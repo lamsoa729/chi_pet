@@ -8,7 +8,6 @@ from shutil import rmtree
 from pathlib import Path
 from .chi_param import ChiParam
 # import line_profiler
-# from math import *
 # Speed
 # from numba import jit
 
@@ -22,7 +21,7 @@ Description:
 
 
 class ChiNode(object):
-    def __init__(self, path, chiparams, yml_file_dict, params={}, level=0):
+    def __init__(self, path, chiparams, yml_file_dict, params=None, level=0):
         if isinstance(path, Path):
             self._path = path
         elif isinstance(path, str):
@@ -43,12 +42,8 @@ class ChiNode(object):
         for cp in self._chiparams:
             # TODO tracer round coding
             snode_path = snode_dir / cp._name
-            cnode = ChiNode(
-                snode_path,
-                cp,
-                self._yml_file_dict,
-                cp._name,
-                self._level - 1)
+            cnode = ChiNode(snode_path, cp, self._yml_file_dict, cp._name,
+                            self._level - 1)
             cnode.MakeNodeDirectory()
 
     def MakeYamlFiles(self):
@@ -70,6 +65,7 @@ class ChiNode(object):
     def DumpData(self):
         pass
 
+    @classmethod
     def CreateDir(self, path, overwrite=False):
         """!Create directory. If it exists it will be either overwritten or left
         alone depending on the overwrite flag

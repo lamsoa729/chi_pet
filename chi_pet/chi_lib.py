@@ -6,7 +6,6 @@ import re
 import shutil
 import yaml
 from collections import OrderedDict
-from math import *
 
 '''
 Name: ChiLib.py

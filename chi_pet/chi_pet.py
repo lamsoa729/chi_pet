@@ -62,7 +62,6 @@ class ChiPet(object):
             except OSError:
                 print(
                     "run.not was not found in workdir. Might want to go searching for it.")
-                pass
             # Create run.ing in workdir
             touch(os.path.join(wd, "run.ing"))
             ChiLaunch(simdirs=self.opts.launch, opts=self.opts)
