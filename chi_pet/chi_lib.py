@@ -1,16 +1,15 @@
 #!/usr/bin/env python
-import sys
 import os
-import pdb
 import re
-import shutil
 import yaml
 from collections import OrderedDict
 
-'''
-Name: ChiLib.py
-Description: Library of used functions for Chi-Launcher
-'''
+"""@package docstring
+File: chi_lib.py
+Author: Adam Lamson
+Email: adam.lamson@colorado.edu
+Description: Library of common functions for chi_pet
+"""
 
 
 def CreateYamlFilesFromDict(seed_dir, yml_file_dict):
@@ -124,11 +123,11 @@ class ObjRef(object):
 
 
 # TODO turn into node dir. Might not need this any more.
-def find_seed_dirs(path):
-    is_seed = re.compile(r's\d+$')
-    for current, dirnames, filenames in os.walk(path):
-        if is_seed.search(current):
-            yield os.path.abspath(current)
+# def find_seed_dirs(path):
+#     is_seed = re.compile(r's\d+$')
+#     for current, dirnames, filenames in os.walk(path):
+#         if is_seed.search(current):
+#             yield os.path.abspath(current)
 
 
 def touch(fname, times=None):

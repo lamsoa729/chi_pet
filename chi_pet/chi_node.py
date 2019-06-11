@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # In case of poor (Sh***y) commenting contact adam.lamson@colorado.edu
 # Basic
-import sys
 import os
-import yaml
+# import yaml
 from shutil import rmtree
 from pathlib import Path
 from .chi_param import ChiParam
@@ -51,8 +50,10 @@ class ChiNode(object):
 
     def MakeNodeDirectory(self, overwrite=False):
         node_created = self.CreateDir(self._path, overwrite)
-        self.MakeDataDirectory()
-        self.MakeYamlFiles()
+        if node_created:
+            self.MakeDataDirectory()
+            self.MakeYamlFiles()
+            return
         if self._level < 0:
             return
         else:
@@ -83,6 +84,7 @@ class ChiNode(object):
                 rmtree(path)
         else:
             path.mkdir()
+            return True
 
 
 ##########################################

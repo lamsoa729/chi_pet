@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # In case of poor (Sh***y) commenting contact adam.lamson@colorado.edu
 # Basic
-import sys
-import os
+# import sys
+# import os
 # Testing
 # import pdb
 # import time, timeit

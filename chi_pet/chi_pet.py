@@ -2,14 +2,10 @@
 # -*- coding: utf-8 -*-
 
 # Basic
-import sys
-import os
 import shutil
-import pdb
-import yaml
-import argparse
+# import yaml
 # Analysis
-import re
+# import re
 from .chi_parser import chi_parser
 from .chi_lib import *
 # from ChiParams import ChiParam, ChiSim
@@ -19,12 +15,13 @@ from .chi_lib import *
 # from ChiGeneticAlgorithm import ChiGeneticAlgorithm
 # from ChiRun import ChiRun
 
-'''
-Name: chi_pet.py
-Description: Main control program for xi(chi)-launcher. Runs all newagebob code.
-Input: To view options type Chi.py -h
-Output:
-'''
+"""@package docstring
+File: chi_pet.py
+Author: Adam Lamson
+Email: adam.lamson@colorado.edu
+Description: Control program for chi_pet.
+
+"""
 
 
 class ChiPet(object):
@@ -110,7 +107,7 @@ def main():
 
     """
     opts = chi_parser()
-    x = ChiPet(opts)
+    chi_obj = ChiPet(opts)
 
 
 ##########################################
