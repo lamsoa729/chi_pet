@@ -10,8 +10,8 @@ import yaml
 import argparse
 # Analysis
 import re
-from chi_parser import chi_parser
-from chi_lib import *
+from .chi_parser import chi_parser
+from .chi_lib import *
 # from ChiParams import ChiParam, ChiSim
 # from ChiLaunch import ChiLaunch
 # from ChiCreate import ChiCreate
@@ -105,8 +105,16 @@ class ChiPet(object):
                         os.remove(path)
 
 
-##########################################
-if __name__ == "__main__":
+def main():
+    """!Main function of chi_pet
+    @return: void
+
+    """
     opts = chi_parser()
     x = ChiPet(opts)
+
+
+##########################################
+if __name__ == "__main__":
+    main()
     # x.MakeDirectoryStruct()

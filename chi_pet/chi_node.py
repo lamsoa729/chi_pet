@@ -6,7 +6,7 @@ import os
 import yaml
 from shutil import rmtree
 from pathlib import Path
-from chi_param import ChiParam
+from .chi_param import ChiParam
 # import line_profiler
 # from math import *
 # Speed

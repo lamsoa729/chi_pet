@@ -31,7 +31,7 @@ def OrderedYamlLoad(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
     ''' Taken from http://stackoverflow.com/questions/5121931/in-python-how-can-you-load-yaml-mappings-as-ordereddicts/21048064#21048064
     Usage: yaml_dict = OrderedYamlLoad(istream)
     '''
-   class OrderedLoader(Loader):
+    class OrderedLoader(Loader):
         pass
 
     def construct_mapping(loader, node):
@@ -41,7 +41,6 @@ def OrderedYamlLoad(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
         yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
         construct_mapping)
     return yaml.load(stream, OrderedLoader)
-
 
 
 def OrderedYamlDump(data, stream=None, Dumper=yaml.Dumper, **kwds):
@@ -57,7 +56,6 @@ def OrderedYamlDump(data, stream=None, Dumper=yaml.Dumper, **kwds):
             list(data.items()))
     OrderedDumper.add_representer(OrderedDict, _dict_representer)
     return yaml.dump(data, stream, OrderedDumper, **kwds)
-
 
 
 def ind_recurse(pi_list, p_index=0):
@@ -78,22 +76,24 @@ def ind_recurse(pi_list, p_index=0):
     return l
 
 
-
 def find_str_values(obj, pattern=r'^ChiParam\(.*\)'):
-    '''Recursive function to find ChiParams in program and returns a list of 
+    '''Recursive function to find ChiParams in program and returns a list of
     references to those objects.
     '''
     # Look through list with the index being the key of the object
     if isinstance(obj, list):
         for k, v in enumerate(obj):
-            # If you find a match to pattern, create and yeild object reference.
+            # If you find a match to pattern, create and yeild object
+            # reference.
             if re.match(pattern, str(v)):
                 yield ObjRef(obj, k)
-            # If another list or dictionary is encountered, recurse into it. Yeild any patterns you find
+            # If another list or dictionary is encountered, recurse into it.
+            # Yeild any patterns you find
             elif isinstance(v, (dict, list)):
                 for result in find_str_values(v, pattern):
                     yield result
-    # Look through dictionary with the key being the key to the object reference
+    # Look through dictionary with the key being the key to the object
+    # reference
     elif isinstance(obj, dict):
         for k, v in obj.items():
             if re.match(pattern, str(v)):
@@ -109,6 +109,7 @@ class ObjRef(object):
     ''' A 'reference' to an object. This allows you to make changes to strings
     or other objects in place of a dictionary or list like structure.
     '''
+
     def __init__(self, obj, key):
         self.obj = obj
         self.key = key

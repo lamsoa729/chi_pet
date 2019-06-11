@@ -47,4 +47,5 @@ setup(
     url='https://github.com/lamsoa729/chi_pet',
     version='0.1.0',
     zip_safe=False,
+    entry_points={'console_scripts': ['Chi = chi_pet.chi_pet:main', ], }
 )
