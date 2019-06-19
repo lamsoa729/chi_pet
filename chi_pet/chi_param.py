@@ -31,7 +31,8 @@ class ChiParam(object):
 
     """!Class that holds all the values of a changing parameter."""
 
-    def __init__(self, name, vals=None, level=0):
+    def __init__(self, name, format_str='{}',
+                 exec_str=None, vals=None, level=0):
         """!TODO: to be defined1.
 
         @param name: TODO
@@ -39,8 +40,25 @@ class ChiParam(object):
 
         """
         self._name = name
+        self._format_str = format_str
+        self._exec_str = exec_str
         self._vals = vals
         self._level = level
+
+
+class ChiParamVal(object):
+
+    """!Singular value of parameters that are being varied"""
+
+    def __init__(self, name, val):
+        """!Initializes ChiParamVal with the name of the parameter and a value
+
+        @param name: TODO
+        @param val: TODO
+
+        """
+        self._name = name
+        self._val = val
 
 
 class ChiParamVariations(object):

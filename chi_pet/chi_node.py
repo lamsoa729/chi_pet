@@ -20,17 +20,19 @@ Description:
 
 
 class ChiNode(object):
-    def __init__(self, path, chiparams, yml_file_dict, params=None, level=0):
+    def __init__(self, path, chi_params, yaml_file_dict,
+                 opts=None, params=None, level=0):
+        # Make sure paths are accurate
         if isinstance(path, Path):
             self._path = path
         elif isinstance(path, str):
             self._path = Path(path)
         else:
             raise TypeError(
-                " Path {} was neither pathlib object nor string".format(path))
+                " Path {} was not pathlib object nor string".format(path))
 
-        self._chiparams = chiparams
-        self._yml_file_dict = yml_file_dict
+        self._chi_params = chi_params
+        self._yaml_file_dict = yaml_file_dict
         self._params = params
         self._level = level
 
@@ -41,7 +43,7 @@ class ChiNode(object):
         for cp in self._chiparams:
             # TODO tracer round coding
             snode_path = snode_dir / cp._name
-            cnode = ChiNode(snode_path, cp, self._yml_file_dict, cp._name,
+            cnode = ChiNode(snode_path, cp, self._yaml_file_dict, cp._name,
                             self._level - 1)
             cnode.MakeNodeDirectory()
 

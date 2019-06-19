@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+from pathlib import Path
 import re
 import yaml
 from collections import OrderedDict
@@ -12,10 +13,10 @@ Description: Library of common functions for chi_pet
 """
 
 
-def CreateYamlFilesFromDict(seed_dir, yml_file_dict):
+def CreateYamlFilesFromDict(dir_path, yml_file_dict):
     for f, d in yml_file_dict.items():
-        path = os.path.join(seed_dir, f)
-        with open(path, 'w') as of:
+        fpath = path / f
+        with open(fpath, 'w') as of:
             OrderedYamlDump(d, of, default_flow_style=False)
 
 
