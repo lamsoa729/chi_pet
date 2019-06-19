@@ -33,7 +33,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    description="SPython module to create, schedule, and analyze simulations on computing clusters.",
+    description="Python module to create, schedule, and analyze simulations on computing clusters.",
     install_requires=requirements,
     license="MIT license",
     long_description=readme + '\n\n' + history,

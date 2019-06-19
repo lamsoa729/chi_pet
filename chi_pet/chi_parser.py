@@ -12,7 +12,7 @@ Description:
 
 
 def chi_parser():
-    parser = argparse.ArgumentParser(prog='chi.py')
+    parser = argparse.ArgumentParser(prog='chi_pet.py')
 
     parser.add_argument('-n', type=int, default=10,
                         help='Number of different parameter sets used.')
