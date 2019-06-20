@@ -8,9 +8,9 @@ import yaml
 import argparse
 import re
 # Analysis
-from ChiParams import ChiParam, ChiSim
+from .chi_param import ChiParam
 from collections import OrderedDict
-from ChiLib import *
+from .chi_lib import *
 
 '''
 Name: chi_create.py
@@ -54,19 +54,19 @@ class ChiCreate(object):
             # Set reference in the master param file to change value later
             self.ChiParams[-1].SetObjRef(x)
 
-        self.Sim = ChiSim(self.ChiParams, self.yml_files_dict, self.opts)
+        # self.Sim = ChiSim(self.ChiParams, self.yml_files_dict, self.opts)
 
-        # Make all parameter values for ChiParam objects
-        if self.opts.create:
-            self.Sim.UpdateParamValues()
-        elif self.opts.shotgun:
-            self.Sim.UpdateShotgunParamValues()
-        elif self.opts.particleswarmcreate:  # Duplicates the behavior of the shotgun approach
-            self.Sim.UpdateShotgunParamValues()
-        elif self.opts.geneticalgorithmcreate:  # Duplicates the behavior again
-            self.Sim.UpdateShotgunParamValues()
+        # # Make all parameter values for ChiParam objects
+        # if self.opts.create:
+        #     self.Sim.UpdateParamValues()
+        # elif self.opts.shotgun:
+        #     self.Sim.UpdateShotgunParamValues()
+        # elif self.opts.particleswarmcreate:  # Duplicates the behavior of the shotgun approach
+        #     self.Sim.UpdateShotgunParamValues()
+        # elif self.opts.geneticalgorithmcreate:  # Duplicates the behavior again
+        #     self.Sim.UpdateShotgunParamValues()
 
-        self.Sim.MakeSeeds()
+        # # self.Sim.MakeSeeds()
 
     def MakeDirectoryStruct(self):
         sim_dir_name = "simulations"

@@ -2,7 +2,7 @@
 # In case of poor (Sh***y) commenting contact adam.lamson@colorado.edu
 
 from .chi_node import ChiNode
-import .chi_lib as clib
+from chi_pet import chi_lib as clib
 from pathlib import Path
 
 
@@ -16,7 +16,7 @@ Description:
 
 class ChiRootNode(ChiNode):
 
-    """!Create the root node of the system"""
+    """!Create the root node of the chi tree structure"""
 
     def __init__(self, path, opts=None):
         """!TODO: to be defined1. """
@@ -32,7 +32,8 @@ class ChiRootNode(ChiNode):
         # Create yaml file dictionary
         self.makeYamlDict(yaml_lst)
         chi_param_refs = self.makeChiParamRefs()
-        self.makeChiParam
+        max_level = self.makeChiParam
+        self.MakeSubnodes(max_level)
 
         # Get a list of object references to all entries in dictionary with key
         # and value ChiParam(string) and put into a list
@@ -57,7 +58,12 @@ class ChiRootNode(ChiNode):
         for cp_i, ref in zip(self._chi_params, chi_param_refs):
             cp_i.SetObjRef(ref)
 
+        # Get the max level of the chi parameters
+        from operator import attrgetter
+        max_level = max(self._chi_params, key=attrgetter('_level'))._level
+
 
 ##########################################
 if __name__ == "__main__":
-    print("Not implemented yet")
+    cparams = [ChiParam('s', level=1, vals=[0, 1, 2, 3])
+    # print("Not implemented yet")

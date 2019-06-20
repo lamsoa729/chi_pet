@@ -36,30 +36,40 @@ class ChiNode(object):
         self._params = params
         self._level = level
 
-    def MakeSubnodes(self, subnode_dir="subnodes"):
+    def MakeSubnodes(self, max_level, subnode_dir="subnodes"):
         snode_dir = self._path / subnode_dir
         self.CreateDir(snode_dir)
+        # Find chi_params that are on the same level as node
+        chi_params_level = [cp_i if cp_i._level == self._level for cp_i in self._chi_params]
+        # pop chi_params out of chi_param lists
+        self.MakeChiParamVals()
+        for cp_i in chi_params_level:
+            # Get all combinations of chi_param values
+            chi_param_values = cp_i.makeValues()
+            # Update yaml_dictionary with this values
 
-        for cp in self._chiparams:
-            # TODO tracer round coding
-            snode_path = snode_dir / cp._name
-            cnode = ChiNode(snode_path, cp, self._yaml_file_dict, cp._name,
-                            self._level - 1)
-            cnode.MakeNodeDirectory()
+        # Create subnodes with updated lists
 
-    def MakeYamlFiles(self):
-        pass
+        # for cp in self._chi_params:
+        #     # TODO tracer round coding
+        #     snode_path = snode_dir / "{}_{}".format(cp._name, self._
+        #     cnode = ChiNode(snode_path, cp, self._yaml_file_dict, cp._name, cp._format_str
+        #                     self._level + 1)
+        #     cnode.MakeNodeDirectory(max_level)
 
-    def MakeNodeDirectory(self, overwrite=False):
+    def MakeNodeDirectory(self, max_level=0, overwrite=False):
         node_created = self.CreateDir(self._path, overwrite)
         if node_created:
             self.MakeDataDirectory()
             self.MakeYamlFiles()
             return
-        if self._level < 0:
+        if self._level >= max_level:
             return
         else:
-            self.MakeSubnodes()
+            self.MakeSubnodes(max_level)
+
+    def MakeYamlFiles(self):
+        pass
 
     def MakeDataDirectory(self):
         self._data_dir = self._path / "data"
@@ -91,7 +101,7 @@ class ChiNode(object):
 
 ##########################################
 if __name__ == "__main__":
-    cparams = [ChiParam("s" + str(i)) for i in range(10)]
+    # cparams = [ChiParam("s" + str(i)) for i in range(10)]
     yml_dict = {}
     cnode = ChiNode(Path(os.getcwd()), cparams, yml_dict)
     cnode.MakeNodeDirectory()

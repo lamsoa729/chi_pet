@@ -10,7 +10,7 @@ import os
 from .chi_parser import chi_parser
 from .chi_create import ChiCreate
 from .chi_root_node import ChiRootNode
-import .chi_lib as clib
+from chi_pet import chi_lib as clib
 from pathlib import Path
 # from ChiParams import ChiParam, ChiSim
 # from ChiLaunch import ChiLaunch
@@ -72,9 +72,10 @@ class ChiPet(object):
             run_not_path.touch()
             # touch(os.path.join(wd, "run.not"))
             chi_root_node = ChiNode(self.opts)
+            chi_root_node.Grow()
 
             # c = ChiCreate(self.opts, self.opts.workdir)
-            c.Create(self.opts.create)
+            # c.Create(self.opts.create)
 
         elif self.opts.shotgun:
             c = ChiCreate(self.opts, self.opts.workdir)
