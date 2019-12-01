@@ -1,24 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-# Basic
-import shutil
-import os
-# import yaml
-# Analysis
-# import re
-from .chi_parser import chi_parser
-from .chi_create import ChiCreate
-from .chi_root_node import ChiRootNode
-from chi_pet import chi_lib as clib
-from pathlib import Path
-# from ChiParams import ChiParam, ChiSim
-# from ChiLaunch import ChiLaunch
-# from ChiCreate import ChiCreate
-# from ChiParticleSwarm import ChiParticleSwarm
-# from ChiGeneticAlgorithm import ChiGeneticAlgorithm
-# from ChiRun import ChiRun
-
 """@package docstring
 File: chi_pet.py
 Author: Adam Lamson
@@ -26,6 +7,24 @@ Email: adam.lamson@colorado.edu
 Description: Control program for chi_pet.
 
 """
+
+# Basic
+import shutil
+import os
+# import yaml
+# Analysis
+# import re
+from . import chi_lib as clib
+from .chi_parser import chi_parser
+from .chi_create import ChiCreate
+from .chi_root_node import ChiRootNode
+from pathlib import Path
+# from ChiParams import ChiParam, ChiSim
+# from ChiLaunch import ChiLaunch
+# from ChiCreate import ChiCreate
+# from ChiParticleSwarm import ChiParticleSwarm
+# from ChiGeneticAlgorithm import ChiGeneticAlgorithm
+# from ChiRun import ChiRun
 
 
 class ChiPet(object):

@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # In case of poor (Sh***y) commenting contact adam.lamson@colorado.edu
-
-from .chi_node import ChiNode
-from chi_pet import chi_lib as clib
-from pathlib import Path
-
-
 """@package docstring
 File: chi_root_node.py
 Author: Adam Lamson
 Email: adam.lamson@colorado.edu
 Description:
 """
+
+from operator import attrgetter
+
+from .chi_node import ChiNode
+from chi_pet import chi_lib as clib
+from pathlib import Path
 
 
 class ChiRootNode(ChiNode):
@@ -59,11 +59,9 @@ class ChiRootNode(ChiNode):
             cp_i.SetObjRef(ref)
 
         # Get the max level of the chi parameters
-        from operator import attrgetter
         max_level = max(self._chi_params, key=attrgetter('_level'))._level
 
 
 ##########################################
 if __name__ == "__main__":
-    cparams = [ChiParam('s', level=1, vals=[0, 1, 2, 3])
-    # print("Not implemented yet")
+    cparams = [ChiParam('s', level=1, vals=[0, 1, 2, 3])]
