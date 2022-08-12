@@ -3,6 +3,7 @@
 """Top-level package for Chi-Pet."""
 
 # import .chi_lib
+# from . import *
 
 __author__ = """Adam Reay Lamson"""
 __email__ = 'adam.lamson@colorado.edu'

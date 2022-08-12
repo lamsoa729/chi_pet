@@ -8,9 +8,10 @@ import yaml
 import argparse
 import re
 # Analysis
-from ChiParams import ChiParam, ChiSim
+from .ChiParams import ChiParam, ChiSim
 from collections import OrderedDict
-from ChiLib import *
+from .ChiLib import *
+from pathlib import Path
 
 '''
 Name: ChiCreate.py
@@ -37,7 +38,7 @@ class ChiCreate(object):
         # and value (ChiParam string) and put into a list
         a = list(find_str_values(self.yml_files_dict))
 
-        # Turn list of dictionaries in to ChiParam objects
+        # Turn list of dictionaries into ChiParam objects
         self.MakeChiParams(a)
         self.MakeDirectoryStruct()
 
@@ -45,7 +46,8 @@ class ChiCreate(object):
         # Take input yaml files and create master dictionary from them
         for f_name in file_list:
             if os.path.isfile(f_name):
-                self.yml_files_dict[f_name] = CreateDictFromYamlFile(f_name)
+                self.yml_files_dict[
+                    Path(f_name).name] = CreateDictFromYamlFile(f_name)
 
     def MakeChiParams(self, chilist):
         for x in chilist:
@@ -75,7 +77,7 @@ class ChiCreate(object):
         sim_dir = os.path.join(self.opts.workdir, sim_dir_name)
 
         # Make run directory
-        if os.path.exists(sim_dir_name):
+        if os.path.exists(sim_dir):
             if self.opts.replace:
                 shutil.rmtree(sim_dir)
             else:
@@ -106,7 +108,7 @@ class ChiCreate(object):
         # and place seed directories in them
         print(" -- Making simulations -- ")
         for il in l:
-            self.Sim.MakeSimDirectory(sim_dir_name, il)
+            self.Sim.MakeSimDirectory(sim_dir, il)
 
     def TestPickleDump(self, sim_dir):
         # Test the dump functionality

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-## Basic
+# Basic
 import sys
 import os
 import pdb
@@ -8,11 +8,11 @@ import yaml
 import argparse
 import re
 import pickle
-## Analysis
-from ChiCreate import ChiCreate
-from ChiParams import ChiParam, ChiSim
+# Analysis
+from .ChiCreate import ChiCreate
+from .ChiParams import ChiParam, ChiSim
 from collections import OrderedDict
-from ChiLib import *
+from .ChiLib import *
 import pandas as pd
 
 from copy import deepcopy
@@ -22,19 +22,22 @@ Name: ChiGeneticAlgorithm.py
 Description: Creates simulations for a particle swarm optimization run(s)
 '''
 
+
 class ChiGeneticAlgorithm(ChiCreate):
     def __init__(self, opts, cwd, generation):
         self.generation = generation
         ChiCreate.__init__(self, opts=opts, cwd=cwd)
 
-    ### Fun save/load hacks
+    # Fun save/load hacks
     def savestate(self, sim_dir):
-        filename = os.path.join(sim_dir, "sim_data_genetics_{}.pickle".format(self.generation))
+        filename = os.path.join(
+            sim_dir, "sim_data_genetics_{}.pickle".format(
+                self.generation))
         self.save(filename)
 
     def save(self, filename):
         f = open(filename, 'wb')
-        pickle.dump(self.__dict__,f)
+        pickle.dump(self.__dict__, f)
         f.close()
 
     def load(self, filename):
@@ -49,7 +52,7 @@ class ChiGeneticAlgorithm(ChiCreate):
         # Make master yaml dictionary
         self.MakeYmlDict(file_list)
 
-        # Get a list of all the ChiParam dictionsarys with key 
+        # Get a list of all the ChiParam dictionsarys with key
         # and value (ChiParam string) and put into a list
         a = list(find_str_values(self.yml_files_dict))
 
@@ -72,29 +75,32 @@ class ChiGeneticAlgorithm(ChiCreate):
         # Always a shotgun type creation of directory struct
         l = []
         for i in range(self.opts.n):
-            l += [ [i]*len(self.ChiParams) ]
+            l += [[i] * len(self.ChiParams)]
 
         # Create a master list of the particular parameter points and the Sim name in an
         # index/database to lookup later!
-        # Loop through the sim stuff, it should handle writing out the hash to the database file
+        # Loop through the sim stuff, it should handle writing out the hash to
+        # the database file
         print(" -- Making Genetic Algorithm Generation {} -- ".format(self.generation))
         for il in l:
-            self.Sim.MakeSimDirectoryDatabase(sim_dir_name, self.generation, il)
+            self.Sim.MakeSimDirectoryDatabase(
+                sim_dir_name, self.generation, il)
 
         # Save myself off to the directory
         self.savestate("generations")
 
-    ### Print functionality
+    # Print functionality
     def PrintSwarm(self):
         print("Swarm Generation: {}".format(self.generation))
         print("   n particles: {}".format(self.Sim.nparticles))
 
-    ### Particle Swarm specifics
+    # Particle Swarm specifics
     def CreateGeneticAlgorithmData(self):
         self.Sim.CreateGeneticAlgorithm()
         sim_dir_name = "generations/gen{0}".format(self.generation)
         sim_dir = os.path.join(self.opts.workdir, sim_dir_name)
-        self.Sim.CreateParticleSwarmDatabase(sim_dir, self.generation) # Can just reuse this version
+        self.Sim.CreateParticleSwarmDatabase(
+            sim_dir, self.generation)  # Can just reuse this version
 
     def GenerateFitnessInformation(self, dotest=False):
         # We have to look up the fitness information based on the driectory names and correlate this
@@ -108,23 +114,29 @@ class ChiGeneticAlgorithm(ChiCreate):
     # Procreate Functionality
     def Procreate(self, dotest=False):
         # Load self
-        generations = [dirname for dirname in os.listdir('generations') if dirname.startswith('gen')]
-        generationints = [int(list(filter(str.isdigit, str1))) for str1 in generations]
+        generations = [dirname for dirname in os.listdir(
+            'generations') if dirname.startswith('gen')]
+        generationints = [int(list(filter(str.isdigit, str1)))
+                          for str1 in generations]
         maxgen = max(generationints)
 
-        filename = os.path.join('generations', 'sim_data_genetics_{}.pickle'.format(maxgen))
+        filename = os.path.join('generations',
+                                'sim_data_genetics_{}.pickle'.format(maxgen))
         self.load(filename)
 
         # have to reset the generation and generationints
-        generations = [dirname for dirname in os.listdir('generations') if dirname.startswith('gen')]
-        generationints = [int(list(filter(str.isdigit, str1))) for str1 in generations]
+        generations = [dirname for dirname in os.listdir(
+            'generations') if dirname.startswith('gen')]
+        generationints = [int(list(filter(str.isdigit, str1)))
+                          for str1 in generations]
         self.maxgen = max(generationints)
         self.nextgen = self.maxgen + 1
 
         self.PrintSwarm()
-        print(" -- Genetic Algorithm Procreating from max generation {}".format(self.maxgen))
+        print(
+            " -- Genetic Algorithm Procreating from max generation {}".format(self.maxgen))
         self.GenerateFitnessInformation(dotest)
-        #self.Sim.UpdateFitness()
+        # self.Sim.UpdateFitness()
         print(" -- Input Parameters -- ")
         self.Sim.PrintCurrentGenetics()
         print(" -- Best Parameters -- ")
@@ -132,7 +144,7 @@ class ChiGeneticAlgorithm(ChiCreate):
         self.Sim.PrintGeneticsBest()
         print(" -- Updating Parameter Values -- ")
         self.Sim.UpdateGeneticsTournament()
-        #self.Sim.UpdateGeneticsRoulette()
+        # self.Sim.UpdateGeneticsRoulette()
         print(" -- Output Parameters -- ")
         self.Sim.PrintCurrentGenetics()
 
@@ -142,16 +154,21 @@ class ChiGeneticAlgorithm(ChiCreate):
 
     def Bias(self, opts):
         # Load self like in procreate
-        generations = [dirname for dirname in os.listdir('generations') if dirname.startswith('gen')]
-        generationints = [int(list(filter(str.isdigit, str1))) for str1 in generations]
+        generations = [dirname for dirname in os.listdir(
+            'generations') if dirname.startswith('gen')]
+        generationints = [int(list(filter(str.isdigit, str1)))
+                          for str1 in generations]
         maxgen = max(generationints)
 
-        filename = os.path.join('generations', 'sim_data_genetics_{}.pickle'.format(maxgen))
+        filename = os.path.join('generations',
+                                'sim_data_genetics_{}.pickle'.format(maxgen))
         self.load(filename)
 
         # have to reset the generation and generationints
-        generations = [dirname for dirname in os.listdir('generations') if dirname.startswith('gen')]
-        generationints = [int(list(filter(str.isdigit, str1))) for str1 in generations]
+        generations = [dirname for dirname in os.listdir(
+            'generations') if dirname.startswith('gen')]
+        generationints = [int(list(filter(str.isdigit, str1)))
+                          for str1 in generations]
         self.maxgen = max(generationints)
         self.nextgen = self.maxgen + 1
 
@@ -163,7 +180,7 @@ class ChiGeneticAlgorithm(ChiCreate):
         self.Sim.PrintCurrentGenetics()
         print(" -- Bias Swarm {} -- ".format(opts.bias))
         # Read in the file specified into a dataframe or something
-        df = pd.read_csv(opts.bias[0], delim_whitespace = True, header = None)
+        df = pd.read_csv(opts.bias[0], delim_whitespace=True, header=None)
         self.Sim.BiasSwarm(df)
         print(" -- Output Parameters -- ")
         self.Sim.PrintCurrentGenetics()
@@ -177,18 +194,19 @@ def parse_args():
     parser = argparse.ArgumentParser(prog='ChiGeneticAlgorithm.py')
 
     parser.add_argument('-P', '--procreate', nargs='+', type=str, metavar='DIRS',
-            help='Procreates based on most recent generation in DIRS list.')
+                        help='Procreates based on most recent generation in DIRS list.')
 
     parser.add_argument('-B', '--bias', nargs='+', type=str, metavar='DIRS',
-            help='Biases current generation by directly implementing the values found in the file passed')
+                        help='Biases current generation by directly implementing the values found in the file passed')
 
     parser.add_argument('-T', '--test', action='store_true',
-            help='Test the particle swarm optimization')
+                        help='Test the particle swarm optimization')
 
     opts = parser.parse_args()
     return opts
 
-### Main function to test stuff?
+
+# Main function to test stuff?
 if __name__ == "__main__":
     opts = parse_args()
     c = ChiGeneticAlgorithm(None, None, 0)

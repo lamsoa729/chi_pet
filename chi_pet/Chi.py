@@ -8,13 +8,13 @@ import yaml
 import argparse
 # Analysis
 import re
-from ChiParams import ChiParam, ChiSim
-from ChiLaunch import ChiLaunch
-from ChiCreate import ChiCreate
-from ChiParticleSwarm import ChiParticleSwarm
-from ChiGeneticAlgorithm import ChiGeneticAlgorithm
-from ChiRun import ChiRun
-from ChiLib import CreateDictFromYamlFile, find_dirs, touch, find_seed_dirs
+from .ChiParams import ChiParam, ChiSim
+from .ChiLaunch import ChiLaunch
+from .ChiCreate import ChiCreate
+from .ChiParticleSwarm import ChiParticleSwarm
+from .ChiGeneticAlgorithm import ChiGeneticAlgorithm
+from .ChiRun import ChiRun
+from .ChiLib import CreateDictFromYamlFile, find_dirs, touch, find_seed_dirs
 
 '''
 Name: Chi.py
@@ -160,8 +160,12 @@ class ChiMain(object):
                         os.remove(path)
 
 
-##########################################
-if __name__ == "__main__":
+def main():
     opts = parse_args()
     x = ChiMain(opts)
+
+
+##########################################
+if __name__ == "__main__":
+    main()
     # x.MakeDirectoryStruct()
