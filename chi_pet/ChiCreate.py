@@ -8,12 +8,12 @@ import yaml
 import argparse
 import re
 # Analysis
-from .chi_param import ChiParam
+from ChiParams import ChiParam, ChiSim
 from collections import OrderedDict
-from .chi_lib import *
+from ChiLib import *
 
 '''
-Name: chi_create.py
+Name: ChiCreate.py
 Description: Creates simulation structure to run simulations with ChiLaunch
 '''
 
@@ -27,18 +27,18 @@ class ChiCreate(object):
         self.opts = opts
         self.yml_files_dict = OrderedDict()  # combined dictionary of all yaml files
         self.ChiParams = []
-        # self.Sim = None
+        self.Sim = None
 
     def Create(self, file_list):
         # Make master yaml dictionary
         self.MakeYmlDict(file_list)
 
-        # Get a list of all the ChiParam dictionarys with key
+        # Get a list of all the ChiParam dictionsarys with key
         # and value (ChiParam string) and put into a list
-        chi_param_loc = list(find_str_values(self.yml_files_dict))
+        a = list(find_str_values(self.yml_files_dict))
 
         # Turn list of dictionaries in to ChiParam objects
-        self.MakeChiParams(chi_param_loc)
+        self.MakeChiParams(a)
         self.MakeDirectoryStruct()
 
     def MakeYmlDict(self, file_list):
@@ -54,19 +54,19 @@ class ChiCreate(object):
             # Set reference in the master param file to change value later
             self.ChiParams[-1].SetObjRef(x)
 
-        # self.Sim = ChiSim(self.ChiParams, self.yml_files_dict, self.opts)
+        self.Sim = ChiSim(self.ChiParams, self.yml_files_dict, self.opts)
 
-        # # Make all parameter values for ChiParam objects
-        # if self.opts.create:
-        #     self.Sim.UpdateParamValues()
-        # elif self.opts.shotgun:
-        #     self.Sim.UpdateShotgunParamValues()
-        # elif self.opts.particleswarmcreate:  # Duplicates the behavior of the shotgun approach
-        #     self.Sim.UpdateShotgunParamValues()
-        # elif self.opts.geneticalgorithmcreate:  # Duplicates the behavior again
-        #     self.Sim.UpdateShotgunParamValues()
+        # Make all parameter values for ChiParam objects
+        if self.opts.create:
+            self.Sim.UpdateParamValues()
+        elif self.opts.shotgun:
+            self.Sim.UpdateShotgunParamValues()
+        elif self.opts.particleswarmcreate:  # Duplicates the behavior of the shotgun approach
+            self.Sim.UpdateShotgunParamValues()
+        elif self.opts.geneticalgorithmcreate:  # Duplicates the behavior again
+            self.Sim.UpdateShotgunParamValues()
 
-        # # self.Sim.MakeSeeds()
+        self.Sim.MakeSeeds()
 
     def MakeDirectoryStruct(self):
         sim_dir_name = "simulations"
@@ -75,9 +75,18 @@ class ChiCreate(object):
         sim_dir = os.path.join(self.opts.workdir, sim_dir_name)
 
         # Make run directory
-        if self.opts.replace and os.path.exists(sim_dir_name):
-            shutil.rmtree(sim_dir)
-        # os.mkdir(sim_dir)
+        if os.path.exists(sim_dir_name):
+            if self.opts.replace:
+                shutil.rmtree(sim_dir)
+            else:
+                option = input(
+                    " Folders exist, would you like to overwrite them?(y or [n]): ") or 'n'
+                if option == 'y':
+                    shutil.rmtree(sim_dir)
+                else:
+                    print("Could not create run structure. Exiting Chi.")
+                    exit(1)
+
         os.makedirs(sim_dir)
 
         # Get all the permutations of values when running a slice
