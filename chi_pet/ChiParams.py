@@ -749,8 +749,6 @@ class ChiSeed(ChiParam):
             os.mkdir(sd_dir)
             self.obj_r.Set(s)
             CreateYamlFilesFromDict(sd_dir, yml_file_dict)
-            if opts.fluid_config:  # TODO depricate this for one below
-                cp(opts.fluid_config, sd_dir)
             for f in opts.non_yaml:
                 cp(f, sd_dir)
             if opts.states:
