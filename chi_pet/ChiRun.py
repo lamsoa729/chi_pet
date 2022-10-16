@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 import os
-from subprocess import call
+from subprocess import call, run
 import shutil
 import yaml
 from .ChiLib import *
@@ -65,7 +65,7 @@ def run_start(workdir, args):  # , prefix="spindle_bd_mp"):
         print(args)
         open('.running', 'a').close()
         # args = [program, prefix+".default", prefix+".equil"]
-        status = call(args)
+        status = run(args)
         os.remove('.running')
         return status
     else:
@@ -79,7 +79,7 @@ def run_analyze(workdir, args):
         os.chdir(workdir)
         open('.running', 'a').close()
         # args = ["spindle_analysis", prefix+".default", prefix+".equil", prefix+".initial_config", prefix+".posit"]
-        status = call(args)
+        status = run(args)
         os.remove('.running')
         return status
     else:
@@ -93,7 +93,7 @@ def run_args(workdir, state, args):
     if os.path.exists(workdir):
         os.chdir(workdir)
         open('.' + action, 'a').close()
-        status = call(args)
+        status = run(args)
         os.remove('.' + action)
         return status
     else:
