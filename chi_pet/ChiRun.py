@@ -7,6 +7,7 @@ import yaml
 from .ChiLib import *
 from collections import OrderedDict
 import argparse
+from pathlib import Path
 
 '''
 Name: ChiMain.py
@@ -28,18 +29,6 @@ default_args = OrderedDict([('run', ['spindle_bd_mp',
                                          'spindle_bd_mp.initial_config',
                                          'spindle_bd_mp.posit'])
                             ])
-# TODO Future args.yaml file so order is preserved.
-# default_args = { [{'run': [ 'spindle_bd_mp',
-# 'spindle_bd_mp.default',
-# 'spindle_bd_mp.equil',
-# 'spindle_bd_mp.yaml',
-# 'crosslink_params.yaml'}],
-# {'analyze': [ 'spindle_analsysis',
-# 'spindle_bd_mp.default',
-# 'spindle_bd_mp.equil',
-# 'spindle_bd_mp.initial_config',
-# 'spindle_bd_mp.posit']}
-# ] }
 
 
 def run_parse_args():
@@ -105,20 +94,19 @@ class ChiRun(object):
         self.opts = opts
 
     def Run(self, opts):
+        wd = Path(opts.workdir)
+        af_path = wd / opts.args_file
         args_dict = {}
         if not os.path.exists(opts.workdir):
-            print(
-                "Run failed. Directory {} does not exists".format(
-                    opts.workdir))
+            raise FileNotFoundError("Run failed. Directory {} does not exists.".format(
+                opts.workdir))
 
+        elif not af_path.exists():
+            raise FileNotFoundError(
+                "Run failed. args.yaml file not found in {}.".format(
+                    opts.workdir))
         else:
-            if (opts.args_file and
-                    os.path.exists(os.path.join(opts.workdir, opts.args_file))):
-                af = CreateDictFromYamlFile(
-                    os.path.join(opts.workdir, opts.args_file))
-            # with open(os.path.join(opts.workdir, opts.args_file), 'r') as f:
-            else:
-                af = default_args
+            af = CreateDictFromYamlFile(af_path)
 
         print(OrderedYamlDump(af, default_flow_style=False))
         for k, l in af.items():
@@ -131,18 +119,7 @@ class ChiRun(object):
                 elif os.path.exists('sim.{}'.format(k)):
                     os.remove('sim.{}'.format(k))
 
-        # if 'start' in opts.states:
-            # if run_start(opts.workdir, af['start']):
-                # print "run failed"
-                # open('.error', 'a').close()
-            # else:
-                # os.remove('sim.start')
-        # if 'analyze' in opts.states:
-            # if run_analyze(opts.workdir, af['analyze']):
-                # print "run failed"
-                # open('.error', 'a').close()
-            # else:
-                # os.remove('sim.analyze')
+
 if __name__ == '__main__':
 
     opts = run_parse_args()
