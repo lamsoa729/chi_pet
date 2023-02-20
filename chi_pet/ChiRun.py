@@ -16,20 +16,6 @@ Input: To view type ChiRun.py -h
 Output: Runs seed (singular) simulations
 '''
 
-# Dictionary of commands used for spindle_bd_mp.
-# This is the default commands when using ChiRun.
-default_args = OrderedDict([('run', ['spindle_bd_mp',
-                                     'spindle_bd_mp.default',
-                                     'spindle_bd_mp.equil',
-                                     'spindle_bd_mp.yaml',
-                                     'crosslink_params.yaml']),
-                            ('analyze', ['spindle_analsysis',
-                                         'spindle_bd_mp.default',
-                                         'spindle_bd_mp.equil',
-                                         'spindle_bd_mp.initial_config',
-                                         'spindle_bd_mp.posit'])
-                            ])
-
 
 def run_parse_args():
     parser = argparse.ArgumentParser(prog='Chi.py')
@@ -94,22 +80,22 @@ class ChiRun(object):
         self.opts = opts
 
     def Run(self, opts):
-        wd = Path(opts.workdir)
-        af_path = wd / opts.args_file
+        workdir_path = Path(opts.workdir)
+        args_file_path = workdir_path / opts.args_file
         args_dict = {}
-        if not os.path.exists(opts.workdir):
+        if not workdir_path.exists():
             raise FileNotFoundError("Run failed. Directory {} does not exists.".format(
                 opts.workdir))
 
-        elif not af_path.exists():
+        elif not args_file_path.exists():
             raise FileNotFoundError(
                 "Run failed. args.yaml file not found in {}.".format(
                     opts.workdir))
         else:
-            af = CreateDictFromYamlFile(af_path)
+            args_dict = CreateDictFromYamlFile(args_file_path)
 
-        print(OrderedYamlDump(af, default_flow_style=False))
-        for k, l in af.items():
+        print(OrderedYamlDump(args_dict, default_flow_style=False))
+        for k, l in args_dict.items():
             print("File= {}, Dictionary= {}".format(k, " ".join(l)))
 
             if k in opts.states:
