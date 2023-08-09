@@ -32,35 +32,6 @@ def run_parse_args():
     return opts
 
 
-def run_start(workdir, args):  # , prefix="spindle_bd_mp"):
-    print("starting sim in {0}".format(workdir))
-    sys.stdout.flush()
-    if os.path.exists(workdir):
-        os.chdir(workdir)
-        print(args)
-        open('.running', 'a').close()
-        # args = [program, prefix+".default", prefix+".equil"]
-        status = run(args)
-        os.remove('.running')
-        return status
-    else:
-        return 1
-
-
-def run_analyze(workdir, args):
-    print("starting sim in {0}".format(workdir))
-    sys.stdout.flush()
-    if os.path.exists(workdir):
-        os.chdir(workdir)
-        open('.running', 'a').close()
-        # args = ["spindle_analysis", prefix+".default", prefix+".equil", prefix+".initial_config", prefix+".posit"]
-        status = run(args)
-        os.remove('.running')
-        return status
-    else:
-        return 1
-
-
 def run_args(workdir, state, args):
     action = state + '-ing'
     print("Started {} sim in {}".format(action, args))
@@ -70,8 +41,11 @@ def run_args(workdir, state, args):
         open('.' + action, 'a').close()
         status = run(args)
         os.remove('.' + action)
-        return status
+        if status.returncode:
+            print(f"Run failed: State {state} did not succeed.")
+        return status.returncode
     else:
+        print(f"Run failed: could not find work directory {workdir}.")
         return 1
 
 
@@ -100,7 +74,6 @@ class ChiRun(object):
 
             if k in opts.states:
                 if run_args(opts.workdir, k, l):
-                    print("run failed")
                     open('.error', 'a').close()
                 elif os.path.exists('sim.{}'.format(k)):
                     os.remove('sim.{}'.format(k))

@@ -6,6 +6,7 @@ import shutil
 import pdb
 import yaml
 import argparse
+from pathlib import Path
 # Analysis
 import re
 from .ChiParams import ChiParam, ChiSim
@@ -146,10 +147,19 @@ class ChiMain(object):
         elif self.opts.prep:
             seed_lst = find_seed_dirs(self.opts.workdir)
             for sd_dir in seed_lst:
+                sd_path = Path(sd_dir)
+                # Place new args file in directory
                 if self.opts.args_file:
                     shutil.copy(self.opts.args_file, sd_dir)
+                # Clean directory of any old state files
+                for state_file in sd_path.glob('sim.*'):
+                    state_file.unlink()
+                # Clean directory of error files
+                for err_file in sd_path.glob('.error'):
+                    err_file.unlink()
+                # Add wanted state files
                 for s in self.opts.states:
-                    touch(os.path.join(sd_dir, 'sim.{}'.format(s)))
+                    (sd_path / f'sim.{s}').touch()
 
         elif self.opts.remove:
             seed_lst = find_seed_dirs(self.opts.workdir)
