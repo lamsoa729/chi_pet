@@ -4,7 +4,7 @@
 """@package docstring
 File: chi_param
 Author: Adam Lamson
-Email: adam.lamson@colorado.edu
+Email: alamson@flatironinstitute.org
 Description:
 """
 

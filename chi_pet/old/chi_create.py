@@ -43,7 +43,8 @@ class ChiCreate(object):
         # Take input yaml files and create master dictionary from them
         for f_name in file_list:
             if os.path.isfile(f_name):
-                self.yml_files_dict[f_name] = CreateDictFromYamlFile(f_name)
+                self.yml_files_dict[f_name] = create_dict_from_yaml_file(
+                    path)(f_name)
 
     def MakeChiParams(self, chilist):
         for x in chilist:

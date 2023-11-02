@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# In case of poor (Sh***y) commenting contact adam.lamson@colorado.edu
+# In case of poor (Sh***y) commenting contact alamson@flatironinstitute.org
 # Basic
 import sys
 import os

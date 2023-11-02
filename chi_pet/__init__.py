@@ -5,5 +5,5 @@
 # import .chi_lib
 
 __author__ = """Adam Reay Lamson"""
-__email__ = 'adam.lamson@colorado.edu'
+__email__ = 'alamson@flatironinstitute.org'
 __version__ = '0.1.0'

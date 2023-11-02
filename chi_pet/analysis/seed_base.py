@@ -20,7 +20,7 @@ from .analyzer import Analyzer
 """@package docstring
 File: seed_base.py
 Author: Adam Lamson
-Email: adam.lamson@colorado.edu
+Email: alamson@flatironinstitute.org
 Description: Base code to collect and hold all data from one seed
 """
 

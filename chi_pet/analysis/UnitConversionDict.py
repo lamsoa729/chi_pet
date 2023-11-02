@@ -1,9 +1,11 @@
 #!/usr/bin/env python
-# In case of poor (Sh**y) commenting contact adam.lamson@colorado.edu
+# In case of poor (Sh**y) commenting contact alamson@flatironinstitute.org
 # Basic
-import sys, os, pdb
+import sys
+import os
+import pdb
 import yaml
-## Analysis
+# Analysis
 # import pandas as pd
 # import numpy as np
 # import matplotlib.pyplot as plt
@@ -17,7 +19,9 @@ Description: Object that takes in dictionary of parameterts to convert from
 Input: Either yaml file or dictionary of units
 '''
 
-#Class definition
+# Class definition
+
+
 class UnitConversionDict(object):
     def __init__(self, dictionary='', yaml_file=''):
         self.ud = {}
@@ -33,13 +37,9 @@ class UnitConversionDict(object):
         if k in self.ud:
             return self.ud[k]
         else:
-            return ('',1.0, float)
-        
+            return ('', 1.0, float)
+
 
 ##########################################
 if __name__ == "__main__":
     print("UnitConversionDict not implemented for executable use.")
-
-
-
-

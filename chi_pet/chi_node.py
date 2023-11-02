@@ -2,7 +2,7 @@
 """@package docstring
 File: chi_node.py
 Author: Adam Lamson
-Email: adam.lamson@colorado.edu
+Email: alamson@flatironinstitute.org
 Description:
 """
 from shutil import rmtree

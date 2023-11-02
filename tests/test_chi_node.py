@@ -3,7 +3,7 @@
 """@package docstring
 File: test_chi_node.py
 Author: Adam Lamson
-Email: adam.lamson@colorado.edu
+Email: alamson@flatironinstitute.org
 Description:
 """
 

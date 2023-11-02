@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# In case of poor (Sh***y) commenting contact adam.lamson@colorado.edu
+# In case of poor (Sh***y) commenting contact alamson@flatironinstitute.org
 # YOLO edelmaie@colorado.edu (too)
 # Basic
 import sys
@@ -23,7 +23,7 @@ import scipy.misc
 """@package docstring
 File: read_posit_base.py
 Author: Adam Lamson
-Email: adam.lamson@colorado.edu
+Email: alamson@flatironinstitute.org
 Description: Base class for all ReadPosit classes which take in a binary
 file (position or posit files) and interprets bits as objects to be analyzed.
 """
@@ -113,7 +113,7 @@ class ReadPositBase(object):
         """!Counts the number of frames in the posit file
         @return: void, sets self.framezie and self.nframes
         """
-        assert(self.configsize is not None)
+        assert (self.configsize is not None)
         self.data_file_position = self.f_posit.tell()
         self.f_posit.seek(0, os.SEEK_END)
         final_file_position = self.f_posit.tell()

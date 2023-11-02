@@ -3,7 +3,7 @@
 """@package docstring
 File: chi_pet.py
 Author: Adam Lamson
-Email: adam.lamson@colorado.edu
+Email: alamson@flatironinstitute.org
 Description: Control program for chi_pet.
 
 """
@@ -16,36 +16,30 @@ import os
 # import re
 from . import chi_lib as clib
 from .chi_parser import chi_parser
-from .chi_create import ChiCreate
-from .chi_root_node import ChiRootNode
+from .old.chi_create import ChiCreate
+from .old.chi_root_node import ChiRootNode
 from pathlib import Path
-# from ChiParams import ChiParam, ChiSim
-# from ChiLaunch import ChiLaunch
-# from ChiCreate import ChiCreate
-# from ChiParticleSwarm import ChiParticleSwarm
-# from ChiGeneticAlgorithm import ChiGeneticAlgorithm
-# from ChiRun import ChiRun
 
 
-class ChiPet(object):
+class Chi(object):
     def __init__(self, opts):
 
         self.opts = opts
         self.yml_files_dict = {}  # combined dictionary of all yaml files
-        self.ChiParams = []
-        self.ReadOpts()
-        self.ProgOpts()
+        self._chi_params = []
+        self.read_opts()
+        self.run()
 
-    def ReadOpts(self):
+    def read_opts(self):
         # TODO This might not be fully integrated just yet
         if not self.opts.workdir:
             self.opts.workdir = Path.cwd()
 
         if not self.opts.states and self.opts.args_file:
-            yd = clib.CreateDictFromYamlFile(self.opts.args_file)
+            yd = clib.create_dict_from_yaml_file(self.opts.args_file)
             self.opts.states = list(yd.keys())
 
-    def ProgOpts(self):
+    def run(self):
         wd = self.opts.workdir  # Shortcut for work directory
         run_not_path = wd / "run.not"
         if self.opts.launch != "NOLAUNCH":
@@ -115,7 +109,7 @@ def main():
 
     """
     opts = chi_parser()
-    chi_obj = ChiPet(opts)
+    chi_obj = Chi(opts)
 
 
 ##########################################

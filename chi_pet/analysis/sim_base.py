@@ -20,10 +20,11 @@ from base_funcs import *
 """!@package docstring
 File: sim_base.py
 Author: Adam Lamson
-Email: adam.lamson@colorado.edu
+Email: alamson@flatironinstitute.org
 Description: Base class that holds multiple seeds that have the same
 parameters aka a sim.
 """
+
 
 class SimBase(object):
     def __init__(self, simdir, rundir=None, datadir=None, seedType=SeedBase):

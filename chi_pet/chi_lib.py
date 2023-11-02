@@ -8,28 +8,30 @@ from collections import OrderedDict
 """@package docstring
 File: chi_lib.py
 Author: Adam Lamson
-Email: adam.lamson@colorado.edu
+Email: alamson@flatironinstitute.org
 Description: Library of common functions for chi_pet
 """
 
 
-def CreateYamlFilesFromDict(dir_path, yml_file_dict):
+def create_yaml_files_from_dict(dir_path, yml_file_dict):
     for f, d in yml_file_dict.items():
-        fpath = path / f
+        fpath = dir_path / f
         with open(fpath, 'w') as of:
-            OrderedYamlDump(d, of, default_flow_style=False)
+            dump_yaml_in_order(d, of, default_flow_style=False)
 
 
-def CreateDictFromYamlFile(path):
+def create_dict_from_yaml_file(path):
     with open(path, 'r') as f:
-        ydict = OrderedYamlLoad(f)
+        ydict = load_yaml_in_order(f)
         return ydict
 
 
-def OrderedYamlLoad(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
-    ''' Taken from http://stackoverflow.com/questions/5121931/in-python-how-can-you-load-yaml-mappings-as-ordereddicts/21048064#21048064
+def load_yaml_in_order(stream,
+                       Loader=yaml.Loader,
+                       object_pairs_hook=OrderedDict):
+    """ Taken from http://stackoverflow.com/questions/5121931/in-python-how-can-you-load-yaml-mappings-as-ordereddicts/21048064#21048064
     Usage: yaml_dict = OrderedYamlLoad(istream)
-    '''
+    """
     class OrderedLoader(Loader):
         pass
 
@@ -42,7 +44,7 @@ def OrderedYamlLoad(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
     return yaml.safe_load(stream, OrderedLoader)
 
 
-def OrderedYamlDump(data, stream=None, Dumper=yaml.Dumper, **kwds):
+def dump_yaml_in_order(data, stream=None, Dumper=yaml.Dumper, **kwds):
     ''' Taken from http://stackoverflow.com/questions/5121931/in-python-how-can-you-load-yaml-mappings-as-ordereddicts/21048064#21048064
     Usage: OrderedYamlDump(yaml_dictionary, ostream)
     '''

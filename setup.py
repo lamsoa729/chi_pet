@@ -19,7 +19,7 @@ test_requirements = ['pytest', ]
 
 setup(
     author="Adam Reay Lamson",
-    author_email='adam.lamson@colorado.edu',
+    author_email='alamson@flatironinstitute.org',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',

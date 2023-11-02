@@ -1,16 +1,16 @@
 #!/usr/bin/env python
-# In case of poor (Sh***y) commenting contact adam.lamson@colorado.edu
+# In case of poor (Sh***y) commenting contact alamson@flatironinstitute.org
 """@package docstring
 File: chi_root_node.py
 Author: Adam Lamson
-Email: adam.lamson@colorado.edu
+Email: alamson@flatironinstitute.org
 Description:
 """
 
 from operator import attrgetter
 
-from .chi_node import ChiNode
-from .chi_param import ChiParam
+from ..chi_node import ChiNode
+from ..chi_param import ChiParam
 from chi_pet import chi_lib as clib
 from pathlib import Path
 
@@ -43,7 +43,7 @@ class ChiRootNode(ChiNode):
         # Take input yaml files and create master dictionary from them
         for fname in file_list:
             if Path.isfile(fname):
-                self.yaml_files_dict[fname] = clib.CreateDictFromYamlFile(
+                self.yaml_files_dict[fname] = clib.create_dict_from_yaml_file(path)(
                     fname)
 
     def make_chi_params(self):
