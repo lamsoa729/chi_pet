@@ -17,7 +17,21 @@ Chi-Pet
         :alt: Documentation Status
 
 
+.. |check| raw:: html
 
+    <input checked=""  type="checkbox">
+
+.. |check_| raw:: html
+
+    <input checked=""  disabled="" type="checkbox">
+
+.. |uncheck| raw:: html
+
+    <input type="checkbox">
+
+.. |uncheck_| raw:: html
+
+    <input disabled="" type="checkbox">
 
 SPython module to create, schedule, and analyze simulations on computing clusters.
 
@@ -28,8 +42,15 @@ SPython module to create, schedule, and analyze simulations on computing cluster
 
 Features
 --------
+*  Create a directory of nodes
 
-* TODO
+Developing Task
+---------------
+|uncheck| Create ChiParam class
+
+|uncheck| Add object references to chi params
+
+|uncheck| Change out all os.path to pathlib.Path objects
 
 Credits
 -------

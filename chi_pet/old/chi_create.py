@@ -8,16 +8,14 @@ import yaml
 import argparse
 import re
 # Analysis
-from .chi_param import ChiParam
+from ..chi_param import ChiParam
 from collections import OrderedDict
-from .chi_lib import *
+from ..chi_lib import *
 
 '''
 Name: chi_create.py
 Description: Creates simulation structure to run simulations with ChiLaunch
 '''
-
-# Class definition
 
 
 class ChiCreate(object):

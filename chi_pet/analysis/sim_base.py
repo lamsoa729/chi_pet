@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# In case of poor (Sh**y) commenting contact adam.lamson@colorado
+
 # Basic
 import sys
 import os
@@ -24,7 +24,6 @@ Email: adam.lamson@colorado.edu
 Description: Base class that holds multiple seeds that have the same
 parameters aka a sim.
 """
-
 
 class SimBase(object):
     def __init__(self, simdir, rundir=None, datadir=None, seedType=SeedBase):

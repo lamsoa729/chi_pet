@@ -10,6 +10,7 @@ Description:
 from operator import attrgetter
 
 from .chi_node import ChiNode
+from .chi_param import ChiParam
 from chi_pet import chi_lib as clib
 from pathlib import Path
 
@@ -22,7 +23,7 @@ class ChiRootNode(ChiNode):
         """!TODO: to be defined1. """
         ChiNode.__init__(self, path, None, None, level=0, opts=opts)
 
-    def Grow(self, yaml_lst):
+    def grow_chi_tree(self, yaml_lst):
         """!Template pattern for creating ChiNode tree
 
         @param yaml_lst: TODO
@@ -30,7 +31,7 @@ class ChiRootNode(ChiNode):
 
         """
         # Create yaml file dictionary
-        self.makeYamlDict(yaml_lst)
+        self.make_yaml_dict(yaml_lst)
         chi_param_refs = self.makeChiParamRefs()
         max_level = self.makeChiParam
         self.MakeSubnodes(max_level)
@@ -38,14 +39,14 @@ class ChiRootNode(ChiNode):
         # Get a list of object references to all entries in dictionary with key
         # and value ChiParam(string) and put into a list
 
-    def makeYamlDict(self, file_list):
+    def make_yaml_dict(self, file_list):
         # Take input yaml files and create master dictionary from them
         for fname in file_list:
             if Path.isfile(fname):
                 self.yaml_files_dict[fname] = clib.CreateDictFromYamlFile(
                     fname)
 
-    def makeChiParams(self):
+    def make_chi_params(self):
         """!TODO: Docstring for makeChiParamRef.
         @return: TODO
 

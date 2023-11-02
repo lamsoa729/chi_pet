@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-# In case of poor (Sh***y) commenting contact adam.lamson@colorado.edu
-# Basic
+
 import argparse
 
 """@package docstring
 File: chi_parser.py
 Author: Adam Lamson
-Email: adam.lamson@colorado.edu
+Email: alamson@flatironinstitute.org
 Description:
 """
 

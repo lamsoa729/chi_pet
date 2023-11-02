@@ -17,10 +17,8 @@ MOCK_YAML_DICT = {"mock_param.yaml": {"param": 1}}
 
 
 def clean_mocks():
-    """!Clean up mock directories and files before testing to make sure we are
+    """Clean up mock directories and files before testing to make sure we are
     working from a clean slate.
-    @return: TODO
-
     """
     for mpath in Path('.').glob('tests/mock*'):
         if mpath.is_file():
@@ -28,12 +26,17 @@ def clean_mocks():
         elif mpath.is_dir():
             rmtree(mpath)
 
+#
+
 
 @pytest.fixture(scope='session')
 def mock_chi_node():
-    """!Create a mock of ChiNode to use in testing
-    @return: TODO
+    """Create a mock of ChiNode to use in testing
 
+    Returns
+    -------
+    ChiNode
+        Mock of ChiNode class
     """
     cnode = ChiNode('tests/mock_node', None, MOCK_YAML_DICT)
     return cnode

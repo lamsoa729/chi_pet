@@ -105,7 +105,7 @@ class ChiNode():
         #                     self._level + 1)
         #     cnode.MakeNodeDirectory(max_level)
 
-    def DumpData(self):
+    def dump_data(self):
         pass
 
     @classmethod
@@ -117,6 +117,7 @@ class ChiNode():
         @return: Bool of whether a new directory was created or not
 
         """
+
         if path.exists():
             if overwrite:
                 print("Removing {}".format(path))
@@ -130,7 +131,9 @@ class ChiNode():
 
 ##########################################
 if __name__ == "__main__":
+    # Testing code for things
     cparams = [ChiParam("s" + str(i)) for i in range(10)]
+    print(cparams)
     yml_dict = {}
     cnode = ChiNode(Path.cwd(), cparams, yml_dict)
-    cnode.MakeNodeDirectory()
+    cnode.make_node_directory()

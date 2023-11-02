@@ -5,7 +5,7 @@ Credits
 Development Lead
 ----------------
 
-* Adam Reay Lamson <adam.lamson@colorado.edu>
+* Adam Reay Lamson <alamson@flatironinstitute.org>
 
 Contributors
 ------------
