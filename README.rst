@@ -48,6 +48,8 @@ Developing Task
 ---------------
 |uncheck| Create ChiParam class
 
+|uncheck| Add better leaf node finding
+
 |uncheck| Add object references to chi params
 
 |uncheck| Create tests for functions in chi_lib.py

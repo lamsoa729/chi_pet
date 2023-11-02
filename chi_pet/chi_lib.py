@@ -78,27 +78,28 @@ def ind_recurse(pi_list, p_index=0):
 
 
 def find_str_values(obj, pattern=r'^ChiParam\(.*\)'):
-    '''Recursive function to find ChiParams in program and returns a list of
+    """Recursive function to find ChiParams in program and returns a list of
     references to those objects.
-    '''
+    """
     # Look through list with the index being the key of the object
     if isinstance(obj, list):
         for k, v in enumerate(obj):
-            # If you find a match to pattern, create and yeild object
-            # reference.
+            # If a ChiParam is found, yield it
             if re.match(pattern, str(v)):
                 yield ObjRef(obj, k)
+
             # If another list or dictionary is encountered, recurse into it.
-            # Yeild any patterns you find
             elif isinstance(v, (dict, list)):
                 for result in find_str_values(v, pattern):
                     yield result
-    # Look through dictionary with the key being the key to the object
-    # reference
+
+    # Walk dictionary recursing into any lists or dictionaries
     elif isinstance(obj, dict):
         for k, v in obj.items():
+            # If a ChiParam is found, yield it
             if re.match(pattern, str(v)):
                 yield ObjRef(obj, k)
+            # If another list or dictionary is encountered, recurse into it.
             elif isinstance(v, (dict, list)):
                 for result in find_str_values(v, pattern):
                     yield result
@@ -107,18 +108,18 @@ def find_str_values(obj, pattern=r'^ChiParam\(.*\)'):
 
 
 class ObjRef(object):
-    ''' A 'reference' to an object. This allows you to make changes to strings
+    """ A 'reference' to an object. This allows you to make changes to strings
     or other objects in place of a dictionary or list like structure.
-    '''
+    """
 
     def __init__(self, obj, key):
         self.obj = obj
         self.key = key
 
-    def Set(self, value):
+    def set_value(self, value):
         self.obj[self.key] = value
 
-    def GetValue(self):
+    def get_value(self):
         return self.obj[self.key]
 
     def __repr__(self):
