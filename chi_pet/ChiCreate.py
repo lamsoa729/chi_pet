@@ -37,6 +37,10 @@ class ChiCreate(object):
         # Get a list of all the ChiParam dictionsarys with key
         # and value (ChiParam string) and put into a list
         a = list(find_str_values(self.yml_files_dict))
+        if not a:
+            raise RuntimeError(
+                "ChiParam list was empty. "
+                "Please make sure your yaml files have at least one ChiParam argument.")
 
         # Turn list of dictionaries into ChiParam objects
         self.MakeChiParams(a)

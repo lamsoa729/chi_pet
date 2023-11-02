@@ -4,7 +4,7 @@ import os
 from subprocess import call, run
 import shutil
 import yaml
-from .ChiLib import *
+from .ChiLib import CreateDictFromYamlFile, OrderedYamlDump
 from collections import OrderedDict
 import argparse
 from pathlib import Path
@@ -34,7 +34,7 @@ def run_parse_args():
 
 def run_args(workdir, state, args):
     action = state + '-ing'
-    print("Started {} sim in {}".format(action, args))
+    print("Started {} sim using args {}".format(action, args))
     sys.stdout.flush()
     if os.path.exists(workdir):
         os.chdir(workdir)
@@ -69,11 +69,12 @@ class ChiRun(object):
             args_dict = CreateDictFromYamlFile(args_file_path)
 
         print(OrderedYamlDump(args_dict, default_flow_style=False))
-        for k, l in args_dict.items():
-            print("File= {}, Dictionary= {}".format(k, " ".join(l)))
+        for k, vals in args_dict.items():
+            args = [str(a) for a in vals]
+            # print(f"File= {k}, Dictionary= ", args)
 
             if k in opts.states:
-                if run_args(opts.workdir, k, l):
+                if run_args(opts.workdir, k, args):
                     open('.error', 'a').close()
                 elif os.path.exists('sim.{}'.format(k)):
                     os.remove('sim.{}'.format(k))

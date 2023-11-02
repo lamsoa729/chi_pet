@@ -123,6 +123,20 @@ def find_seed_dirs(path):
             yield os.path.abspath(current)
 
 
+def find_leaf_dirs(path, ignore=['result', 'analysis']):
+    # Assume this is a leaf to start
+    is_leaf = True
+    # See if directories exist in cureent path (besides ignored directories)
+    # If so, this is not a leaf and interate into next leaf yielding paths
+    for p in path.iterdir():
+        if p.is_dir() and p.name not in ignore:
+            yield from find_leaf_dirs(p, ignore)
+            is_leaf = False
+    # This is a leaf directory so yeald this current path
+    if is_leaf:
+        yield path
+
+
 def touch(fname, times=None):
     """ Replicates the UNIX touch command """
     with open(fname, 'a'):

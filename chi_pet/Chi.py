@@ -15,7 +15,7 @@ from .ChiCreate import ChiCreate
 from .ChiParticleSwarm import ChiParticleSwarm
 from .ChiGeneticAlgorithm import ChiGeneticAlgorithm
 from .ChiRun import ChiRun
-from .ChiLib import CreateDictFromYamlFile, find_dirs, touch, find_seed_dirs
+from .ChiLib import CreateDictFromYamlFile, find_dirs, touch, find_leaf_dirs
 
 '''
 Name: Chi.py
@@ -79,6 +79,9 @@ def parse_args():
                         help='Runs a singular seed directory. Need --args_file.')
 
     opts = parser.parse_args()
+    if not opts.workdir:
+        opts.workdir = Path.cwd()
+
     return opts
 
 
@@ -88,21 +91,22 @@ class ChiMain(object):
 
         self.opts = opts
         self.yml_files_dict = {}  # combined dictionary of all yaml files
-        self.cwd = os.getcwd()
+        self.cwd = Path.cwd()
         self.ChiParams = []
-        self.ReadOpts()
-        self.ProgOpts()
+        self.update_states()
+        self.execute()
 
-    def ReadOpts(self):
-        # TODO This might not be fully integrated just yet
-        if not self.opts.workdir:
-            self.opts.workdir = self.cwd
+    def update_states(self):
+        """Fill states if states vector is not defined
 
+        @return: None
+
+        """
         if not self.opts.states and self.opts.args_file:
             yd = CreateDictFromYamlFile(self.opts.args_file)
             self.opts.states = list(yd.keys())
 
-    def ProgOpts(self):
+    def execute(self):
         wd = self.opts.workdir  # Shortcut for work directory
         if self.opts.launch != "NOLAUNCH":
             # If no sim dirs are given find them all in simulations
@@ -149,8 +153,9 @@ class ChiMain(object):
             for sd_dir in seed_lst:
                 sd_path = Path(sd_dir)
                 # Place new args file in directory
+                print(self.opts.args_file)
                 if self.opts.args_file:
-                    shutil.copy(self.opts.args_file, sd_dir)
+                    shutil.copy(self.opts.args_file, sd_path)
                 # Clean directory of any old state files
                 for state_file in sd_path.glob('sim.*'):
                     state_file.unlink()
@@ -162,7 +167,7 @@ class ChiMain(object):
                     (sd_path / f'sim.{s}').touch()
 
         elif self.opts.remove:
-            seed_lst = find_seed_dirs(self.opts.workdir)
+            seed_lst = find_leaf_dirs(self.opts.workdir)
             for sd_dir in seed_lst:
                 for fn in self.opts.remove:
                     path = os.path.join(sd_dir, fn)
