@@ -51,6 +51,9 @@ class ChiNode():
             # self.make_nonyaml_files(self._path)
             # self.make_analysis_dir(self._path)
             # self.make_script_dir(self._path)
+            if self._level > 0:
+                self.make_subnodes(self._level - 1)
+                return
             self.make_data_dir(self._path)
 
     def make_yaml_files(self, path: Path) -> None:
@@ -63,29 +66,16 @@ class ChiNode():
                 yaml.dump(yfdict, yfile)
 
     def make_data_dir(self, path: Path, overwrite: bool = False) -> None:
-        """!Create data directory.
-        @return: None
-
-        """
         self._data_dir = path / "data"
         node_created = self.create_dir(self._data_dir, overwrite)
-        if self._level > 0:
-            self.make_subnodes(self._level - 1,)
 
-    def make_subnodes(self, subnode_dir, sub_level):
-        """!Create subnode in directory tree structure
-
-        @param max_level: TODO
-        @param subnode_dir: TODO
-        @return: TODO
-
-        """
+    def make_subnodes(self, sub_level: int, overwrite: bool = False) -> None:
         if not self._path.exists():
             raise RuntimeError(
-                'Node directory {} does not exist.'.format(self._path))
+                f'Node directory {self._path} does not exist.')
 
-        self._snode_dir = self._path / subnode_dir
-        self.create_dir(self._snode_dir)
+        self._snode_dir = self._path / "subnodes"
+        self.create_dir(self._snode_dir, overwrite)
     #     # Find chi_params that are on the same level as node
     #     chi_params_level = [
     #         cp_i for cp_i in self._chi_params if cp_i._level == self._level]

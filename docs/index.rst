@@ -8,7 +8,6 @@ Welcome to Chi-Pet's documentation!
    readme
    installation
    usage
-   modules
    contributing
    contributors
    history
