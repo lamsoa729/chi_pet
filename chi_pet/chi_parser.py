@@ -44,9 +44,6 @@ def chi_parser():
     parser.add_argument('-ny', '--non_yaml', nargs='+', default=[], type=str,
                         help='Will add non-yaml files to seed directories when creating directory structure. (Used with --create or --shotgun option only)')
 
-    parser.add_argument('--fluid_config', default='',
-                        help='(DEPRICATED: use --non_yaml or -ny instead) Will add fluid.config file to seed directories when creating directory structure. Used with bulk simulations when all fluids start with the same configuration. (Used with --create or --shotgun option only)')
-
     parser.add_argument('-S', '--shotgun', metavar='PARAM_FILE',
                         nargs='+', type=str,
                         help='Creates seed directories with simulation structure that can be launched with ChiLaunch.py. PARAM_FILEs are copied into seed directories with ChiParams chosen according to the random distribution specified. Need -n to specify the number of random variants (default=10).')

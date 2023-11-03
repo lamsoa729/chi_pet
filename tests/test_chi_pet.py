@@ -4,7 +4,7 @@
 import pytest
 import random
 
-from chi_pet import chi_pet
+from chi_pet import chi
 
 
 @pytest.fixture
