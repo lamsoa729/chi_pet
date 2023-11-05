@@ -46,6 +46,14 @@ Features
 
 Developing Task
 ---------------
+|check| Create ChiNode class
+
+|check| Create ChiDict class
+
+|uncheck| Have ChiDict read in a list of yaml files
+
+|uncheck| Add ChiParam finding to ChiDict class
+
 |uncheck| Create ChiParam class
 
 |uncheck| Add better leaf node finding

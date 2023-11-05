@@ -9,13 +9,14 @@ from shutil import rmtree
 from pathlib import Path
 import yaml
 from .chi_param import ChiParam
+from .chi_dict import ChiDict
 
 
 class ChiNode():
 
     """!Node in the directory tree of parameter variations"""
 
-    def __init__(self, path, chi_params: list, yaml_dict: dict,
+    def __init__(self, node_path: Path, chi_params: list, yaml_dict: dict,
                  opts=None, params=None, level: int = 0) -> None:
         """!Initialize ChiNode with path location, parameter objects to change,
         and template parameter yaml dictionary.
@@ -28,12 +29,13 @@ class ChiNode():
         @param level: TODO
 
         """
-        if isinstance(path, Path):
-            self._path = path
-        elif isinstance(path, str):
-            self._path = Path(path)
+        if isinstance(node_path, Path):
+            self._node_path = node_path
+        elif isinstance(node_path, str):
+            self._node_path = Path(node_path)
         else:
-            raise TypeError(f" Path {path} was not pathlib object nor string")
+            raise TypeError(
+                f" Path {node_path} was not pathlib object nor string")
 
         self._chi_params = chi_params
         self._yaml_dict = yaml_dict
@@ -45,16 +47,16 @@ class ChiNode():
         self._snode_dir = None
 
     def make_node_dir(self, overwrite: bool = False) -> None:
-        node_created = self.create_dir(self._path, overwrite)
+        node_created = self.create_dir(self._node_path, overwrite)
         if node_created:
-            self.make_yaml_files(self._path)
+            self.make_yaml_files(self._node_path)
             # self.make_nonyaml_files(self._path)
             # self.make_analysis_dir(self._path)
             # self.make_script_dir(self._path)
             if self._level > 0:
                 self.make_subnodes(self._level - 1)
                 return
-            self.make_data_dir(self._path)
+            self.make_data_dir(self._node_path)
 
     def make_yaml_files(self, path: Path) -> None:
         """!Create parameter files to use
@@ -70,11 +72,11 @@ class ChiNode():
         node_created = self.create_dir(self._data_dir, overwrite)
 
     def make_subnodes(self, sub_level: int, overwrite: bool = False) -> None:
-        if not self._path.exists():
+        if not self._node_path.exists():
             raise RuntimeError(
-                f'Node directory {self._path} does not exist.')
+                f'Node directory {self._node_path} does not exist.')
 
-        self._snode_dir = self._path / "subnodes"
+        self._snode_dir = self._node_path / "subnodes"
         self.create_dir(self._snode_dir, overwrite)
     #     # Find chi_params that are on the same level as node
     #     chi_params_level = [

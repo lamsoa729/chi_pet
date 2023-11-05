@@ -20,12 +20,6 @@ def create_yaml_files_from_dict(dir_path, yml_file_dict):
             dump_yaml_in_order(d, of, default_flow_style=False)
 
 
-def create_dict_from_yaml_file(path):
-    with open(path, 'r') as f:
-        ydict = load_yaml_in_order(f)
-        return ydict
-
-
 def load_yaml_in_order(stream,
                        Loader=yaml.Loader,
                        object_pairs_hook=OrderedDict):

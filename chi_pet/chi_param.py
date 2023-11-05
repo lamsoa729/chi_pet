@@ -8,52 +8,38 @@ Email: alamson@flatironinstitute.org
 Description:
 """
 
+from typing import Optional, List
+
 
 class ChiParam(object):
 
     """!Class that holds all the values of a changing parameter."""
 
-    def __init__(self, name, format_str='{}',
-                 exec_str=None, vals=None, level=0):
-        """!TODO: to be defined1.
+    def __init__(self, name: str, format_str: Optional[str] = None,
+                 exec_str: Optional[str] = None,
+                 vals: Optional[List] = None,
+                 level: int = 0,
+                 **kwargs):
+        """Initialize ChiParam with name, format string, execution string,
 
-        @param name: TODO
-        @param vals: TODO
-
+        Parameters
+        ----------
+        name : _type_
+            _description_
+        format_str : Optional[str], optional
+            _description_, by default None
+        exec_str : Optional[str], optional
+            _description_, by default None
+        vals : Optional[List], optional
+            _description_, by default None
+        level : int, optional
+            _description_, by default 0
         """
         self._name = name
         self._format_str = format_str
         self._exec_str = exec_str
         self._vals = vals
         self._level = level
-
-
-class ChiParamVal(object):
-
-    """!Singular value of parameters that are being varied"""
-
-    def __init__(self, name, val):
-        """!Initializes ChiParamVal with the name of the parameter and a value
-
-        @param name: TODO
-        @param val: TODO
-
-        """
-        self._name = name
-        self._val = val
-
-
-class ChiParamVariations(object):
-
-    """!Docstring for ChiParamVariations. """
-
-    def __init__(self, chi_param_list=None):
-        """!Initialize a list of varied parameters to make chi_nodes
-
-        @param chi_param_list: TODO
-
-        """
-        self._chi_param_list = chi_param_list
 
 
 ##########################################
