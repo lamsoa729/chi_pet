@@ -10,8 +10,8 @@ Description:
 
 from typing import Optional, Dict, List
 from pathlib import Path
-from .chi_param import ChiParam
-from .chi_lib import load_yaml_in_order, dump_yaml_in_order
+# from .chi_param import ChiParam
+from chi_pet.chi_lib import load_yaml_in_order, dump_yaml_in_order
 import yaml
 
 
@@ -22,14 +22,17 @@ class ChiDict(object):
     def __init__(self, param_dict: Optional[Dict] = None,
                  file_path_list: Optional[List[Path]] = None):
         self._param_dict = param_dict
+        print(file_path_list)
         if self._param_dict is None:
             assert file_path_list is not None, "Must provide a dictionary or list of file paths."
             self._param_dict = self.make_param_dict(file_path_list)
 
     def make_param_dict(self, file_path_list):
+        param_dict = {}
         for file_path in file_path_list:
             with file_path.open('r') as f:
-                self._param_dict[f.name] = load_yaml_in_order(f)
+                param_dict[file_path.name] = load_yaml_in_order(f)
+        return param_dict
 
     def search_dict_for_chi_params(self):
         pass
@@ -42,4 +45,7 @@ class ChiDict(object):
 
 ##########################################
 if __name__ == "__main__":
-    print("Not implemented yet")
+    cwd = Path(__file__).parent.parent / 'tests'
+    yaml_list = list(cwd.glob('*.yaml'))
+    chi_dict = ChiDict(file_path_list=yaml_list)
+    print('chi_dict._param_dict = ', chi_dict._param_dict)

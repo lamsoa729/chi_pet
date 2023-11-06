@@ -35,7 +35,7 @@ def load_yaml_in_order(stream,
     OrderedLoader.add_constructor(
         yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
         construct_mapping)
-    return yaml.safe_load(stream, OrderedLoader)
+    return yaml.load(stream, OrderedLoader)
 
 
 def dump_yaml_in_order(data, stream=None, Dumper=yaml.Dumper, **kwds):
@@ -69,55 +69,6 @@ def ind_recurse(pi_list, p_index=0):
             for x in lst:
                 l += [[i] + x]
     return l
-
-
-def find_str_values(obj, pattern=r'^ChiParam\(.*\)'):
-    """Recursive function to find ChiParams in program and returns a list of
-    references to those objects.
-    """
-    # Look through list with the index being the key of the object
-    if isinstance(obj, list):
-        for k, v in enumerate(obj):
-            # If a ChiParam is found, yield it
-            if re.match(pattern, str(v)):
-                yield ObjRef(obj, k)
-
-            # If another list or dictionary is encountered, recurse into it.
-            elif isinstance(v, (dict, list)):
-                for result in find_str_values(v, pattern):
-                    yield result
-
-    # Walk dictionary recursing into any lists or dictionaries
-    elif isinstance(obj, dict):
-        for k, v in obj.items():
-            # If a ChiParam is found, yield it
-            if re.match(pattern, str(v)):
-                yield ObjRef(obj, k)
-            # If another list or dictionary is encountered, recurse into it.
-            elif isinstance(v, (dict, list)):
-                for result in find_str_values(v, pattern):
-                    yield result
-    else:
-        return
-
-
-class ObjRef(object):
-    """ A 'reference' to an object. This allows you to make changes to strings
-    or other objects in place of a dictionary or list like structure.
-    """
-
-    def __init__(self, obj, key):
-        self.obj = obj
-        self.key = key
-
-    def set_value(self, value):
-        self.obj[self.key] = value
-
-    def get_value(self):
-        return self.obj[self.key]
-
-    def __repr__(self):
-        return self.obj[self.key]
 
 
 def find_leaf_dirs(path, ignore=['result', 'analysis', 'scripts']):

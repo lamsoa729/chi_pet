@@ -97,9 +97,6 @@ class ChiNode():
         #                     self._level + 1)
         #     cnode.MakeNodeDirectory(max_level)
 
-    def dump_data(self):
-        pass
-
     @classmethod
     def create_dir(cls, path: Path, overwrite: bool = False) -> bool:
         """Create directory. If it exists it will be either overwritten or left
