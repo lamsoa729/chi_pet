@@ -9,7 +9,7 @@ Description:
 """
 
 import re
-from typing import Optional, List
+from typing import Optional, Union, List, Dict
 
 
 class ObjRef(object):
@@ -35,7 +35,8 @@ class ChiParam(object):
 
     """!Class that holds all the values of a changing parameter."""
 
-    def __init__(self, name: str, format_str: Optional[str] = None,
+    def __init__(self, name: str,
+                 format_str: Optional[str] = None,
                  exec_str: Optional[str] = None,
                  vals: Optional[List] = None,
                  level: int = 0,
@@ -63,9 +64,9 @@ class ChiParam(object):
 
 
 # TODO: Make this a class method of ChiParam
-def find_chi_param_values(obj, pattern=r'^ChiParam\(.*\)'):
-    """Recursive function to find ChiParams in program and returns a list of
-    references to those objects.
+def find_chi_param_str(obj: Union[Dict, List],
+                       pattern: str = r'^ChiParam\(.*\)'):
+    """Recursive function to find ChiParams in a heirarchical parameter dictionary  and returns a list of references to those objects.
     """
     # Look through list with the index being the key of the object
     if isinstance(obj, list):
@@ -76,7 +77,7 @@ def find_chi_param_values(obj, pattern=r'^ChiParam\(.*\)'):
 
             # If another list or dictionary is encountered, recurse into it.
             elif isinstance(v, (dict, list)):
-                for result in find_chi_param_values(v, pattern):
+                for result in find_chi_param_str(v, pattern):
                     yield result
 
     # Walk dictionary recursing into any lists or dictionaries
@@ -87,7 +88,7 @@ def find_chi_param_values(obj, pattern=r'^ChiParam\(.*\)'):
                 yield ObjRef(obj, k)
             # If another list or dictionary is encountered, recurse into it.
             elif isinstance(v, (dict, list)):
-                for result in find_chi_param_values(v, pattern):
+                for result in find_chi_param_str(v, pattern):
                     yield result
     else:
         return

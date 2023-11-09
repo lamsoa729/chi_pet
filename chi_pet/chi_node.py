@@ -16,8 +16,11 @@ class ChiNode():
 
     """!Node in the directory tree of parameter variations"""
 
-    def __init__(self, node_path: Path, chi_params: list, yaml_dict: dict,
-                 opts=None, params=None, level: int = 0) -> None:
+    def __init__(self, node_path: Path, chi_params: list,
+                 chi_dict: ChiDict = None,
+                 opts=None,
+                 params=None,
+                 level: int = 0) -> None:
         """!Initialize ChiNode with path location, parameter objects to change,
         and template parameter yaml dictionary.
 
@@ -38,7 +41,7 @@ class ChiNode():
                 f" Path {node_path} was not pathlib object nor string")
 
         self._chi_params = chi_params
-        self._yaml_dict = yaml_dict
+        self._yaml_dict = chi_dict
         self._opts = opts
         self._params = params
         self._level = level

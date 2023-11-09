@@ -12,6 +12,7 @@ from typing import Optional, Dict, List
 from pathlib import Path
 # from .chi_param import ChiParam
 from chi_pet.chi_lib import load_yaml_in_order, dump_yaml_in_order
+from chi_pet.chi_param import ChiParam, find_chi_param_str
 import yaml
 
 
@@ -27,7 +28,7 @@ class ChiDict(object):
             assert file_path_list is not None, "Must provide a dictionary or list of file paths."
             self._param_dict = self.make_param_dict(file_path_list)
 
-    def make_param_dict(self, file_path_list):
+    def make_param_dict(self, file_path_list: List[Path]) -> Dict:
         param_dict = {}
         for file_path in file_path_list:
             with file_path.open('r') as f:
