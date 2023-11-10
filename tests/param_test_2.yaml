@@ -1,7 +1,0 @@
-param_1: "one"
-param_2: "two"
-param_3: "three"
-param_list:
-  - "one"
-  - "two"
-  - "three"

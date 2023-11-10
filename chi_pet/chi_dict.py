@@ -23,7 +23,6 @@ class ChiDict(object):
     def __init__(self, param_dict: Optional[Dict] = None,
                  file_path_list: Optional[List[Path]] = None):
         self._param_dict = param_dict
-        print(file_path_list)
         if self._param_dict is None:
             assert file_path_list is not None, "Must provide a dictionary or list of file paths."
             self._param_dict = self.make_param_dict(file_path_list)
@@ -36,7 +35,7 @@ class ChiDict(object):
         return param_dict
 
     def search_dict_for_chi_params(self):
-        pass
+        return list(find_chi_param_str(self._param_dict))
 
     def write_out_yaml_files(self, node_path: Path):
         for file_name, file_dict in self._param_dict.items():

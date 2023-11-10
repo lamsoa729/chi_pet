@@ -14,10 +14,10 @@ import yaml
 
 MOCK_PARAM_DICT = {"param_1": 1,
                    "param_list": [1, 2, 3]}
-
+MOCK_CHI_PARAM_STR = "ChiParam(name='pA', format_str='pA{:d}', values=[10,20,30])"
 MOCK_PARAM_CHI_DICT = {"param_two": "two",
                        "param_str_list": ["one", "two", "three"],
-                       "var_param": "ChiParam(name='pA', format_str='pA{:d}', values=[10,20,30])"}
+                       "var_param": MOCK_CHI_PARAM_STR}
 
 MOCK_NON_YAML_FILE_STR = "This is a tests."
 
@@ -71,7 +71,8 @@ def mock_root_dir():
     with yaml_chi_param_path.open('w') as ycpp:
         yaml.dump(MOCK_PARAM_CHI_DICT, ycpp)
 
-    return chi_root_path
+    yield chi_root_path
+    clean_mocks()
 
 
 @pytest.fixture()
