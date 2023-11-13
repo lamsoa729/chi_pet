@@ -39,10 +39,21 @@ Python module to create, schedule, and analyze simulations on computing clusters
 * Free software: MIT license
 * Documentation: https://chi-pet.readthedocs.io.
 
+Introduction
+------------
+The philosophy behind Chi-Pet is to allow you to generate a heirarchy of directories by minimally modifying viable configuration and input files of your choice of simulation framework. These variations could be simple paramter scans or iterative optimizations schemes that require the output of one simulation to be the input of another. Chi-Pet will allow you to create a directory of nodes that can be submitted to a computing cluster. Chi-Pet will also allow you to analyze the output of your simulations and create a heirarchy of directories of those results. Chi-Pet is designed to be modular and extensible so that you can easily add your own simulation framework and analysis tools.
+
+The key lies in the `ChiParam` object that you substitute into yaml or toml files of your simulation. Every ChiParam will be varied in the generated node structure until no all ChiParams have been realized and a viable simulation run is created. 
+
+Basic node structure
+--------------------
+
+
 
 Features
 --------
-*  Create a directory of nodes
+* Create a directory heirarchy of nodes
+* Create variations of simulations, optimizing for a given cost function
 
 Developing Task
 ---------------
