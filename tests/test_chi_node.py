@@ -13,11 +13,12 @@ import pytest
 import yaml
 from chi_pet.chi_node import ChiNode
 from chi_pet.chi_dict import ChiDict
+from test_chi_dict import mock_chi_dict
 from mhelpers import setup_and_teardown, mock_non_yaml_file, mock_yaml_dict
 
 
 @pytest.fixture()
-def mock_chi_node(mock_yaml_dict):
+def mock_chi_node(mock_chi_dict):
     """Create a mock of ChiNode to use in testing
 
     Returns
@@ -25,7 +26,8 @@ def mock_chi_node(mock_yaml_dict):
     ChiNode
         Mock of ChiNode class
     """
-    cnode = ChiNode('tests/mock_node', None, mock_yaml_dict)
+
+    cnode = ChiNode('tests/mock_node', mock_chi_dict)
     return cnode
 
 

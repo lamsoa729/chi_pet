@@ -15,6 +15,16 @@ import pytest
 import yaml
 
 
+@pytest.fixture()
+def mock_chi_dict(mock_yaml_dict):
+    chi_dict = ChiDict(param_dict=mock_yaml_dict)
+    return chi_dict
+
+
+# def test_mock_chi_dict(mock_chi_dict):
+#     assert mock_chi_dict._param_dict == mock_yaml_dict
+
+
 def test_make_param_dict(mock_root_dir, mock_yaml_dict):
     chi_root_dir = mock_root_dir
     yaml_file_list = list(chi_root_dir.glob('*.yaml'))

@@ -16,7 +16,7 @@ class ChiNode():
 
     """!Node in the directory tree of parameter variations"""
 
-    def __init__(self, node_path: Path, chi_params: list,
+    def __init__(self, node_path: Path,
                  chi_dict: ChiDict = None,
                  opts=None,
                  params=None,
@@ -25,7 +25,6 @@ class ChiNode():
         and template parameter yaml dictionary.
 
         @param path: TODO
-        @param chi_params: TODO
         @param yaml_dict: TODO
         @param opts: TODO
         @param params: TODO
@@ -40,35 +39,37 @@ class ChiNode():
             raise TypeError(
                 f" Path {node_path} was not pathlib object nor string")
 
-        self._chi_params = chi_params
-        self._yaml_dict = chi_dict
+        self._chi_dict = chi_dict
+        self._chi_params = self._chi_dict.search_dict_for_chi_params()
         self._opts = opts
         self._params = params
         self._level = level
 
         self._data_dir = None
         self._snode_dir = None
+        self._analysis_dir = None
+        self._misc_dir = None
 
     def make_node_dir(self, overwrite: bool = False) -> None:
         node_created = self.create_dir(self._node_path, overwrite)
-        if node_created:
-            self.make_yaml_files(self._node_path)
-            # self.make_nonyaml_files(self._path)
-            # self.make_analysis_dir(self._path)
-            # self.make_script_dir(self._path)
-            if self._level > 0:
-                self.make_subnodes(self._level - 1)
-                return
-            self.make_data_dir(self._node_path)
+        if not node_created:
+            return
+
+        self.make_yaml_files(self._node_path)
+        # self.make_nonyaml_files(self._path)
+        # self.make_analysis_dir(self._path)
+        # self.make_misc_dir(self._path)
+        if self._level > 0:
+            self.make_subnodes(self._level - 1)
+            return
+        self.make_data_dir(self._node_path)
 
     def make_yaml_files(self, path: Path) -> None:
         """!Create parameter files to use
         @return: TODO
 
         """
-        for yfname, yfdict in self._yaml_dict.items():
-            with (path / yfname).open('w') as yfile:
-                yaml.dump(yfdict, yfile)
+        self._chi_dict.write_out_yaml_files(path)
 
     def make_data_dir(self, path: Path, overwrite: bool = False) -> None:
         self._data_dir = path / "data"

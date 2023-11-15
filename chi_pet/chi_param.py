@@ -31,6 +31,36 @@ class ObjRef(object):
         return self.obj[self.key]
 
 
+def find_chi_param_str(obj: Union[Dict, List],
+                       pattern: str = r'^ChiParam\(.*\)'):
+    """Recursive function to find ChiParams in a heirarchical parameter dictionary  and returns a list of references to those objects.
+    """
+    # Look through list with the index being the key of the object
+    if isinstance(obj, list):
+        for k, v in enumerate(obj):
+            # If a ChiParam is found, yield it
+            if re.match(pattern, str(v)):
+                yield ObjRef(obj, k)
+
+            # If another list or dictionary is encountered, recurse into it.
+            elif isinstance(v, (dict, list)):
+                for result in find_chi_param_str(v, pattern):
+                    yield result
+
+    # Walk dictionary recursing into any lists or dictionaries
+    elif isinstance(obj, dict):
+        for k, v in obj.items():
+            # If a ChiParam is found, yield it
+            if re.match(pattern, str(v)):
+                yield ObjRef(obj, k)
+            # If another list or dictionary is encountered, recurse into it.
+            elif isinstance(v, (dict, list)):
+                for result in find_chi_param_str(v, pattern):
+                    yield result
+    else:
+        return
+
+
 class ChiParam(object):
 
     """!Class that holds all the values of a changing parameter."""
@@ -62,36 +92,8 @@ class ChiParam(object):
         self._vals = vals
         self._level = level
 
-
-# TODO: Make this a class method of ChiParam
-def find_chi_param_str(obj: Union[Dict, List],
-                       pattern: str = r'^ChiParam\(.*\)'):
-    """Recursive function to find ChiParams in a heirarchical parameter dictionary  and returns a list of references to those objects.
-    """
-    # Look through list with the index being the key of the object
-    if isinstance(obj, list):
-        for k, v in enumerate(obj):
-            # If a ChiParam is found, yield it
-            if re.match(pattern, str(v)):
-                yield ObjRef(obj, k)
-
-            # If another list or dictionary is encountered, recurse into it.
-            elif isinstance(v, (dict, list)):
-                for result in find_chi_param_str(v, pattern):
-                    yield result
-
-    # Walk dictionary recursing into any lists or dictionaries
-    elif isinstance(obj, dict):
-        for k, v in obj.items():
-            # If a ChiParam is found, yield it
-            if re.match(pattern, str(v)):
-                yield ObjRef(obj, k)
-            # If another list or dictionary is encountered, recurse into it.
-            elif isinstance(v, (dict, list)):
-                for result in find_chi_param_str(v, pattern):
-                    yield result
-    else:
-        return
+    def realize_param(self, val):
+        pass
 
 
 ##########################################
