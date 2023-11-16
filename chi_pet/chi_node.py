@@ -17,10 +17,9 @@ class ChiNode():
     """!Node in the directory tree of parameter variations"""
 
     def __init__(self, node_path: Path,
-                 chi_dict: ChiDict = None,
+                 chi_dict: ChiDict = None,  # TODO: remove,
                  opts=None,
-                 params=None,
-                 level: int = 0) -> None:
+                 params=None) -> None:
         """!Initialize ChiNode with path location, parameter objects to change,
         and template parameter yaml dictionary.
 
@@ -40,40 +39,39 @@ class ChiNode():
                 f" Path {node_path} was not pathlib object nor string")
 
         self._chi_dict = chi_dict
-        self._chi_params = self._chi_dict.search_dict_for_chi_params()
         self._opts = opts
         self._params = params
-        self._level = level
+
+        self._chi_params = self._chi_dict.search_dict_for_chi_params()
+        print("chi_params = ", self._chi_params)
+        self._level = min(self._chi_params, key=lambda x: x._level)
 
         self._data_dir = None
         self._snode_dir = None
         self._analysis_dir = None
         self._misc_dir = None
 
-    def make_node_dir(self, overwrite: bool = False) -> None:
-        node_created = self.create_dir(self._node_path, overwrite)
+    def make_node_dir(self, node_path: Path, overwrite: bool = False) -> None:
+        node_created = self.create_dir(node_path, overwrite)
         if not node_created:
             return
 
-        self.make_yaml_files(self._node_path)
+        self.make_yaml_files(node_path)
+        self._chi_dict.write_out_yaml_files(node_path)
         # self.make_nonyaml_files(self._path)
         # self.make_analysis_dir(self._path)
         # self.make_misc_dir(self._path)
         if self._level > 0:
             self.make_subnodes(self._level - 1)
             return
-        self.make_data_dir(self._node_path)
+        self.make_data_dir(node_path)
 
-    def make_yaml_files(self, path: Path) -> None:
-        """!Create parameter files to use
-        @return: TODO
-
-        """
-        self._chi_dict.write_out_yaml_files(path)
+        self._chi_dict.write_out_yaml_files(node_path)
 
     def make_data_dir(self, path: Path, overwrite: bool = False) -> None:
         self._data_dir = path / "data"
         node_created = self.create_dir(self._data_dir, overwrite)
+        return node_created
 
     def make_subnodes(self, sub_level: int, overwrite: bool = False) -> None:
         if not self._node_path.exists():

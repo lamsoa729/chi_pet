@@ -68,14 +68,14 @@ class ChiParam(object):
     def __init__(self, name: str,
                  format_str: Optional[str] = None,
                  exec_str: Optional[str] = None,
-                 vals: Optional[List] = None,
+                 values: Optional[List] = None,
                  level: int = 0,
                  **kwargs):
-        """Initialize ChiParam with name, format string, execution string,
+        """Initialize a Chi parameter object.
 
         Parameters
         ----------
-        name : _type_
+        name : str
             _description_
         format_str : Optional[str], optional
             _description_, by default None
@@ -89,11 +89,19 @@ class ChiParam(object):
         self._name = name
         self._format_str = format_str
         self._exec_str = exec_str
-        self._vals = vals
+        self._values = values
         self._level = level
+        self._kwargs = kwargs
 
-    def realize_param(self, val):
+    def realize_param(self):
         pass
+
+    def __str__(self):
+        chi_str = f'ChiParam(name={self._name}, format_str={self._format_str}, exec_str={self._exec_str}, vals={self._values}, level={self._level}'
+        for k, v in self._kwargs.items():
+            chi_str += f', {k}={v}'
+        chi_str += ')'
+        return chi_str
 
 
 ##########################################

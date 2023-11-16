@@ -10,7 +10,6 @@ Description:
 from pathlib import Path
 from shutil import rmtree
 import pytest
-import yaml
 from chi_pet.chi_node import ChiNode
 from chi_pet.chi_dict import ChiDict
 from test_chi_dict import mock_chi_dict

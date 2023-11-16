@@ -65,4 +65,4 @@ class ChiRootNode(ChiNode):
 
 ##########################################
 if __name__ == "__main__":
-    cparams = [ChiParam('s', level=1, vals=[0, 1, 2, 3])]
+    cparams = [ChiParam('s', level=1, values=[0, 1, 2, 3])]
