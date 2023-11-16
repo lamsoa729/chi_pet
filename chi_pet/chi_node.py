@@ -43,8 +43,7 @@ class ChiNode():
         self._params = params
 
         self._chi_params = self._chi_dict.search_dict_for_chi_params()
-        print("chi_params = ", self._chi_params)
-        self._level = min(self._chi_params, key=lambda x: x._level)
+        self._level = min(param._level for param in self._chi_params)
 
         self._data_dir = None
         self._snode_dir = None
@@ -56,7 +55,6 @@ class ChiNode():
         if not node_created:
             return
 
-        self.make_yaml_files(node_path)
         self._chi_dict.write_out_yaml_files(node_path)
         # self.make_nonyaml_files(self._path)
         # self.make_analysis_dir(self._path)

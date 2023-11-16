@@ -9,8 +9,10 @@ Description:
 
 from pathlib import Path
 from shutil import rmtree
-from mhelpers import setup_and_teardown, mock_yaml_dict, mock_root_dir, MOCK_CHI_PARAM_STR
+from mhelpers import (setup_and_teardown, mock_yaml_dict,
+                      mock_root_dir, MOCK_CHI_PARAM_DICT_PATH)
 from chi_pet.chi_dict import ChiDict
+from test_chi_param import mock_chi_param
 import pytest
 import yaml
 
@@ -32,12 +34,20 @@ def test_make_param_dict(mock_root_dir, mock_yaml_dict):
     assert chi_dict._param_dict == mock_yaml_dict
 
 
-def test_search_dict_for_chi_params(mock_yaml_dict):
+def test_search_dict_for_chi_params(mock_yaml_dict, mock_chi_param):
     chi_dict = ChiDict(param_dict=mock_yaml_dict)
     assert chi_dict._param_dict == mock_yaml_dict
     chi_param_list = chi_dict.search_dict_for_chi_params()
     assert len(chi_param_list) == 1
-    assert str(chi_param_list[0]) == MOCK_CHI_PARAM_STR
+    assert str(chi_param_list[0]) == str(mock_chi_param)
+
+
+def test_search_dict_for_chi_params_when_non_exist(mock_yaml_dict):
+    # Remove the chi param string from the mock dictionary
+    mock_yaml_dict[MOCK_CHI_PARAM_DICT_PATH] = 1
+    chi_dict = ChiDict(param_dict=mock_yaml_dict)
+    chi_param_list = chi_dict.search_dict_for_chi_params()
+    assert len(chi_param_list) == 0
 
 
 def test_write_out_yaml_files(mock_root_dir):

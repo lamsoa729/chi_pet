@@ -15,6 +15,12 @@ import pytest
 import yaml
 
 
+@pytest.fixture()
+def mock_chi_param():
+    chi_param = eval(MOCK_CHI_PARAM_STR)
+    return chi_param
+
+
 def test_chi_param_init():
     chi_param = ChiParam(name='pA', format_str='pA{:d}', values=[10, 20, 30])
     assert chi_param._name == 'pA'

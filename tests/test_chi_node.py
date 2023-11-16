@@ -36,7 +36,7 @@ def test_chi_node_dir_creation(mock_chi_node):
 
     """
     cnode = mock_chi_node
-    cnode.make_node_dir()
+    cnode.make_node_dir(cnode._node_path)
     assert Path('tests/mock_node').exists()
     assert Path('tests/mock_node/mock_param.yaml').exists()
     assert Path('tests/mock_node/data').exists()
@@ -51,5 +51,5 @@ def test_chi_node_subnode_creation(mock_chi_node):
     """
     cnode = mock_chi_node
     cnode._level = 1
-    cnode.make_node_dir()
+    cnode.make_node_dir(cnode._node_path)
     assert Path('tests/mock_node/subnodes').exists()

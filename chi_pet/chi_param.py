@@ -33,7 +33,7 @@ class ObjRef(object):
 
 def find_chi_param_str(obj: Union[Dict, List],
                        pattern: str = r'^ChiParam\(.*\)'):
-    """Recursive function to find ChiParams in a heirarchical parameter dictionary  and returns a list of references to those objects.
+    """Recursive function to find ChiParams in a heirarchical parameter dictionary and returns a list of references to those objects.
     """
     # Look through list with the index being the key of the object
     if isinstance(obj, list):
@@ -92,6 +92,13 @@ class ChiParam(object):
         self._values = values
         self._level = level
         self._kwargs = kwargs
+
+        # Object reference class will be set here
+        self._obj_r = None
+
+    # todo: this needs testing
+    def set_obj_ref(self, obj_r):
+        self._obj_r = obj_r
 
     def realize_param(self):
         pass

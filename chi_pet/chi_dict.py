@@ -35,7 +35,13 @@ class ChiDict(object):
         return param_dict
 
     def search_dict_for_chi_params(self):
-        return list(find_chi_param_str(self._param_dict))
+        chi_param_ref_list = list(find_chi_param_str(self._param_dict))
+        chi_param_list = []
+        for cp_ref in chi_param_ref_list:
+            cp_tmp = eval(cp_ref.get_value())
+            cp_tmp.set_obj_ref(cp_ref)
+            chi_param_list.append(cp_tmp)
+        return chi_param_list
 
     def write_out_yaml_files(self, node_path: Path):
         for file_name, file_dict in self._param_dict.items():

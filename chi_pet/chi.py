@@ -16,7 +16,7 @@ import os
 # import re
 from . import chi_lib as clib
 from .chi_parser import chi_parser
-from .old.chi_create import ChiCreate
+from .old.ChiCreate import ChiCreate
 from .old.chi_root_node import ChiRootNode
 from pathlib import Path
 
