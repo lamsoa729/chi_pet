@@ -26,3 +26,18 @@ def test_chi_param_init():
     assert chi_param._name == 'pA'
     assert chi_param._format_str == 'pA{:d}'
     assert chi_param._values == [10, 20, 30]
+
+
+def test_gen_param_values(mock_chi_param):
+    assert mock_chi_param._values == [10, 20, 30]
+    mock_chi_param._exec_str = 'list(range(4))'
+    mock_chi_param.gen_param_values()
+    assert mock_chi_param._values == [10, 20, 30]
+    mock_chi_param._values = None
+    mock_chi_param.gen_param_values()
+    assert mock_chi_param._values == [0, 1, 2, 3]
+
+
+def test_realize_param():
+    # TODO next
+    assert False

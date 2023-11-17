@@ -68,8 +68,7 @@ class ChiNode():
 
     def make_data_dir(self, path: Path, overwrite: bool = False) -> None:
         self._data_dir = path / "data"
-        node_created = self.create_dir(self._data_dir, overwrite)
-        return node_created
+        return self.create_dir(self._data_dir, overwrite)
 
     def make_subnodes(self, sub_level: int, overwrite: bool = False) -> None:
         if not self._node_path.exists():

@@ -28,7 +28,7 @@ class ObjRef(object):
         return self.obj[self.key]
 
     def __repr__(self):
-        return self.obj[self.key]
+        return self.get_value()
 
 
 def find_chi_param_str(obj: Union[Dict, List],
@@ -100,8 +100,18 @@ class ChiParam(object):
     def set_obj_ref(self, obj_r):
         self._obj_r = obj_r
 
-    def realize_param(self):
-        pass
+    def gen_param_values(self):
+        # Values already exist so new parameters will not be generated
+        if self._values:
+            return
+
+        assert self._exec_str is not None, "Must provide a command to execute if values are not explicitly given or a list of values."
+
+        # XXX This is really dangerous and we should figure out a better way to do this. Maybe parsing it first so you can see if it is safe.
+        self._values = eval(self._exec_str)
+
+    def realize_param(self, index: int):
+        self._obj_r.set_value(self._values[index])
 
     def __str__(self):
         chi_str = f'ChiParam(name={self._name}, format_str={self._format_str}, exec_str={self._exec_str}, vals={self._values}, level={self._level}'
