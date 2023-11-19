@@ -87,20 +87,20 @@ class Chi(object):
             c.Run(self.opts)
 
         elif self.opts.prep:
-            seed_lst = clib.find_seed_dirs(self.opts.workdir)
-            for sd_dir in seed_lst:
+            leaf_lst = clib.find_leaf_dirs(self.opts.workdir)
+            for leaf_dir in leaf_lst:
                 if self.opts.args_file:
-                    shutil.copy(self.opts.args_file, sd_dir)
+                    shutil.copy(self.opts.args_file, leaf_dir)
                 for s in self.opts.states:
-                    clib.touch(os.path.join(sd_dir, 'sim.{}'.format(s)))
+                    clib.touch(leaf_dir / f'sim.{s}')
 
         elif self.opts.remove:
-            seed_lst = clib.find_seed_dirs(self.opts.workdir)
-            for sd_dir in seed_lst:
+            leaf_lst = clib.find_leaf_dirs(self.opts.workdir)
+            for leaf_dir in leaf_lst:
                 for fn in self.opts.remove:
-                    path = os.path.join(sd_dir, fn)
-                    if os.path.exists(path):
-                        os.remove(path)
+                    path = leaf_dir / fn
+                    if path.exists():
+                        path.unlink()
 
 
 def main():
@@ -109,7 +109,7 @@ def main():
 
     """
     opts = chi_parser()
-    chi_obj = Chi(opts)
+    chi = Chi(opts)
 
 
 ##########################################
