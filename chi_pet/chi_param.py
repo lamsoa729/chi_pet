@@ -13,11 +13,12 @@ from typing import Optional, Union, List, Dict
 
 
 class ObjRef(object):
-    """ A 'reference' to an object. This allows you to make changes to strings
-    or other objects in place of a dictionary or list like structure.
+    """ A 'reference' to an object that stores ChiParam strings and locations. This allows you to make changes to strings
+    or other objects in  a dictionary or list like structure.
     """
+    # TODO create a unit test for this
 
-    def __init__(self, obj, key):
+    def __init__(self, obj: Union[Dict, List], key: Union[str, int]):
         self.obj = obj
         self.key = key
 
@@ -33,7 +34,7 @@ class ObjRef(object):
 
 def find_chi_param_str(obj: Union[Dict, List],
                        pattern: str = r'^ChiParam\(.*\)'):
-    """Recursive function to find ChiParams in a heirarchical parameter dictionary and returns a list of references to those objects.
+    """Recursive function to find ChiParams in a heirarchical parameter dictionary and returns a list of references to the objects that store these strings.
     """
     # Look through list with the index being the key of the object
     if isinstance(obj, list):
@@ -114,7 +115,7 @@ class ChiParam(object):
         self._obj_r.set_value(self._values[index])
 
     def __str__(self):
-        chi_str = f'ChiParam(name={self._name}, format_str={self._format_str}, exec_str={self._exec_str}, vals={self._values}, level={self._level}'
+        chi_str = f'ChiParam(name={self._name}, format_str={self._format_str}, exec_str={self._exec_str}, values={self._values}, level={self._level}'
         for k, v in self._kwargs.items():
             chi_str += f', {k}={v}'
         chi_str += ')'

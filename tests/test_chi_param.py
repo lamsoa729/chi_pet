@@ -8,11 +8,9 @@ Description:
 """
 
 from pathlib import Path
-from shutil import rmtree
-from mhelpers import setup_and_teardown,  MOCK_CHI_PARAM_STR
-from chi_pet.chi_param import ChiParam
+from mhelpers import MOCK_CHI_PARAM_STR, mock_yaml_dict
+from chi_pet.chi_param import ChiParam, ObjRef
 import pytest
-import yaml
 
 
 @pytest.fixture()
@@ -38,6 +36,34 @@ def test_gen_param_values(mock_chi_param):
     assert mock_chi_param._values == [0, 1, 2, 3]
 
 
-def test_realize_param():
-    # TODO next
-    assert False
+def test_obj_reference():
+    # Create a dictionary
+    test_dict = {'test': 1,
+                 'test2': 2,
+                 'test3_list': ['a', 'b', 'c']}
+    # Create an object reference in that dictionary
+    obj_ref = ObjRef(test_dict['test3_list'], 0)
+    # Change the value in the dictionary using obj reference
+    obj_ref.set_value('d')
+    # Check value is what was given
+    assert test_dict['test3_list'][0] == 'd'
+    assert test_dict['test3_list'][0] == obj_ref.get_value()
+    # Make sure rest of dictionary was not changed
+    assert test_dict['test3_list'][1] == 'b'
+    assert test_dict['test'] == 1
+
+
+def test_realize_param(mock_yaml_dict):
+    # Create an obj reference to chi param string
+    obj_ref = ObjRef(mock_yaml_dict['mock_param_chi_param.yaml'],
+                     'var_param')
+    # Create a chi param object from the string
+    chi_param = eval(obj_ref.get_value())
+    # Set obj_ref
+    chi_param.set_obj_ref(obj_ref)
+    # Realize the chi param
+    for i, val in enumerate(chi_param._values):
+        chi_param.realize_param(i)
+        assert chi_param._obj_r.get_value() == val
+        assert mock_yaml_dict['mock_param_chi_param.yaml']['var_param'] == val
+    assert mock_yaml_dict['mock_param_chi_param.yaml']['param_two'] == 'two'

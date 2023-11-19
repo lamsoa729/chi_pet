@@ -1,6 +1,0 @@
-param_str_list:
-- one
-- two
-- three
-param_two: two
-var_param: ChiParam(name='pA', format_str='pA{:d}', values=[10,20,30])

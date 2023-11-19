@@ -9,6 +9,8 @@ Email: alamson@flatironinstitute.org
 Description:
 """
 
+from pathlib import Path
+
 
 def chi_parser():
     parser = argparse.ArgumentParser(prog='chi_pet.py')
@@ -37,28 +39,41 @@ def chi_parser():
 
     # CREATE options only
     parser.add_argument('-C', '--create', metavar='PARAM_FILE',
-                        nargs='+', type=str,
+                        nargs='+', type=str, default=[],
                         help='Creates seed directories with simulation structure that can be launched with ChiLaunch.py.')
-    parser.add_argument('-r', '--replace', default=False, action='store_true',
-                        help='Replace simulation file instead of throwing and error if file already exists.(Used with --create option only)')
-    parser.add_argument('-ny', '--non_yaml', nargs='+', default=[], type=str,
-                        help='Will add non-yaml files to seed directories when creating directory structure. (Used with --create or --shotgun option only)')
 
     parser.add_argument('-S', '--shotgun', metavar='PARAM_FILE',
                         nargs='+', type=str,
                         help='Creates seed directories with simulation structure that can be launched with ChiLaunch.py. PARAM_FILEs are copied into seed directories with ChiParams chosen according to the random distribution specified. Need -n to specify the number of random variants (default=10).')
 
     parser.add_argument('-PSC', '--particleswarmcreate', metavar='PARAM_FILE',
-                        nargs='+', type=str,
+                        nargs='+', type=str, default=[],
                         help='Particle Swarm Optimization Creation. Creates seed directories with simulation structure that can be launched with ChiLaunch.py. PARAM_FILEs are copied into seed directories with ChiParams chosen according to the random distribution specified. Need -n to specify the number of random population members (default=10).')
 
     parser.add_argument('-GAC', '--geneticalgorithmcreate', metavar='PARAM_FILE',
-                        nargs='+', type=str,
+                        nargs='+', type=str, default=[],
                         help='Genetic Algorithm Optimization Creation. Creates seed directories with simulation structure that can be launched with ChiLaunch.py. PARAM_FILEs are copied into seed directories with ChiParams chosen according to the random distribution specified. Need -n to specify the number of random population members (default=10).')
+
+    parser.add_argument('-r', '--replace', default=False, action='store_true',
+                        help='Replace simulation file instead of throwing and error if file already exists.(Used with --create option only)')
+
+    parser.add_argument('-ny', '--non_yaml', nargs='+', default=[], type=str,
+                        help='Will add non-yaml files to seed directories when creating directory structure. (Used with --create or --shotgun option only)')
 
     # RUN options only
     parser.add_argument('-R', '--run', action="store_true",
                         help='Runs a singular seed directory. Need --args_file.')
 
     opts = parser.parse_args()
+
+    # If growing a chi tree, turn param file path strings into a pathlib list
+    create_args = [opts.create,
+                   opts.shotgun,
+                   opts.particleswarmcreate,
+                   opts.geneticalgorithmcreate]
+    opts.param_file_paths = []
+
+    for plist in create_args:
+        opts.param_file_paths += plist
+
     return opts
