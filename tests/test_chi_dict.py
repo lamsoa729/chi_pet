@@ -38,6 +38,12 @@ def test_search_dict_for_chi_params(mock_yaml_dict, mock_chi_param):
     assert str(chi_param_list[0]) == str(mock_chi_param)
 
 
+def test_search_dict_for_chi_params_when_none_exist(mock_yaml_dict, mock_chi_param):
+    chi_dict = ChiDict(param_dict={"param": "not a ChiParam"})
+    chi_param_list = chi_dict.search_dict_for_chi_params()
+    assert len(chi_param_list) == 0
+
+
 def test_search_dict_for_chi_params_when_non_exist(mock_yaml_dict):
     # Remove the chi param string from the mock dictionary
     mock_yaml_dict[MOCK_CHI_PARAM_DICT_PATH] = 1

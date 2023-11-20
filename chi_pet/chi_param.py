@@ -97,16 +97,20 @@ class ChiParam(object):
         # Object reference class will be set here
         self._obj_r = None
 
-    # todo: this needs testing
     def set_obj_ref(self, obj_r):
         self._obj_r = obj_r
+
+    def get_number_of_values(self):
+        return len(self._values)
 
     def gen_param_values(self):
         # Values already exist so new parameters will not be generated
         if self._values:
             return
 
-        assert self._exec_str is not None, "Must provide a command to execute if values are not explicitly given or a list of values."
+        if self._exec_str is None:
+            raise RuntimeError(
+                "Must provide a command to execute if values are not explicitly given or a list of values.")
 
         # XXX This is really dangerous and we should figure out a better way to do this. Maybe parsing it first so you can see if it is safe.
         self._values = eval(self._exec_str)

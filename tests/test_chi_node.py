@@ -49,7 +49,12 @@ def test_chi_node_subnode_creation(mock_chi_node):
     @return: TODO
 
     """
+    def opts(x): return None
+    opts.command = 'create'
+    opts.algorithm = 'scan'
+
     cnode = mock_chi_node
-    cnode._level = 1
-    cnode.make_node_dir(cnode._node_path)
+    cnode._opts = opts
+    # cnode.make_node_dir(cnode._node_path)
+    cnode.make_subnodes()
     assert Path('tests/mock_node/subnodes').exists()

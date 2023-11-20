@@ -7,9 +7,9 @@ Description:
 """
 from shutil import rmtree
 from pathlib import Path
-import yaml
 from .chi_param import ChiParam
 from .chi_dict import ChiDict
+from .chi_lib import ind_recurse
 
 
 class ChiNode():
@@ -44,8 +44,11 @@ class ChiNode():
         if chi_dict:
             self._chi_dict = chi_dict
         else:
-            assert opts and opts.param_file_paths, "If a ChiDict is not supplied, a params_file_path list must be supplied instead."
-            self._chi_dict = ChiDict(file_path_list=opts.param_file_paths)
+            if not self._opts.param_file_paths:
+                raise RuntimeError(
+                    "If a ChiDict is not supplied, a params_file_path list must be supplied instead.")
+            self._chi_dict = ChiDict(
+                file_path_list=self._opts.param_file_paths)
 
         self._chi_params = self._chi_dict.search_dict_for_chi_params()
         self._level = min(param._level for param in self._chi_params)
@@ -78,14 +81,25 @@ class ChiNode():
         return self.create_dir(self._data_dir, overwrite)
 
     def make_subnodes(self, overwrite: bool = False) -> None:
+        assert self._opts.command == 'create', "Subnodes can only be created when creating a directory structure."
+
         if not self._node_path.exists():
             raise RuntimeError(
                 f'Node directory {self._node_path} does not exist.')
 
         self._snode_dir = self._node_path / "subnodes"
         self.create_dir(self._snode_dir, overwrite)
-        # TODO loop over lowest level of ChiParams and realize param values
-        # TODO if multiple chi-params have the same level carry out the combinetorics
+
+        # Loop over lowest level of ChiParams and realize param values
+        current_level_chi_params = [
+            cp for cp in self._chi_params if cp._level == self._level]
+
+        # If multiple chi-params have the same level carry out the combinatorics (but only for scan options)
+        if self._opts.algorithm == "scan":
+            lst = [cp.get_number_of_values()
+                   for cp in current_level_chi_params]
+            index_combinations = ind_recurse(lst)
+        # TODO test
 
     #     # Find chi_params that are on the same level as node
     #     chi_params_level = [

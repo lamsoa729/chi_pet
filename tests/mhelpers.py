@@ -72,7 +72,7 @@ def mock_root_dir():
         yaml.dump(MOCK_PARAM_CHI_DICT, ycpp)
 
     yield chi_root_path
-    clean_mocks()
+    # clean_mocks()
 
 
 @pytest.fixture()

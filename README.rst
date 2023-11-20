@@ -112,6 +112,8 @@ Developing Task
 ---------------
 |uncheck| Add subnode generating function to ChiNode
 
+|uncheck| Add edge case handling to tests (one for each test)
+
 |uncheck| Create tests for functions in chi_lib.py
 
 |uncheck| Create tests for multi-node generation
@@ -123,6 +125,10 @@ Developing Task
 |uncheck| Get commandline arguments working
 
 |uncheck| Create ChiRun class
+
+|uncheck| Make tutorial and quickstart for using Chi-Pet
+
+|uncheck| Create a safe chiparam parser so we don't need to use eval
 
 |check| Create a subparser for creation algorithms
 

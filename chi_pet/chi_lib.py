@@ -60,8 +60,7 @@ def ind_recurse(pi_list, p_index=0):
     # p_index
     for i in range(pi_list[p_index]):
         if p_index == len(pi_list) - 1:
-            # If at the last index (end of recursion) start constructing index
-            # list
+            # If at the last index (recursion end) start constructing index list
             l += [[i]]
         else:
             # Prepend i value to front of sublists using recursion
