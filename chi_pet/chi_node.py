@@ -67,11 +67,8 @@ class ChiNode():
         # self.make_nonyaml_files(self._path)
         # self.make_analysis_dir(self._path)
         # self.make_misc_dir(self._path)
-        if len(self._chi_params):
-            self.make_subnodes()
-        # if self._level > 0:
-        #     self.make_subnodes(self._level - 1)
-        #     return
+        # if len(self._chi_params):
+        #     self.make_subnodes()
         self.make_data_dir(node_path)
 
         self._chi_dict.write_out_yaml_files(node_path)
@@ -88,7 +85,7 @@ class ChiNode():
                 f'Node directory {self._node_path} does not exist.')
 
         self._snode_dir = self._node_path / "subnodes"
-        self.create_dir(self._snode_dir, overwrite)
+        subnode_dir_created = self.create_dir(self._snode_dir, overwrite)
 
         # Loop over lowest level of ChiParams and realize param values
         current_level_chi_params = [
@@ -99,7 +96,13 @@ class ChiNode():
             lst = [cp.get_number_of_values()
                    for cp in current_level_chi_params]
             index_combinations = ind_recurse(lst)
-        # TODO test
+
+        # loop over indices, choosing the right chi-param value for each index
+        for ind_list in index_combinations:
+            for ind, cparam in zip(ind_list, current_level_chi_params):
+                cparam.set_value(ind)
+
+        # TODO NEXT create subnodes with updated ChiParams
 
     #     # Find chi_params that are on the same level as node
     #     chi_params_level = [

@@ -8,18 +8,18 @@ Description:
 """
 
 from pathlib import Path
-from shutil import rmtree
-from mhelpers import (setup_and_teardown, mock_yaml_dict,
-                      mock_root_dir, MOCK_CHI_PARAM_DICT_PATH)
-from chi_pet.chi_dict import ChiDict
 from test_chi_param import mock_chi_param
+from mhelpers import (setup_and_teardown, MOCK_CHI_PARAM_DICT_PATH,
+                      mock_yaml_dict, mock_root_dir)
+from chi_pet.chi_dict import ChiDict
 import pytest
 import yaml
 
 
 @pytest.fixture()
 def mock_chi_dict(mock_yaml_dict):
-    chi_dict = ChiDict(param_dict=mock_yaml_dict)
+    yaml_dict = mock_yaml_dict
+    chi_dict = ChiDict(param_dict=yaml_dict)
     return chi_dict
 
 

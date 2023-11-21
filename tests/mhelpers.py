@@ -53,6 +53,13 @@ def mock_non_yaml_file():
 
 
 @pytest.fixture()
+def mock_yaml_dict():
+    yaml_dict = {MOCK_PARAM_DICT_PATH: MOCK_PARAM_DICT,
+                 MOCK_CHI_PARAM_DICT_PATH: MOCK_PARAM_CHI_DICT}
+    yield yaml_dict
+
+
+@pytest.fixture()
 def mock_root_dir():
     """Create a directory to use a root chi directory for testing 
 
@@ -76,7 +83,8 @@ def mock_root_dir():
 
 
 @pytest.fixture()
-def mock_yaml_dict():
-    yaml_dict = {MOCK_PARAM_DICT_PATH: MOCK_PARAM_DICT,
-                 MOCK_CHI_PARAM_DICT_PATH: MOCK_PARAM_CHI_DICT}
-    return yaml_dict
+def mock_create_opts():
+    def opts(x): return None
+    opts.command = 'create'
+    opts.algorithm = 'scan'
+    yield opts
