@@ -12,6 +12,11 @@ from .chi_dict import ChiDict
 from .chi_lib import ind_recurse
 
 
+"""! 
+
+"""
+
+
 class ChiNode():
 
     """!Node in the directory tree of parameter variations"""
@@ -20,15 +25,25 @@ class ChiNode():
                  chi_dict: ChiDict = None,
                  opts=None,
                  params=None) -> None:
-        """!Initialize ChiNode with path location or ChiDict that will allow you to create a ChiNode like directory. 
+        """Initialize ChiNode with path location or ChiDict to create a ChiNode-like directory.
 
+        Parameters
+        ----------
+        node_path : Path
+            Path to directory of ChiNode
+        chi_dict : ChiDict, optional
+            Combined dictionary of yaml/toml parameter files to create in directory, by default None
+        opts : _type_, optional
+            parser options, by default None
+        params : _type_, optional
+            _description_, by default None
 
-        @param path: TODO
-        @param yaml_dict: TODO
-        @param opts: TODO
-        @param params: TODO
-        @param level: TODO
-
+        Raises
+        ------
+        TypeError
+            _description_
+        RuntimeError
+            _description_
         """
         if isinstance(node_path, Path):
             self._node_path = node_path
@@ -53,6 +68,7 @@ class ChiNode():
         self._chi_params = self._chi_dict.search_dict_for_chi_params()
         self._level = min(param._level for param in self._chi_params)
 
+        # Directories in a ChiNode. If these are None, they will be created when the node is created.
         self._data_dir = None
         self._snode_dir = None
         self._analysis_dir = None
@@ -117,7 +133,7 @@ class ChiNode():
         # Create subnodes with updated lists
 
         # for cp in self._chi_params:
-        #     # TODO tracer round coding
+        #     # tracer round coding
         #     snode_path = snode_dir / "{}_{}".format(cp._name, self._
         #     cnode = ChiNode(snode_path, cp, self._yaml_file_dict, cp._name, cp._format_str
         #                     self._level + 1)

@@ -33,9 +33,6 @@ class RunBase(Analyzer):
                  subnodeType=SimBase, **kwargs):
         """!Initialize run base with simulation base.
 
-        @param path: TODO
-        @param **kwargs: TODO
-
         """
         Analyzer.__init__(self, path, nodeType=nodeType, **kwargs)
 

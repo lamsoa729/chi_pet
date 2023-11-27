@@ -16,7 +16,6 @@ class ObjRef(object):
     """ A 'reference' to an object that stores ChiParam strings and locations. This allows you to make changes to strings
     or other objects in  a dictionary or list like structure.
     """
-    # TODO create a unit test for this
 
     def __init__(self, obj: Union[Dict, List], key: Union[str, int]):
         self.obj = obj

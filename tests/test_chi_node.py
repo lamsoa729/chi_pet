@@ -45,11 +45,7 @@ def test_chi_node_dir_creation(mock_chi_node):
 
 
 def test_chi_node_subnode_creation(mock_root_dir, mock_create_opts):
-    """!Test to make sure subnodes are generated properly
-
-    @param mock_chi_node: TODO
-    @return: TODO
-
+    """!Test to make sure subnodes are generated properly.
     """
     root_path = mock_root_dir
     mock_create_opts.param_file_paths = list(root_path.glob('*.yaml'))

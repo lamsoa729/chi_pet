@@ -3,6 +3,7 @@
 # Basic
 import sys
 import os
+import yaml
 from os import path as pth
 # Testing
 import pandas as pd
@@ -26,10 +27,6 @@ class Analyzer(object):
     def __init__(self, path, param_dir='params', data_dir='data',
                  subnodeType=None, **kwargs):
         """!Initialize analyzer object with necessary information.
-
-        @param path: TODO
-        @param nodeType: TODO
-
         """
         self._path = self.CheckPath(path)
         self._data_dir = create_datadir(self._path, data_dir)
@@ -47,12 +44,7 @@ class Analyzer(object):
         self._data_dict = {}
         self._h5_data = None
 
-    def CheckPath(self, path):
-        """!Make sure path to directory exists
-        @param path: TODO
-        @return: TODO
-
-        """
+    def check_path(self, path):
         if path == 'cur_dir':
             return pth.abspath(os.getcwd())
         elif not pth.isdir(path):
@@ -61,51 +53,25 @@ class Analyzer(object):
         else:
             return pth.abspath(path)
 
-    def ParseParams(self):
-        """! Make a param dictionary
-        @return: void, creates params dictionary
-
-        """
+    def parse_params(self):
         for pf in self._pfile_lst:
             with open(pf, 'r') as f:
                 param_d = yaml.safe_load(f)
                 self._params[pf] = param_d
 
-    def Analyze(self, filelist, overwrite=False):
-        """!Analyze data in the file provided
-
-        @param filelist: TODO
-        @return: TODO
-
-        """
+    def analyze(self, filelist, overwrite=False):
         pass
 
-    def Write(self):
-        """!Write out analyzed data into an excel file.
-
-        @return: TODO
-
-        """
+    def write(self):
         pass
 
-    def Collect(self):
-        """!Collect all subnodes
-        @return: TODO
-
-        """
+    def collect(self):
         pass
 
-    def Graph(self):
-        """!TODO: Docstring for Graph.
-        @return: TODO
+    def graph(self):
+        pass
 
-        """
-
-    def GraphSubnodes(self, level=-2):
-        """!TODO: Docstring for GraphSubnodes.
-        @return: TODO
-
-        """
+    def graph_subnodes(self, level=-2):
         if level == -1 or self._subnodeType is None:
             return
         for sn in self._subnodes:
@@ -114,7 +80,7 @@ class Analyzer(object):
             sn.GraphSubnodes(level - 1)
         return
 
-    def Save(self):
+    def save(self):
         """!Save state of analyzer object
         @return: void
 
@@ -128,12 +94,11 @@ class Analyzer(object):
         #     pickle.dump(self._data_dict, f)
         # print("        - {} saved - ".format(self._path))
 
-    def Load(self):
+    def load(self):
         """!Load saved state of analyzer
         @return: boolean on whether load was successful or not
 
         """
-        # TODO Make sure this works correctly
         self._h5_data = h5py.File(pth.join(self._data_dir,
                                            "{}.h5".format(self._name)), 'r')
         # filename = pth.join(self._data_dir, "{}.pickle".format(self._name))
@@ -148,13 +113,10 @@ class Analyzer(object):
         #     print(("    Could not find file '{}'.").format(filename))
         #     return False
 
-    def Read(self):
-        """!TODO: Docstring for Read.
-        @return: TODO
-        """
+    def read(self):
         pass
 
-    def ReadSubnodes(self, level=-2):
+    def read_subnodes(self, level=-2):
         if level == -1 or self._subnodeType is None:
             return
         else:

@@ -204,12 +204,8 @@ class UnitConversion(object):
                         prop['value'] /= (pow(float(self._conv_dict[u]), d))
         return conv_params
 
-    def WriteYamlFile(self, name=""):
+    def write_yaml_file(self, name=""):
         """Write converted yaml file to current directory.
-
-        @param name: TODO
-        @return: TODO
-
         """
         conv_yaml = {}
         if self._to_dim:
@@ -228,12 +224,9 @@ class UnitConversion(object):
             outfile.write(convdump(conv_yaml))
 
 # Write function to use conv_yaml to make latex tables
-    def WriteLatexTable(self, f_name=""):
+    def write_latex_table(self, f_name=""):
         """Make a tex file that contains a table of all the conversion and 
            parameters has everything filled out according to the yaml file.
-        @param f_name: TODO
-        @return: TODO
-
         """
         tex_table = tex_table_hdr
 
