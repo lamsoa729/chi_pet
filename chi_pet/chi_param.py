@@ -114,8 +114,14 @@ class ChiParam(object):
         # XXX This is really dangerous and we should figure out a better way to do this. Maybe parsing it first so you can see if it is safe.
         self._values = eval(self._exec_str)
 
-    def realize_param(self, index: int):
+    def set_value(self, index: int):
         self._obj_r.set_value(self._values[index])
+
+    def get_value(self):
+        return self._obj_r.get_value()
+
+    def get_dir_str(self):
+        return self._format_str.format(self.get_value())
 
     def __str__(self):
         chi_str = f'ChiParam(name={self._name}, format_str={self._format_str}, exec_str={self._exec_str}, values={self._values}, level={self._level}'

@@ -13,8 +13,7 @@ import pytest
 from chi_pet.chi_node import ChiNode
 from chi_pet.chi_dict import ChiDict
 from test_chi_dict import mock_chi_dict
-from mhelpers import (setup_and_teardown, mock_create_opts,
-                      mock_root_dir, mock_yaml_dict)
+from mhelpers import *
 
 
 @pytest.fixture()

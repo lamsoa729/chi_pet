@@ -36,11 +36,17 @@ def clean_mocks():
             rmtree(mpath)
 
 
+@pytest.fixture()
+def clean_up(request):
+    return not request.config.getoption("--no-cleanup")
+
+
 @pytest.fixture(autouse=True)
-def setup_and_teardown():
+def setup_and_teardown(clean_up):
     clean_mocks()  # Makes sure you start clean
     yield
-    clean_mocks()  # Clean up after running tests
+    if clean_up:
+        clean_mocks()  # Clean up after running tests
 
 
 @pytest.fixture()

@@ -10,10 +10,8 @@ Description:
 
 from typing import Optional, Dict, List
 from pathlib import Path
-# from .chi_param import ChiParam
 from chi_pet.chi_lib import load_yaml_in_order, dump_yaml_in_order
 from chi_pet.chi_param import ChiParam, find_chi_param_str
-import yaml
 
 
 class ChiDict(object):

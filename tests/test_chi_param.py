@@ -63,7 +63,7 @@ def test_realize_param(mock_yaml_dict):
     chi_param.set_obj_ref(obj_ref)
     # Realize the chi param
     for i, val in enumerate(chi_param._values):
-        chi_param.realize_param(i)
+        chi_param.set_value(i)
         assert chi_param._obj_r.get_value() == val
         assert mock_yaml_dict['mock_param_chi_param.yaml']['var_param'] == val
     assert mock_yaml_dict['mock_param_chi_param.yaml']['param_two'] == 'two'
