@@ -10,6 +10,7 @@ Description:
 from pathlib import Path
 from shutil import rmtree
 import pytest
+from copy import deepcopy
 from chi_pet.chi_node import ChiNode
 from chi_pet.chi_dict import ChiDict
 from test_chi_dict import mock_chi_dict
@@ -35,7 +36,6 @@ def test_chi_node_dir_creation(mock_chi_node):
     @return: Test to make sure chi node can create a directory with proper structure
 
     """
-    # cnode = mock_chi_node
 
     mock_chi_node.make_node_dir(mock_chi_node._node_path)
     assert Path('tests/mock_node').exists()
@@ -52,3 +52,24 @@ def test_chi_node_subnode_creation(mock_root_dir, mock_create_opts):
     cnode = ChiNode(root_path, opts=mock_create_opts)
     cnode.make_subnodes()
     assert Path('tests/mock_root/subnodes').exists()
+    for pa in [10, 20, 30]:
+        pa_dir_path = Path(f'tests/mock_root/subnodes/pA{pa}')
+        assert pa_dir_path.exists()
+        assert (pa_dir_path / 'mock_param.yaml').exists()
+        assert (yaml.safe_load(
+            (pa_dir_path / 'mock_param_chi_param.yaml').open('r'))['var_param'] == pa)
+
+
+def test_chi_node_multilevel_subnode_creation(mock_yaml_dict, mock_create_opts):
+    root_path = Path.cwd() / 'tests/mock_root'
+    # Add another ChiParam at a lower level
+    yaml_dict = deepcopy(mock_yaml_dict)
+    yaml_dict[MOCK_PARAM_DICT_PATH][
+        'chi_param_2'] = "ChiParam(name='pB', format_str='pB{:f}', values=[.1,.2,.3], level=1)"
+    chi_dict = ChiDict(param_dict=yaml_dict)
+    cnode = ChiNode(root_path, chi_dict, opts=mock_create_opts)
+    cnode.make_node_dir(root_path)
+    # mock_create_opts.param_file_paths = list(root_path.glob('*.yaml'))
+    cnode.make_subnodes()
+    # TODO NEXT make this with chi_dict initialization
+    pass

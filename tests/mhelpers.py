@@ -62,7 +62,7 @@ def mock_non_yaml_file():
 def mock_yaml_dict():
     yaml_dict = {MOCK_PARAM_DICT_PATH: MOCK_PARAM_DICT,
                  MOCK_CHI_PARAM_DICT_PATH: MOCK_PARAM_CHI_DICT}
-    yield yaml_dict
+    return yaml_dict
 
 
 @pytest.fixture()

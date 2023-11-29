@@ -7,14 +7,10 @@ Description:
 """
 from shutil import rmtree
 from pathlib import Path
+from copy import deepcopy
 from .chi_param import ChiParam
 from .chi_dict import ChiDict
 from .chi_lib import ind_recurse
-
-
-"""! 
-
-"""
 
 
 class ChiNode():
@@ -129,7 +125,7 @@ class ChiNode():
                 # Once chi-node parameters are set in chi-dict,
                 # create a new chi-node and recurse
                 new_node = ChiNode(self._snode_store_dir / snode_dir_name,
-                                   self._chi_dict,
+                                   deepcopy(self._chi_dict),
                                    self._opts, self._params,
                                    self._level + 1)
                 new_node.make_node_dir(new_node._node_path, overwrite)
