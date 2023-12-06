@@ -100,9 +100,11 @@ def test_chi_node_combinatorics_subnode_creation(mock_yaml_dict, mock_create_opt
     cnode.make_node_dir(root_path)
     cnode.make_subnodes()
     # TODO NEXT finish this test
-    # for pa in [10, 20, 30]:
-    #     for pb in [.1, .2, .3]:
-    #     papb_dir_path = Path(f'tests/mock_root/subnodes/pA{pa}')
+    chi_dir_name_list = [ppath.name for ppath in Path(
+        f'tests/mock_root/subnodes/').glob('*')]
+    for pa in [10, 20, 30]:
+        for pb in [.1, .2, .3]:
+            assert f'pA{pa}_pB{pb}' in chi_dir_name_list
     #     assert pa_dir_path.exists()
 
     #     pa_subnode_path = pa_dir_path / 'subnodes'

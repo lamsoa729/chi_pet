@@ -7,6 +7,7 @@ Welcome to Chi-Pet's documentation!
 
    readme
    installation
+   quickstart
    usage
    contributing
    contributors

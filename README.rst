@@ -43,7 +43,7 @@ Introduction
 ------------
 The philosophy behind Chi-Pet is to allow you to generate a heirarchy of directories by minimally modifying viable configuration and input files of your choice of simulation framework. These variations could be simple paramter scans or iterative optimizations schemes that require the output of one simulation to be the input of another. Chi-Pet will allow you to create a directory of nodes that can be submitted to a computing cluster. Chi-Pet will also allow you to analyze the output of your simulations and create a heirarchy of directories of those results. Chi-Pet is designed to be modular and extensible so that you can easily add your own simulation framework and analysis tools.
 
-The key lies in the `ChiParam` object that you substitute into yaml or toml files of your simulation. Every ChiParam will be varied in the generated node structure until no all ChiParams have been realized and a viable simulation run is created. 
+The key lies in the `ChiParam` object that you substitute into yaml or toml files of your simulation. Every ChiParam will be varied in the generated node structure until all ChiParams have been realized and a viable simulation run is created. 
 
 
 Chi (non-leaf) node structure
@@ -110,7 +110,6 @@ Features
 
 Developing Task
 ---------------
-|uncheck| Add subnode generating function to ChiNode
 
 |uncheck| Add edge case handling to tests (one for each test)
 
@@ -129,6 +128,8 @@ Developing Task
 |uncheck| Make tutorial and quickstart for using Chi-Pet
 
 |uncheck| Create a safe chiparam parser so we don't need to use eval
+
+|check| Add subnode generating function to ChiNode
 
 |check| Create a subparser for creation algorithms
 

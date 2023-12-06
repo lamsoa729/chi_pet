@@ -14,6 +14,12 @@ from chi_pet.chi_lib import load_yaml_in_order, dump_yaml_in_order
 from chi_pet.chi_param import ChiParam, find_chi_param_str
 
 
+def eval_chi_param(chi_param_str):
+    pass
+    # TODO make sure that string starts off with 'ChiParam'
+    # TODO if exec_str is defined, check for safety
+
+
 class ChiDict(object):
 
     """Compiled dictionary of all the parameters to run a simulation."""
@@ -36,9 +42,12 @@ class ChiDict(object):
         chi_param_ref_list = list(find_chi_param_str(self._param_dict))
         chi_param_list = []
         for cp_ref in chi_param_ref_list:
+            # XXX Change this so that it is safer
             cp_tmp = eval(cp_ref.get_value())
+            # set object reference so ChiParam can change dictionary value
             cp_tmp.set_obj_ref(cp_ref)
             chi_param_list.append(cp_tmp)
+        chi_param_list.sort(key=lambda x: x._name)
         return chi_param_list
 
     def write_out_yaml_files(self, node_path: Path):
