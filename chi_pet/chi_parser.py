@@ -38,12 +38,12 @@ def chi_parser():
     create_parser = subparsers.add_parser(
         'create', help='Create a simulation directory structure using various strategies.')
 
-    create_parser.add_parser('files',
-                             metavar='PARAM_FILE(S)', nargs='+', type=str, default=[],
-                             help='List of yaml files to be combined into a single yaml file and varied using Chi-Pet.')
+    create_parser.add_argument('files',
+                               metavar='PARAM_FILE(S)', nargs='+', type=str, default=[],
+                               help='List of yaml files to be combined into a single yaml file and varied using Chi-Pet.')
 
-    create_parser.add_parser('-A', '--algorithm', type=str, default='scan',
-                             help='Algorithm used to vary parameters. Options are "scan", "shotgun", "particle_swarm", "genetic_algorithm".')
+    create_parser.add_argument('-A', '--algorithm', type=str, default='scan',
+                               help='Algorithm used to vary parameters. Options are "scan", "shotgun", "particle_swarm", "genetic_algorithm".')
 
     create_parser.add_argument('-r', '--replace', default=False, action='store_true',
                                help='Replace simulation file instead of throwing and error if file already exists.(Used with create parser only)')
