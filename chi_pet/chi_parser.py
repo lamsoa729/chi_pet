@@ -11,6 +11,8 @@ Description:
 
 from pathlib import Path
 
+# TODO NEXT add parser test
+
 
 def chi_parser():
     parser = argparse.ArgumentParser(prog='chi_pet.py')
