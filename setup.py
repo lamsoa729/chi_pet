@@ -13,7 +13,9 @@ with open('HISTORY.rst') as history_file:
 
 requirements = ['pyyaml',
                 'h5py',
-                'toml', ]
+                'toml',
+                'pytest',
+                'pytest-runner']
 
 setup_requirements = ['pytest-runner', 'pytest']
 
