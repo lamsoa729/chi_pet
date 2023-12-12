@@ -131,6 +131,12 @@ class ChiNode():
                 new_node.make_node_dir(new_node._node_path, overwrite)
                 new_node.make_subnodes(overwrite)
 
+        if self._opts.algorithm == "match":
+            # ChiParams of the same level are matched with each other during the iteration
+            # TODO NEXT make create a way that the parameters are changed with each other
+            # TODO Raise if the parameters do not have the same number of values
+            pass
+
     @classmethod
     def create_dir(cls, path: Path, overwrite: bool = False) -> bool:
         """Create directory. If it exists it will be either overwritten or left

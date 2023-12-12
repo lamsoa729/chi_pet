@@ -45,7 +45,7 @@ def chi_parser():
                                help='List of yaml files to be combined into a single yaml file and varied using Chi-Pet.')
 
     create_parser.add_argument('-A', '--algorithm', type=str, default='scan',
-                               help='Algorithm used to vary parameters. Options are "scan", "shotgun", "particle_swarm", "genetic_algorithm".')
+                               help='Algorithm used to vary parameters. Options are "scan", "match", "particle_swarm", "genetic_algorithm".')
 
     create_parser.add_argument('-r', '--replace', default=False, action='store_true',
                                help='Replace simulation file instead of throwing and error if file already exists.(Used with create parser only)')

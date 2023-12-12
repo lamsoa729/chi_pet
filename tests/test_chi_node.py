@@ -99,23 +99,20 @@ def test_chi_node_combinatorics_subnode_creation(mock_yaml_dict, mock_create_opt
     cnode = ChiNode(root_path, chi_dict, opts=mock_create_opts)
     cnode.make_node_dir(root_path)
     cnode.make_subnodes()
-    # TODO NEXT finish this test
-    chi_dir_name_list = [ppath.name for ppath in Path(
-        f'tests/mock_root/subnodes/').glob('*')]
     for pa in [10, 20, 30]:
         for pb in [.1, .2, .3]:
-            assert f'pA{pa}_pB{pb}' in chi_dir_name_list
-    #     assert pa_dir_path.exists()
+            p_comb_dir = Path(f'tests/mock_root/subnodes/pA{pa}_pB{pb}')
+            assert p_comb_dir.exists()
+            assert (p_comb_dir / MOCK_PARAM_DICT_PATH).exists()
+            assert (p_comb_dir / MOCK_CHI_PARAM_DICT_PATH).exists()
+            assert (p_comb_dir / 'data').exists()
 
-    #     pa_subnode_path = pa_dir_path / 'subnodes'
-    #     assert pa_subnode_path.exists()
+            assert (yaml.safe_load(
+                (p_comb_dir / MOCK_CHI_PARAM_DICT_PATH).open('r'))['var_param'] == pa)
+            assert (yaml.safe_load(
+                (p_comb_dir / MOCK_PARAM_DICT_PATH).open('r'))['chi_param_2'] == pb)
 
-    #         pb_dir_path = pa_subnode_path / f'pB{pb}'
-    #         assert pb_dir_path.exists()
-    #         assert (pb_dir_path / MOCK_PARAM_DICT_PATH).exists()
-    #         assert (pb_dir_path / MOCK_CHI_PARAM_DICT_PATH).exists()
 
-    #         assert (yaml.safe_load(
-    #             (pb_dir_path / MOCK_CHI_PARAM_DICT_PATH).open('r'))['var_param'] == pa)
-    #         assert (yaml.safe_load(
-    #             (pb_dir_path / MOCK_PARAM_DICT_PATH).open('r'))['chi_param_2'] == pb)
+def test_chi_node_matched_subnode_creation(mock_yaml_dict, mock_create_opts):
+    # TODO NEXT after create matched creation
+    pass
