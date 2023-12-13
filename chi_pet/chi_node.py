@@ -78,6 +78,7 @@ class ChiNode():
             return
 
         self._chi_dict.write_out_yaml_files(node_path)
+        # TODO initialize nonyaml files and test
         # self.make_nonyaml_files(self._path)
         # self.make_analysis_dir(self._path)
         # self.make_misc_dir(self._path)
@@ -108,34 +109,75 @@ class ChiNode():
         current_level_chi_params = [
             cp for cp in self._chi_params if cp._level == self._level]
 
+        # TODO POSSIBLE make this it's own function
+        # Make list of all 'matched' chi-params matched methods of varying parameters
+        matched_params = [
+            cp for cp in current_level_chi_params if cp._alg is 'match']
+
+        # Separate matched parameters into resprective groups
+        matched_grps = {}
+        for mcp in matched_params:
+            if not mcp._param_grp:
+                # TODO Create test for this runtime error
+                raise RuntimeError(
+                    f"Matched param {mcp._name} does not have an associated group. Please set the 'param_grp' argument of this ChiParam object.")
+            # If grp name does not exists, start list of parameters
+            if not mcp._param_grp in matched_grps:
+                matched_grps[mcp._param_grp] = [mcp]
+                continue
+
+            matched_grps[mcp._param_grp] += [mcp]
+
+        # TODO make this it's own testable function
+        val_number_lst = []
+        # Get number of param variations for each group.
+        for grp_name, grp_lst in matched_grps.items():
+            num_vals = None
+            for cp in grp_lst:
+                if not num_vals:
+                    num_vals = cp.get_number_of_values()
+                    continue
+                # make sure each chi-param in a group contains the same param variation number
+                if num_vals != cp.get_number_of_values():
+                    raise RuntimeError(
+                        f"Not all params in matched param group {grp_name} has the same number of values. Check to make sure all values have or generate the same length parameter value lists.")
+            val_number_lst += [num_vals]
+
+        # Loop over all none matched parameters and add their parameter value list lengths to val_number_lst to carry out combinatorics.
+        scanned_params = [
+            cp for cp in current_level_chi_params if cp._alg == 'scan']
+        for scp in scanned_params:
+            val_number_lst += [scp.get_number_of_values()]
+
         # If multiple chi-params have the same level carry out the combinatorics
-        # (but only for scan options)
-        if self._opts.algorithm == "scan":
-            lst = [cp.get_number_of_values()
-                   for cp in current_level_chi_params]
-            index_combinations = ind_recurse(lst)
+        index_combinations = ind_recurse(val_number_lst)
 
-            # loop over indices, choosing the right chi-param value for each index
-            for ind_list in index_combinations:
-                for ind, cparam in zip(ind_list, current_level_chi_params):
-                    cparam.set_value(ind)
-                snode_dir_name = "_".join([cp.get_dir_str()
-                                          for cp in current_level_chi_params])
+        # loop over indices, choosing the right chi-param value for each index
+        num_grps = len(matched_grps.keys())
+        for ind_list in index_combinations:
 
-                # Once chi-node parameters are set in chi-dict,
-                # create a new chi-node and recurse
-                new_node = ChiNode(self._snode_store_dir / snode_dir_name,
-                                   deepcopy(self._chi_dict),
-                                   self._opts, self._params,
-                                   self._level + 1)
-                new_node.make_node_dir(new_node._node_path, overwrite)
-                new_node.make_subnodes(overwrite)
+            # Set matched param values first
+            for ind,  grp_lst in zip(ind_list[:num_grps],
+                                     matched_grps.values()):
+                for mcp in grp_lst:
+                    cp.set_values(ind)
 
-        if self._opts.algorithm == "match":
-            # ChiParams of the same level are matched with each other during the iteration
-            # TODO NEXT make create a way that the parameters are changed with each other
-            # TODO Raise if the parameters do not have the same number of values
-            pass
+            # Set scanned params values second
+            for ind, scp in zip(ind_list[num_grps:], scanned_params):
+                scp.set_value(ind)
+
+            # Create directory name
+            snode_dir_name = "_".join([cp.get_dir_str()
+                                       for cp in current_level_chi_params])
+
+            # Once chi-node parameters are set in chi-dict,
+            # create a new chi-node and recurse
+            new_node = ChiNode(self._snode_store_dir / snode_dir_name,
+                               deepcopy(self._chi_dict),
+                               self._opts, self._params,
+                               self._level + 1)
+            new_node.make_node_dir(new_node._node_path, overwrite)
+            new_node.make_subnodes(overwrite)
 
     @classmethod
     def create_dir(cls, path: Path, overwrite: bool = False) -> bool:

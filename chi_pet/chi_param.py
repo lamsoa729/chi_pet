@@ -70,8 +70,11 @@ class ChiParam(object):
                  exec_str: Optional[str] = None,
                  values: Optional[List] = None,
                  level: int = 0,
+                 alg: str = 'scan',
+                 param_grp: Optional[str] = None,
                  **kwargs):
         """Initialize a Chi parameter object.
+        TODO NDOCUMENT 
 
         Parameters
         ----------
@@ -81,16 +84,23 @@ class ChiParam(object):
             _description_, by default None
         exec_str : Optional[str], optional
             _description_, by default None
-        vals : Optional[List], optional
+        values : Optional[List], optional
             _description_, by default None
         level : int, optional
             _description_, by default 0
+        alg : str, optional
+            _description_, by default 'scan'
+        param_grp : Optional[str], optional
+            _description_, by default None
         """
+
         self._name = name
         self._format_str = format_str
         self._exec_str = exec_str
         self._values = values
         self._level = level
+        self._alg = alg
+        self._param_grp = param_grp
         self._kwargs = kwargs
 
         # Object reference class will be set here

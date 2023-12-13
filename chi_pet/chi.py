@@ -105,9 +105,7 @@ class Chi(object):
 
 
 def main():
-    """!Main function of chi_pet
-    @return: void
-
+    """Main function of chi_pet
     """
     opts = chi_parser()
     chi = Chi(opts)
