@@ -160,7 +160,7 @@ class ChiNode():
             for ind,  grp_lst in zip(ind_list[:num_grps],
                                      matched_grps.values()):
                 for mcp in grp_lst:
-                    cp.set_values(ind)
+                    mcp.set_value(ind)
 
             # Set scanned params values second
             for ind, scp in zip(ind_list[num_grps:], scanned_params):
