@@ -74,24 +74,23 @@ class ChiParam(object):
                  param_grp: Optional[str] = None,
                  **kwargs):
         """Initialize a Chi parameter object.
-        TODO NDOCUMENT 
 
         Parameters
         ----------
         name : str
-            _description_
+            Name of the chi parameter used for identifying object in code.
         format_str : Optional[str], optional
-            _description_, by default None
+            String that will be modified and used to identify ChiNode directories, by default None
         exec_str : Optional[str], optional
-            _description_, by default None
+            String to be executed to generate variable values of parameter, by default None
         values : Optional[List], optional
-            _description_, by default None
+            Explicity given list of values to scan over for parameter, by default None
         level : int, optional
-            _description_, by default 0
+            Level in directory structure param will be varied, by default 0
         alg : str, optional
-            _description_, by default 'scan'
+            Algorithm to use in creating directory variations. Options = ['scan', 'match'], by default 'scan'
         param_grp : Optional[str], optional
-            _description_, by default None
+            For 'match' alg, what group of parameters to vary parameters with, by default None
         """
 
         self._name = name
