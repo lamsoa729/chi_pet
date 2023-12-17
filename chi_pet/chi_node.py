@@ -110,6 +110,7 @@ class ChiNode():
             cp for cp in self._chi_params if cp._level == self._level]
 
         # TODO POSSIBLE make this it's own function
+        ###
         # Make list of all 'matched' chi-params matched methods of varying parameters
         matched_params = [
             cp for cp in current_level_chi_params if cp._alg is 'match']
@@ -118,7 +119,6 @@ class ChiNode():
         matched_grps = {}
         for mcp in matched_params:
             if not mcp._param_grp:
-                # TODO Create test for this runtime error
                 raise RuntimeError(
                     f"Matched param {mcp._name} does not have an associated group. Please set the 'param_grp' argument of this ChiParam object.")
             # If grp name does not exists, start list of parameters
@@ -127,8 +127,10 @@ class ChiNode():
                 continue
 
             matched_grps[mcp._param_grp] += [mcp]
+        ###
 
         # TODO make this it's own testable function
+        ###
         val_number_lst = []
         # Get number of param variations for each group.
         for grp_name, grp_lst in matched_grps.items():
@@ -140,7 +142,7 @@ class ChiNode():
                 # make sure each chi-param in a group contains the same param variation number
                 if num_vals != cp.get_number_of_values():
                     raise RuntimeError(
-                        f"Not all params in matched param group {grp_name} has the same number of values. Check to make sure all values have or generate the same length parameter value lists.")
+                        f"Some params in matched param group {grp_name} have the same number of values. Check to make sure all values have or generate the same length parameter value lists.")
             val_number_lst += [num_vals]
 
         # Loop over all none matched parameters and add their parameter value list lengths to val_number_lst to carry out combinatorics.
@@ -151,8 +153,9 @@ class ChiNode():
 
         # If multiple chi-params have the same level carry out the combinatorics
         index_combinations = ind_recurse(val_number_lst)
+        ###
 
-        # loop over indices, choosing the right chi-param value for each index
+        # Loop over indices, choosing the right chi-param value for each index
         num_grps = len(matched_grps.keys())
         for ind_list in index_combinations:
 

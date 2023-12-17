@@ -116,15 +116,18 @@ def test_chi_node_combinatorics_subnode_creation(mock_yaml_dict, mock_create_opt
 
 
 def test_chi_node_matched_subnode_creation(mock_yaml_dict, mock_create_opts):
+    # Set path for creating node
     root_path = Path.cwd() / 'tests/mock_root'
+
+    # Set up yaml dictionary
     yaml_dict = deepcopy(mock_yaml_dict)
     # Change first chi-param to be a matched parameter
     yaml_dict[MOCK_CHI_PARAM_DICT_PATH]['var_param'] = (
         MOCK_CHI_PARAM_STR[:-1] + ", alg='match', param_grp='alpha')")
-    # Add another ChiParam at a lower level
-
+    # Make second chi-param a matched parameter
     yaml_dict[MOCK_PARAM_DICT_PATH][
         'chi_param_2'] = "ChiParam(name='pB', format_str='pB{:.1f}', values=[.1,.2,.3], alg='match', param_grp='alpha')"
+
     chi_dict = ChiDict(param_dict=yaml_dict)
     cnode = ChiNode(root_path, chi_dict, opts=mock_create_opts)
 
@@ -142,5 +145,65 @@ def test_chi_node_matched_subnode_creation(mock_yaml_dict, mock_create_opts):
         assert (yaml.safe_load(
             (p_comb_dir / MOCK_PARAM_DICT_PATH).open('r'))['chi_param_2'] == pb)
 
-# TODO NTEST do match at combinatorics creation
-# TODO Make sure the system fails if two matched parameters do not have the same number of values
+
+def test_chi_node_matched_scanned_subnode_creation(mock_yaml_dict, mock_create_opts):
+    # Set path for creating node
+    root_path = Path.cwd() / 'tests/mock_root'
+
+    # Set up yaml dictionary
+    yaml_dict = deepcopy(mock_yaml_dict)
+    # Change first chi-param to be a matched parameter
+    yaml_dict[MOCK_CHI_PARAM_DICT_PATH]['var_param'] = (
+        MOCK_CHI_PARAM_STR[:-1] + ", alg='match', param_grp='alpha')")
+    # Make second chi-param a matched parameter
+    yaml_dict[MOCK_PARAM_DICT_PATH][
+        'chi_param_2'] = "ChiParam(name='pB', format_str='pB{:.1f}', values=[.1,.2,.3], alg='match', param_grp='alpha')"
+    # Make third chi-param a scanned parameter
+    yaml_dict[MOCK_PARAM_DICT_PATH][
+        'chi_param_3'] = "ChiParam(name='pC', format_str='pC{:d}', values=[11,22,33], alg='scan')"
+
+    chi_dict = ChiDict(param_dict=yaml_dict)
+    cnode = ChiNode(root_path, chi_dict, opts=mock_create_opts)
+
+    cnode.make_node_dir(root_path)
+    cnode.make_subnodes()
+    for pa, pb in zip([10, 20, 30], [.1, .2, .3]):
+        for pc in [11, 22, 33]:
+            p_comb_dir = Path(
+                f'tests/mock_root/subnodes/pA{pa}_pB{pb}_pC{pc}')
+            assert p_comb_dir.exists()
+            assert (p_comb_dir / MOCK_PARAM_DICT_PATH).exists()
+            assert (p_comb_dir / MOCK_CHI_PARAM_DICT_PATH).exists()
+            assert (p_comb_dir / 'data').exists()
+
+            assert (yaml.safe_load(
+                (p_comb_dir / MOCK_CHI_PARAM_DICT_PATH).open('r'))['var_param'] == pa)
+            assert (yaml.safe_load(
+                (p_comb_dir / MOCK_PARAM_DICT_PATH).open('r'))['chi_param_2'] == pb)
+            assert (yaml.safe_load(
+                (p_comb_dir / MOCK_PARAM_DICT_PATH).open('r'))['chi_param_3'] == pc)
+
+
+@pytest.mark.parametrize("chi_param_2_str",
+                         ["ChiParam(name='pB', format_str='pB{:.1f}', values=[.1,.2,.3,.4], alg='match', param_grp='alpha')",
+                          "ChiParam(name='pB', format_str='pB{:.1f}', values=[.1,.2,.3], alg='match')"])
+def test_chi_node_matched_creation_rt_error(mock_yaml_dict, mock_create_opts, chi_param_2_str):
+    # Set path for creating node
+    root_path = Path.cwd() / 'tests/mock_root'
+
+    # Set up yaml dictionary
+    yaml_dict = deepcopy(mock_yaml_dict)
+    # Change first chi-param to be a matched parameter
+    yaml_dict[MOCK_CHI_PARAM_DICT_PATH]['var_param'] = (
+        MOCK_CHI_PARAM_STR[:-1] + ", alg='match', param_grp='alpha')")
+    # Make second chi-param a matched parameter but with different number of values (should throw error)
+    yaml_dict[MOCK_PARAM_DICT_PATH][
+        'chi_param_2'] = chi_param_2_str
+    # Make third chi-param a scanned parameter
+
+    chi_dict = ChiDict(param_dict=yaml_dict)
+    cnode = ChiNode(root_path, chi_dict, opts=mock_create_opts)
+
+    cnode.make_node_dir(root_path)
+    with pytest.raises(RuntimeError):
+        cnode.make_subnodes()
