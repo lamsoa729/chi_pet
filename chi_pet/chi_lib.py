@@ -84,12 +84,6 @@ def find_leaf_dirs(path, ignore=['result', 'analysis', 'scripts']):
         yield path
 
 
-def touch(fname, times=None):
-    """ Replicates the UNIX touch command """
-    with open(fname, 'a'):
-        os.utime(fname, times)
-
-
 def find_dirs(path):
     """ Find all the child directories one level deep and return a list
         of the absolute paths.

@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 import sys
-# TODO NEXT change os to pathlib functions
 import os
-from subprocess import call, run
+from subprocess import run
 from .chi_lib import load_yaml_in_order, dump_yaml_in_order
 import argparse
 from pathlib import Path
@@ -32,18 +31,20 @@ def run_parse_args():
 
 def run_args(workdir, state, args):
     action = state + '-ing'
+    action_file = Path('.' + action)
     print("Started {} sim using args {}".format(action, args))
     sys.stdout.flush()
     if workdir.exists():
         os.chdir(workdir)
-        open('.' + action, 'a').close()
+        action_file.touch()
         status = run(args)
-        os.remove('.' + action)
+        action_file.unlink()
         if status.returncode:
             print(f"Run failed: State {state} did not succeed.")
         return status.returncode
     else:
-        print(f"Run failed: could not find work directory {workdir}.")
+        print(
+            f"Run failed: could not find work directory {workdir} to do action {state}.")
         return 1
 
 
@@ -55,8 +56,9 @@ class ChiRun(object):
         workdir_path = Path(opts.workdir)
         args_file_path = workdir_path / opts.args_file
         if not workdir_path.exists():
-            raise FileNotFoundError("Run failed. Directory {} does not exists.".format(
-                opts.workdir))
+            raise FileNotFoundError(
+                "Run failed. Directory {} does not exists.".format(
+                    opts.workdir))
 
         elif not args_file_path.exists():
             raise FileNotFoundError(
@@ -69,16 +71,18 @@ class ChiRun(object):
         print(dump_yaml_in_order(args_dict, default_flow_style=False))
         for k, vals in args_dict.items():
             args = [str(a) for a in vals]
+            sim_action = Path('sim.{}'.format(k))
 
             if k in opts.states:
                 if run_args(opts.workdir, k, args):
-                    open('.error', 'a').close()
-                elif os.path.exists('sim.{}'.format(k)):
-                    os.remove('sim.{}'.format(k))
+                    (opts.workdir / '.error').touch()
+                elif sim_action.exists():
+                    sim_action.unlink()
 
 
 if __name__ == '__main__':
 
+    # TODO NEXT add this as a subparser to chi_pet.py
     opts = run_parse_args()
 
     c = ChiRun(opts)
