@@ -10,7 +10,7 @@ RUN apt update && \
 RUN git clone --recursive https://github.com/lamsoa729/chi_pet.git /root/chi_pet && \
     pip install -e /root/chi_pet
 
-# TODO NEXT add continuous integration
+# TODO add continuous integration
 
 
 

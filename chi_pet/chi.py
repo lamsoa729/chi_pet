@@ -13,7 +13,9 @@ import shutil
 import os
 from pathlib import Path
 # Main functions
-from .chi_parser import chi_parser
+from .chi_parse import chi_parse
+from .chi_run import ChiRun
+from .chi_node import ChiNode
 from . import chi_lib as clib
 # Analysis
 
@@ -34,28 +36,28 @@ class Chi(object):
             self.opts.states = list(yd.keys())
 
     def run(self):
-        wd = self.opts.workdir  # Shortcut for work directory
-        run_not_path = wd / "run.not"
-        if self.opts.launch != "NOLAUNCH":
-            # If no sim dirs are given find them all in simulations
-            if self.opts.launch == []:
-                self.opts.launch = clib.find_dirs(wd / "simulations")
-                # If no dirs were found return with warning
-                if self.opts.launch == []:
-                    print(" No sim directories were found our given. ")
-                    return
-            # Find run.not and delete
-            try:
-                run_not_path.unlink()
-            except OSError:
-                print("WARNING: 'run.not' was not found in workdir.",
-                      " Might want to go searching for it.")
+        if self.opts.command == "launch":
+            # # If no sim dirs are given find them all in simulations
+            # if self.opts.launch == []:
+            #     self.opts.launch = clib.find_dirs(wd / "simulations")
+            #     # If no dirs were found return with warning
+            #     if self.opts.launch == []:
+            #         print(" No sim directories were found our given. ")
+            #         return
+            # # Find run.not and delete
+            # try:
+            #     run_not_path.unlink()
+            # except OSError:
+            #     print("WARNING: 'run.not' was not found in workdir.",
+            #           " Might want to go searching for it.")
             # Create run.ing in workdir
             # ChiLaunch(simdirs=self.opts.launch, opts=self.opts)
             # running_path = wd / "run.ing"
             # running_path.touch()
+            pass
 
-        elif self.opts.create:
+        elif self.opts.command == 'create':
+            # TODO NEXT implement this functionality
             pass
             # run_not_path.touch()
             # # touch(os.path.join(wd, "run.not"))
@@ -65,49 +67,44 @@ class Chi(object):
             # c = ChiCreate(self.opts, self.opts.workdir)
             # c.Create(self.opts.create)
 
-        elif self.opts.shotgun:
-            pass
-            # c = ChiCreate(self.opts, self.opts.workdir)
-            # c.Create(self.opts.shotgun)
+        # elif self.opts.particleswarmcreate:
+        #     pass
+        #     # c = ChiParticleSwarm(self.opts, self.opts.workdir, 0)
+        #     # c.Create(self.opts.particleswarmcreate)
 
-        elif self.opts.particleswarmcreate:
-            pass
-            # c = ChiParticleSwarm(self.opts, self.opts.workdir, 0)
-            # c.Create(self.opts.particleswarmcreate)
+        # elif self.opts.geneticalgorithmcreate:
+        #     pass
+        #     # c = ChiGeneticAlgorithm(self.opts, self.opts.workdir, 0)
+        #     # c.Create(self.opts.geneticalgorithmcreate)
 
-        elif self.opts.geneticalgorithmcreate:
+        elif self.opts.command == 'run':
             pass
-            # c = ChiGeneticAlgorithm(self.opts, self.opts.workdir, 0)
-            # c.Create(self.opts.geneticalgorithmcreate)
+            c = ChiRun(self.opts)
+            c.Run(self.opts)
 
-        elif self.opts.run:
-            pass
-            # c = ChiRun(self.opts)
-            # c.Run(self.opts)
+        # elif self.opts.prep:
+        #     pass
+        #     # leaf_lst = clib.find_leaf_dirs(self.opts.workdir)
+        #     # for leaf_dir in leaf_lst:
+        #     #     if self.opts.args_file:
+        #     #         shutil.copy(self.opts.args_file, leaf_dir)
+        #     #     for s in self.opts.states:
+        #     #         clib.touch(leaf_dir / f'sim.{s}')
 
-        elif self.opts.prep:
-            pass
-            # leaf_lst = clib.find_leaf_dirs(self.opts.workdir)
-            # for leaf_dir in leaf_lst:
-            #     if self.opts.args_file:
-            #         shutil.copy(self.opts.args_file, leaf_dir)
-            #     for s in self.opts.states:
-            #         clib.touch(leaf_dir / f'sim.{s}')
-
-        elif self.opts.remove:
-            pass
-            # leaf_lst = clib.find_leaf_dirs(self.opts.workdir)
-            # for leaf_dir in leaf_lst:
-            #     for fn in self.opts.remove:
-            #         path = leaf_dir / fn
-            #         if path.exists():
-            #             path.unlink()
+        # elif self.opts.remove:
+        #     pass
+        #     # leaf_lst = clib.find_leaf_dirs(self.opts.workdir)
+        #     # for leaf_dir in leaf_lst:
+        #     #     for fn in self.opts.remove:
+        #     #         path = leaf_dir / fn
+        #     #         if path.exists():
+        #     #             path.unlink()
 
 
 def main():
     """Main function of chi_pet
     """
-    opts = chi_parser()
+    opts = chi_parse()
     chi = Chi(opts)
 
 

@@ -14,7 +14,7 @@ from pathlib import Path
 # TODO NEXT add parser test
 
 
-def chi_parser():
+def chi_parse():
     parser = argparse.ArgumentParser(prog='chi_pet.py')
 
     parser.add_argument('-n', type=int, default=10,
@@ -26,11 +26,11 @@ def chi_parser():
     parser.add_argument('-s', '--states', nargs='+', type=str,
                         help='Name of all the states the simulation will run eg. start, build, analyze, etc.')
 
-    # PREP options
+    # TODO add prep functionality
     parser.add_argument('-P', '--prep', action='store_true',
-                        help='Prepares sims to run with either states specified with -s or all argument states in -a ARG_FILES')
+                        help='Prepares simulationss to run with either states specified with -s or all argument states in --args_file.')
 
-    # REMOVE options
+    # TODO add remove functionality
     parser.add_argument('-rm', '--remove', nargs='+', metavar='FILE', type=str,
                         help='Removes FILEs from seed directories.')
 
@@ -53,19 +53,15 @@ def chi_parser():
     create_parser.add_argument('-ny', '--non_yaml', nargs='+', default=[], type=str,
                                help='Will add non-yaml files to seed directories when creating directory structure. (Used with create parser only)')
 
-    # LAUNCH options only
-    parser.add_argument('-L', '--launch', nargs='*', default='NOLAUNCH', type=str, metavar='DIRS',
-                        help='Launches all the seed directories in DIRS list. If no list is\
-                    given all sim directories in the "simulations" directory will be launched.')
+    run_parser = subparsers.add_parser(
+        'run', help='Run a simulation pipeline defined in args yaml file in a singular seed directory. Requires the --args_file option defined.')
 
-    # # CREATE options only
-    # parser.add_argument('-C', '--create', metavar='PARAM_FILE',
-    #                     nargs='+', type=str, default=[],
-    #                     help='Creates seed directories with simulation structure that can be launched with ChiLaunch.py.')
+    launch_parser = subparsers.add_parser(
+        'launch', help='Launch or create launching script to run simulations in seed directories.')
 
-    # parser.add_argument('-S', '--shotgun', metavar='PARAM_FILE',
-    #                     nargs='+', type=str,
-    #                     help='Creates seed directories with simulation structure that can be launched with ChiLaunch.py. PARAM_FILEs are copied into seed directories with ChiParams chosen according to the random distribution specified. Need -n to specify the number of random variants (default=10).')
+    # parser.add_argument('-L', '--launch', nargs='*', default='NOLAUNCH', type=str, metavar='DIRS',
+    #                     help='Launches all the seed directories in DIRS list. If no list is\
+    #                 given all sim directories in the "simulations" directory will be launched.')
 
     # parser.add_argument('-PSC', '--particleswarmcreate', metavar='PARAM_FILE',
     #                     nargs='+', type=str, default=[],
@@ -81,14 +77,11 @@ def chi_parser():
 
     opts = parser.parse_args()
 
-    # If growing a chi tree, turn param file path strings into a pathlib list
-    create_args = [opts.create,
-                   opts.shotgun,
-                   opts.particleswarmcreate,
-                   opts.geneticalgorithmcreate]
-    opts.param_file_paths = []
+    if opts.command == 'run' and opts.args_file is None:
+        parser.error("'run' requires the '--args_file' option.")
 
-    for plist in create_args:
-        opts.param_file_paths += plist
+    # If growing a chi tree, turn param file path strings into a pathlib list
+    if opts.command == 'create':
+        opts.param_file_paths = [opts.files]
 
     return opts
