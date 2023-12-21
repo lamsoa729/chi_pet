@@ -13,7 +13,7 @@ import shutil
 import os
 from pathlib import Path
 # Main functions
-from .chi_parse import chi_parse
+from .chi_parse import parse_chi_options
 from .chi_run import ChiRun
 from .chi_node import ChiNode
 from . import chi_lib as clib
@@ -25,7 +25,7 @@ class Chi(object):
 
         self.opts = opts
         self.read_opts()
-        self.run()
+        self.execute()
 
     def read_opts(self):
         if not self.opts.workdir:
@@ -35,7 +35,7 @@ class Chi(object):
             yd = clib.create_dict_from_yaml_file(self.opts.args_file)
             self.opts.states = list(yd.keys())
 
-    def run(self):
+    def execute(self):
         if self.opts.command == "launch":
             # # If no sim dirs are given find them all in simulations
             # if self.opts.launch == []:
@@ -104,7 +104,7 @@ class Chi(object):
 def main():
     """Main function of chi_pet
     """
-    opts = chi_parse()
+    opts = parse_chi_options()
     chi = Chi(opts)
 
 
