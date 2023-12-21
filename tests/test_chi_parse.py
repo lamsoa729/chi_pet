@@ -33,3 +33,7 @@ def test_chi_run_argument_parsing():
     sys.argv = ['chi', 'run', '-a',  'args.yaml']
     opts = parse_chi_options()
     assert opts.args_file == Path('args.yaml')
+
+    sys.argv = ['chi', 'run']
+    with pytest.raises(SystemExit):
+        opts = parse_chi_options()

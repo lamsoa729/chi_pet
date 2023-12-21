@@ -5,7 +5,7 @@ from subprocess import run
 from .chi_lib import load_yaml_in_order, dump_yaml_in_order
 import argparse
 from pathlib import Path
-from .chi_parse import chi_parse
+from .chi_parse import parse_chi_options
 
 '''
 Name: ChiMain.py

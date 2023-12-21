@@ -15,8 +15,6 @@ from pathlib import Path
 
 
 def parse_chi_options():
-    parser = argparse.ArgumentParser(prog='chi.py')
-
     parent_parser = argparse.ArgumentParser(add_help=False)
 
     parent_parser.add_argument('-a', '--args_file', type=Path,
@@ -25,6 +23,8 @@ def parse_chi_options():
                                help='Name of the working directory where simulation will be run. Used with --run option only)')
     parent_parser.add_argument('-s', '--states', nargs='+', type=str,
                                help='Name of all the states the simulation will run eg. start, build, analyze, etc.')
+
+    parser = argparse.ArgumentParser(prog='chi.py', parents=[parent_parser])
 
     # TODO add prep functionality
     parser.add_argument('-P', '--prep', action='store_true',
