@@ -32,8 +32,9 @@ class Chi(object):
             self.opts.workdir = Path.cwd()
 
         if not self.opts.states and self.opts.args_file:
-            yd = clib.create_dict_from_yaml_file(self.opts.args_file)
-            self.opts.states = list(yd.keys())
+            with self.opts.args_file.open('r') as af:
+                yd = clib.load_yaml_in_order(af)
+                self.opts.states = list(yd.keys())
 
     def execute(self):
         if self.opts.command == "launch":
@@ -58,24 +59,8 @@ class Chi(object):
 
         elif self.opts.command == 'create':
             # TODO NEXT implement this functionality
-            pass
-            # run_not_path.touch()
-            # # touch(os.path.join(wd, "run.not"))
-            # chi_root_node = ChiNode(self.opts)
-            # chi_root_node.Grow()
-
-            # c = ChiCreate(self.opts, self.opts.workdir)
-            # c.Create(self.opts.create)
-
-        # elif self.opts.particleswarmcreate:
-        #     pass
-        #     # c = ChiParticleSwarm(self.opts, self.opts.workdir, 0)
-        #     # c.Create(self.opts.particleswarmcreate)
-
-        # elif self.opts.geneticalgorithmcreate:
-        #     pass
-        #     # c = ChiGeneticAlgorithm(self.opts, self.opts.workdir, 0)
-        #     # c.Create(self.opts.geneticalgorithmcreate)
+            chi_root_node = ChiNode(self.opts.workdir, opts=self.opts)
+            chi_root_node.make_subnodes()
 
         elif self.opts.command == 'run':
             pass

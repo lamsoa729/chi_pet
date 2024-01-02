@@ -55,12 +55,16 @@ class ChiRun(object):
                 args_dict = load_yaml_in_order(f)
 
         print(dump_yaml_in_order(args_dict, default_flow_style=False))
-        for k, vals in args_dict.items():
-            args = [str(a) for a in vals]
-            sim_action = Path('sim.{}'.format(k))
 
-            if k in opts.states:
-                if self.run_args(opts.workdir, k, args):
+        # Loop through all states in args.yaml.
+        # TODO Add option to see if sim_action file exists and only run those states.
+        for run_state, vals in args_dict.items():
+            args = [str(a) for a in vals]
+            sim_action = Path('sim.{}'.format(run_state))
+
+            # If sim action file exists then run the state
+            if run_state in opts.states:
+                if self.run_args(opts.workdir, run_state, args):
                     (opts.workdir / '.error').touch()
                 elif sim_action.exists():
                     sim_action.unlink()
@@ -86,8 +90,7 @@ class ChiRun(object):
 
 
 if __name__ == '__main__':
-
-    opts = chi_parse()
+    opts = parse_chi_options()
 
     c = ChiRun(opts)
-    c.Run(opts)
+    c.execute(opts)

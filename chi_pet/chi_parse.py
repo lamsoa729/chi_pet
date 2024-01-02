@@ -11,8 +11,6 @@ Description:
 
 from pathlib import Path
 
-# TODO NTEST add parser test
-
 
 def parse_chi_options():
     parent_parser = argparse.ArgumentParser(add_help=False)

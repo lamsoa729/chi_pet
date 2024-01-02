@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Tests for `chi_pet` package."""
 
-import argparse
 from pathlib import Path
 import pytest
 import sys

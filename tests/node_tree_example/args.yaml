@@ -1,0 +1,14 @@
+setup:
+  - init_test_prog.py
+  - --argA
+  - argA_value
+  - --argB
+  - 1
+
+run:
+  - test_prog.py
+  - --arg1
+  - arg1_value
+
+analyze:
+  - test_analyze.py
