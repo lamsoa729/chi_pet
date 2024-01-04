@@ -73,7 +73,7 @@ def sci_notation_latex(num_str, sig_figs=4, d_range=0, **kwargs):
     @param num_str: string of a number in exponential form
     @param sig_figs: The number of significant figures
     @param d_range: The exponent range before applying scientific notation.
-    @param **kwargs: TODO
+    @param **kwargs: 
     @return: latex string
 
     """

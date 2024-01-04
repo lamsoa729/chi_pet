@@ -18,7 +18,7 @@ def parse_chi_options():
     parent_parser.add_argument('-a', '--args_file', type=Path,
                                help='Name file that holds the program argument list.  (Used with --create option and --launch option)')
     parent_parser.add_argument('-d', '--workdir', type=Path,
-                               help='Name of the working directory where simulation will be run. Used with --run option only)')
+                               help='Name of the working directory where simulation will be created or run.')
     parent_parser.add_argument('-s', '--states', nargs='+', type=str,
                                help='Name of all the states the simulation will run eg. start, build, analyze, etc.')
 
@@ -31,6 +31,10 @@ def parse_chi_options():
     # TODO add remove functionality
     parser.add_argument('-rm', '--remove', nargs='+', metavar='FILE(s)', type=Path,
                         help='Removes FILEs from seed directories.')
+
+    # TODO add clean functionality
+    parser.add_argument('-C', '--clean', action='store_true',
+                        help='Remove subnode and data directory files from current work directory.')
 
     subparsers = parser.add_subparsers(dest='command')
 

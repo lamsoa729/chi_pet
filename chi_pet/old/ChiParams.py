@@ -151,8 +151,6 @@ class ChiSim(object):
     def UpdateShotgunParamValues(self):
         for cparam in self.chiparams:
             if cparam.values:
-                # TODO If two param value lists are different,
-                #     choose the smaller one.
                 if self.opts.n != cparam.GetNValues():
                     print("## Number of values of in {0}({1}) \
                     does not match nvars given({2}). Setting nvars to {1}.".format(
@@ -212,7 +210,7 @@ class ChiSim(object):
             sim_values += str(p[i]) + " "
             sim_name += p.format(p[i]) + "_"
 
-        #sim_name = sim_name[:-1] + str(random.uniform(0.0, 1.0))
+        # sim_name = sim_name[:-1] + str(random.uniform(0.0, 1.0))
         sim_name = sim_name[:-1]
         sim_values = sim_values[:-1]
         # print "sim_values: {}".format(sim_values)
@@ -367,14 +365,14 @@ class ChiSim(object):
             with open(data_file_path, 'r') as stream:
                 fitness_yaml = yaml.load(stream)
                 # Compile fitness information
-                #em_fitness = 0.0
-                #length_correlation_avg = 0.0
-                #fbiorientation = 0.0
-                #kinetochore_fitness = 0.0
+                # em_fitness = 0.0
+                # length_correlation_avg = 0.0
+                # fbiorientation = 0.0
+                # kinetochore_fitness = 0.0
 
                 # Get the EM and length correlation fitness information
-                #em_fitness = (fitness_yaml['short'] + fitness_yaml['med'] + fitness_yaml['long'])/3.
-                #length_correlation_avg = fitness_yaml['length_correlation_avg']
+                # em_fitness = (fitness_yaml['short'] + fitness_yaml['med'] + fitness_yaml['long'])/3.
+                # length_correlation_avg = fitness_yaml['length_correlation_avg']
 
                 # Get the chromosome fitness information, base it off chromosome seconds fraction key
                 # if 'chromosome_seconds_fraction' in fitness_yaml:
@@ -382,8 +380,8 @@ class ChiSim(object):
                 #    kinetochore_fitness = np.mean([fitness_yaml['chromosome_kc_spb_distance'], fitness_yaml['chromosome_kc_spindle1d']])
 
                 # Combine total fitness in our special way
-                #total_fitness = em_fitness + 2.0*length_correlation_avg + 2.0*fbiorientation + kinetochore_fitness
-                #self.fitness[idx] = total_fitness
+                # total_fitness = em_fitness + 2.0*length_correlation_avg + 2.0*fbiorientation + kinetochore_fitness
+                # self.fitness[idx] = total_fitness
 
                 # Get what SpindleAnalysis thinks is the total fitness
                 total_fitness = fitness_yaml['FINAL_FITNESS']
@@ -553,7 +551,7 @@ class ChiSim(object):
             # Roulette wheel selection of the available parameters
             value1 = random.uniform(0.0, 1.0) * self.weight_sum1
             parent1_idx = -1
-            #cur_value1 = self.min_fitness
+            # cur_value1 = self.min_fitness
             for i in range(self.nparticles):
                 value1 -= (self.fitness[i] - self.min_genetics)
                 if value1 <= 0.0:
@@ -587,10 +585,10 @@ class ChiSim(object):
 
             # Two point crossover
             # Two point crossover
-            #self.parents[cidx1] = [parent1_idx, parent2_idx]
-            #self.parents[cidx2] = [parent1_idx, parent2_idx]
-            #cp1 = int(random.uniform(0, len(self.chiparams)))
-            #cp2 = int(random.uniform(0, len(self.chiparams)))
+            # self.parents[cidx1] = [parent1_idx, parent2_idx]
+            # self.parents[cidx2] = [parent1_idx, parent2_idx]
+            # cp1 = int(random.uniform(0, len(self.chiparams)))
+            # cp2 = int(random.uniform(0, len(self.chiparams)))
             # if cp2 < cp1:
             #    temp = cp1
             #    cp1 = cp2
@@ -703,7 +701,7 @@ class ChiSim(object):
         str2 += " {} ".format(self.gbest_better)
         print(str2)
 
-        #str3 = "{} {} ".format("gfull", self.gbest)
+        # str3 = "{} {} ".format("gfull", self.gbest)
         # for ichi in xrange(len(self.chiparams)):
         #    str3 += " {} ".format(self.gbestx[ichi].values[self.gbestid])
         # print str3

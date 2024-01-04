@@ -37,7 +37,17 @@ class Chi(object):
                 self.opts.states = list(yd.keys())
 
     def execute(self):
-        if self.opts.command == "launch":
+
+        if self.opts.command == 'create':
+            chi_root_node = ChiNode(self.opts.workdir, opts=self.opts)
+            chi_root_node.make_subnodes()
+
+        elif self.opts.command == 'run':
+            pass
+            c = ChiRun(self.opts)
+            c.run(self.opts)
+
+        elif self.opts.command == "launch":
             # # If no sim dirs are given find them all in simulations
             # if self.opts.launch == []:
             #     self.opts.launch = clib.find_dirs(wd / "simulations")
@@ -57,18 +67,8 @@ class Chi(object):
             # running_path.touch()
             pass
 
-        elif self.opts.command == 'create':
-            # TODO NEXT implement this functionality
-            chi_root_node = ChiNode(self.opts.workdir, opts=self.opts)
-            chi_root_node.make_subnodes()
-
-        elif self.opts.command == 'run':
+        elif self.opts.prep:
             pass
-            c = ChiRun(self.opts)
-            c.Run(self.opts)
-
-        # elif self.opts.prep:
-        #     pass
         #     # leaf_lst = clib.find_leaf_dirs(self.opts.workdir)
         #     # for leaf_dir in leaf_lst:
         #     #     if self.opts.args_file:

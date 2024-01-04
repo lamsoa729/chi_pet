@@ -36,26 +36,39 @@ def run_args(workdir, state, args):
 
 class ChiRun(object):
     def __init__(self, opts):
-        self.opts = opts
+        self._opts = opts
 
-    def run(self, opts):
-        workdir_path = Path(opts.workdir)
-        args_file_path = workdir_path / opts.args_file
-        if not workdir_path.exists():
+    def run(self):
+        """Run simulation pipeline defined in the the args.yaml file defined as self.opts.args_file.
+
+        Parameters
+        ----------
+        opts : _type_
+            _description_
+
+        Raises
+        ------
+        FileNotFoundError
+            _description_
+        FileNotFoundError
+            _description_
+        """
+
+        # TODO NEXT Make these more useful for running simulations
+        if not self._opts.workdir.exists():
             raise FileNotFoundError(
                 "Run failed. Directory {} does not exists.".format(
-                    opts.workdir))
+                    self._opts.workdir))
 
-        elif not args_file_path.exists():
+        elif not self._opts._args_file.exists():
             raise FileNotFoundError(
-                "Run failed. args.yaml file not found in {}.".format(
-                    opts.workdir))
+                "Run failed. args.yaml file not found in {self._opts.workdir}.".format(
+                ))
         else:
-            with args_file_path.open('r') as f:
+            with self._opts.args_file.open('r') as f:
                 args_dict = load_yaml_in_order(f)
 
-        print(dump_yaml_in_order(args_dict, default_flow_style=False))
-
+        # print(dump_yaml_in_order(args_dict, default_flow_style=False))
         # Loop through all states in args.yaml.
         # TODO Add option to see if sim_action file exists and only run those states.
         for run_state, vals in args_dict.items():
@@ -93,4 +106,4 @@ if __name__ == '__main__':
     opts = parse_chi_options()
 
     c = ChiRun(opts)
-    c.execute(opts)
+    c.run(opts)
