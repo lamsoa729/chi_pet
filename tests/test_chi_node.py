@@ -47,7 +47,7 @@ def test_chi_node_subnode_creation(mock_root_dir, mock_create_opts):
     """!Test to make sure subnodes are generated properly.
     """
     root_path = mock_root_dir
-    mock_create_opts.param_file_paths = list(root_path.glob('*.yaml'))
+    mock_create_opts.param_files = list(root_path.glob('*.yaml'))
 
     cnode = ChiNode(root_path, opts=mock_create_opts)
     cnode.make_subnodes()
