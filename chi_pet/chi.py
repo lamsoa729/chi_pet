@@ -9,7 +9,6 @@ Description: Control program for chi_pet.
 """
 
 # Basic
-import shutil
 import os
 from pathlib import Path
 # Main functions
@@ -24,17 +23,7 @@ class Chi(object):
     def __init__(self, opts):
 
         self.opts = opts
-        self.read_opts()
         self.execute()
-
-    def read_opts(self):
-        if not self.opts.workdir:
-            self.opts.workdir = Path.cwd()
-
-        if not self.opts.states and self.opts.args_file:
-            with self.opts.args_file.open('r') as af:
-                yd = clib.load_yaml_in_order(af)
-                self.opts.states = list(yd.keys())
 
     def execute(self):
 
@@ -43,7 +32,6 @@ class Chi(object):
             chi_root_node.make_subnodes()
 
         elif self.opts.command == 'run':
-            pass
             c = ChiRun(self.opts)
             c.run(self.opts)
 

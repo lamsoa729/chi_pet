@@ -10,6 +10,7 @@ Description:
 """
 
 from pathlib import Path
+from . import chi_lib as clib
 
 
 def parse_chi_options():
@@ -46,24 +47,23 @@ def parse_chi_options():
                                metavar='PARAM_FILE(S)', nargs='+', type=Path, default=[],
                                help='List of yaml files to be combined into a single yaml file and varied using Chi-Pet.')
 
-    # create_parser.add_argument('-A', '--algorithm', type=str, default='scan',
-    #                            help='Algorithm used to vary parameters. Options are "scan", "match", "particle_swarm", "genetic_algorithm".')
-
     create_parser.add_argument('-r', '--replace', default=False, action='store_true',
                                help='Replace simulation file instead of throwing and error if file already exists.(Used with create parser only)')
 
-    create_parser.add_argument('-ny', '--non_yaml', nargs='+', default=[], type=Path,
+    create_parser.add_argument('-ny', '--non_yaml', nargs='+', type=Path, default=[],
                                help='Will add non-yaml files to seed directories when creating directory structure. (Used with create parser only)')
 
+    # RUN options
     run_parser = subparsers.add_parser(
         'run', parents=[parent_parser], help='Run a simulation pipeline defined in args yaml file in a singular seed directory. Requires the --args_file option defined.')
 
+    if opts.command == 'run':
+        if opts.args_file is None:
+            parser.error("'run' requires the '--args_file' option.")
+
+    # LAUNCH options
     launch_parser = subparsers.add_parser(
         'launch', parents=[parent_parser], help='Launch or create launching script to run simulations in seed directories.')
-
-    # parser.add_argument('-L', '--launch', nargs='*', default='NOLAUNCH', type=str, metavar='DIRS',
-    #                     help='Launches all the seed directories in DIRS list. If no list is\
-    #                 given all sim directories in the "simulations" directory will be launched.')
 
     # parser.add_argument('-PSC', '--particleswarmcreate', metavar='PARAM_FILE',
     #                     nargs='+', type=str, default=[],
@@ -75,7 +75,19 @@ def parse_chi_options():
 
     opts = parser.parse_args()
 
-    if opts.command == 'run' and opts.args_file is None:
-        parser.error("'run' requires the '--args_file' option.")
+    if not opts.workdir:
+        opts.workdir = Path.cwd()
+    elif not opts.workdir.exists():
+        parser.error("Work directory '{opts.workdir}' does not exists.")
+
+    if opts.args_file:
+        assert opts.args_file.exists(
+        ), f"Args file {opts.args_file} does not exist."
+
+        with opts.args_file.open('r') as f:
+            opts.args_dict = clib.load_yaml_in_order(f)
+
+        if not opts.states:
+            opts.states = list(opts.args_dict.keys())
 
     return opts

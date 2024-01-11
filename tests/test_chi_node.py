@@ -187,7 +187,7 @@ def test_chi_node_matched_scanned_subnode_creation(mock_yaml_dict, mock_create_o
 @pytest.mark.parametrize("chi_param_2_str",
                          ["ChiParam(name='pB', format_str='pB{:.1f}', values=[.1,.2,.3,.4], alg='match', param_grp='alpha')",
                           "ChiParam(name='pB', format_str='pB{:.1f}', values=[.1,.2,.3], alg='match')"])
-def test_chi_node_matched_creation_rt_error(mock_yaml_dict, mock_create_opts, chi_param_2_str):
+def test_chi_node_matched_creation_runtime_error(mock_yaml_dict, mock_create_opts, chi_param_2_str):
     # Set path for creating node
     root_path = Path.cwd() / 'tests/mock_root'
 
@@ -207,3 +207,12 @@ def test_chi_node_matched_creation_rt_error(mock_yaml_dict, mock_create_opts, ch
     cnode.make_node_dir(root_path)
     with pytest.raises(RuntimeError):
         cnode.make_subnodes()
+
+
+def test_chi_node_nonyaml_create(mock_root_dir, mock_create_opts):
+    """!Test to make sure subnodes are generated properly.
+    """
+    root_path = mock_root_dir
+    mock_create_opts.param_files = list(root_path.glob('*.yaml'))
+    # TODO NEXT TEST Make sure nonyaml files are created
+    pass

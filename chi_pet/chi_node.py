@@ -5,7 +5,7 @@ Author: Adam Lamson
 Email: alamson@flatironinstitute.org
 Description:
 """
-from shutil import rmtree
+from shutil import rmtree, copy
 from pathlib import Path
 from copy import deepcopy
 from .chi_param import ChiParam
@@ -33,14 +33,14 @@ class ChiNode():
         opts : _type_, optional
             parser options, by default None
         params : _type_, optional
-            _description_, by default None
+            _description_ TODO, by default None
 
         Raises
         ------
         TypeError
-            _description_
+            _description_ TODO
         RuntimeError
-            _description_
+            _description_ TODO
         """
         if isinstance(node_path, Path):
             self._node_path = node_path
@@ -78,8 +78,7 @@ class ChiNode():
             return
 
         self._chi_dict.write_out_yaml_files(node_path)
-        # TODO initialize nonyaml files and test
-        # self.make_nonyaml_files(self._path)
+        self.make_nonyaml_files(node_path, self._opts.overwrite)
         # self.make_analysis_dir(self._path)
         # self.make_misc_dir(self._path)
         # if len(self._chi_params):
@@ -87,6 +86,21 @@ class ChiNode():
         self.make_data_dir(node_path)
 
         self._chi_dict.write_out_yaml_files(node_path)
+
+    def make_nonyaml_files(self, dir_path: Path, overwrite: bool = False) -> None:
+        for nyf in self._opts.non_yaml:
+            if nyf.exists():
+                new_nyf = dir_path / nyf.name
+                if new_nyf.exists():
+                    if overwrite:
+                        new_nyf.unlink()
+                    else:
+                        raise RuntimeError(
+                            f"Non-yaml file {new_nyf} already exists. Use the overwrite flag to overwrite.")
+                copy(nyf, new_nyf)
+            else:
+                raise RuntimeError(
+                    f"Non-yaml file {nyf} does not exist.")
 
     def make_data_dir(self, path: Path, overwrite: bool = False) -> None:
         self._data_dir = path / "data"
