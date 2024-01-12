@@ -49,6 +49,13 @@ def test_chi_node_subnode_creation(mock_root_dir, mock_create_opts):
     root_path = mock_root_dir
     mock_create_opts.param_files = list(root_path.glob('*.yaml'))
 
+    ny_file_path = root_path / 'mock_ny_file.txt'
+    with ny_file_path.open('w') as nyf:
+        nyf.write(MOCK_NON_YAML_FILE_STR)
+    mock_create_opts.non_yaml = [ny_file_path]
+    mock_args_path = mock_args_file
+    mock_create_opts.args_files = [mock_args_path]
+
     cnode = ChiNode(root_path, opts=mock_create_opts)
     cnode.make_subnodes()
     assert Path('tests/mock_root/subnodes').exists()

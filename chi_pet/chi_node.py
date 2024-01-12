@@ -72,13 +72,13 @@ class ChiNode():
         self._analysis_dir = None
         self._misc_dir = None
 
-    def make_node_dir(self, node_path: Path, overwrite: bool = False) -> None:
-        node_created = self.create_dir(node_path, overwrite)
+    def make_node_dir(self, node_path: Path, replace: bool = False) -> None:
+        node_created = self.create_dir(node_path, replace)
         if not node_created:
             return
 
         self._chi_dict.write_out_yaml_files(node_path)
-        self.make_nonyaml_files(node_path, self._opts.overwrite)
+        self.make_nonyaml_files(node_path, self._opts.replace)
         # self.make_analysis_dir(self._path)
         # self.make_misc_dir(self._path)
         # if len(self._chi_params):
@@ -87,26 +87,26 @@ class ChiNode():
 
         self._chi_dict.write_out_yaml_files(node_path)
 
-    def make_nonyaml_files(self, dir_path: Path, overwrite: bool = False) -> None:
+    def make_nonyaml_files(self, dir_path: Path, replace: bool = False) -> None:
         for nyf in self._opts.non_yaml:
             if nyf.exists():
                 new_nyf = dir_path / nyf.name
                 if new_nyf.exists():
-                    if overwrite:
+                    if replace:
                         new_nyf.unlink()
                     else:
                         raise RuntimeError(
-                            f"Non-yaml file {new_nyf} already exists. Use the overwrite flag to overwrite.")
+                            f"Non-yaml file {new_nyf} already exists. Use the replace flag to replace.")
                 copy(nyf, new_nyf)
             else:
                 raise RuntimeError(
                     f"Non-yaml file {nyf} does not exist.")
 
-    def make_data_dir(self, path: Path, overwrite: bool = False) -> None:
+    def make_data_dir(self, path: Path, replace: bool = False) -> None:
         self._data_dir = path / "data"
-        return self.create_dir(self._data_dir, overwrite)
+        return self.create_dir(self._data_dir, replace)
 
-    def make_subnodes(self, overwrite: bool = False) -> None:
+    def make_subnodes(self, replace: bool = False) -> None:
         assert self._opts.command == 'create', "Subnodes can only be created when creating a directory structure."
 
         if not self._node_path.exists():
@@ -117,7 +117,7 @@ class ChiNode():
             return
 
         self._snode_store_dir = self._node_path / "subnodes"
-        subnode_dir_created = self.create_dir(self._snode_store_dir, overwrite)
+        subnode_dir_created = self.create_dir(self._snode_store_dir, replace)
 
         # Loop over lowest level of ChiParams and realize param values
         current_level_chi_params = [
@@ -193,19 +193,19 @@ class ChiNode():
                                deepcopy(self._chi_dict),
                                self._opts, self._params,
                                self._level + 1)
-            new_node.make_node_dir(new_node._node_path, overwrite)
-            new_node.make_subnodes(overwrite)
+            new_node.make_node_dir(new_node._node_path, replace)
+            new_node.make_subnodes(replace)
 
     @classmethod
-    def create_dir(cls, path: Path, overwrite: bool = False) -> bool:
+    def create_dir(cls, path: Path, replace: bool = False) -> bool:
         """Create directory. If it exists it will be either overwritten or left
-        alone depending on the overwrite flag.
+        alone depending on the replace flag.
 
         Parameters
         ----------
         path : Path
             path to directory to create
-        overwrite : bool, optional
+        replace : bool, optional
             If path exists, should this be overwritten, by default False
 
         Returns
@@ -216,7 +216,7 @@ class ChiNode():
         """
 
         if path.exists():
-            if not overwrite:
+            if not replace:
                 print(f"{path} exists and is being left alone.")
                 return False
             print(f"Removing {path}.")

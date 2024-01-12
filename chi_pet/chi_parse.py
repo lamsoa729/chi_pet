@@ -48,7 +48,7 @@ def parse_chi_options():
                                help='List of yaml files to be combined into a single yaml file and varied using Chi-Pet.')
 
     create_parser.add_argument('-r', '--replace', default=False, action='store_true',
-                               help='Replace simulation file instead of throwing and error if file already exists.(Used with create parser only)')
+                               help='Replace simulation file instead of throwing an error if file already exists.(Used with create parser only)')
 
     create_parser.add_argument('-ny', '--non_yaml', nargs='+', type=Path, default=[],
                                help='Will add non-yaml files to seed directories when creating directory structure. (Used with create parser only)')
@@ -56,10 +56,6 @@ def parse_chi_options():
     # RUN options
     run_parser = subparsers.add_parser(
         'run', parents=[parent_parser], help='Run a simulation pipeline defined in args yaml file in a singular seed directory. Requires the --args_file option defined.')
-
-    if opts.command == 'run':
-        if opts.args_file is None:
-            parser.error("'run' requires the '--args_file' option.")
 
     # LAUNCH options
     launch_parser = subparsers.add_parser(
@@ -74,6 +70,10 @@ def parse_chi_options():
     #                     help='Genetic Algorithm Optimization Creation. Creates seed directories with simulation structure that can be launched with ChiLaunch.py. PARAM_FILEs are copied into seed directories with ChiParams chosen according to the random distribution specified. Need -n to specify the number of random population members (default=10).')
 
     opts = parser.parse_args()
+
+    if opts.command == 'run':
+        if opts.args_file is None:
+            parser.error("'run' requires the '--args_file' option.")
 
     if not opts.workdir:
         opts.workdir = Path.cwd()

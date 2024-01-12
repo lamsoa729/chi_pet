@@ -20,6 +20,8 @@ MOCK_PARAM_CHI_DICT = {"param_two": "two",
                        "var_param": MOCK_CHI_PARAM_STR}
 
 MOCK_NON_YAML_FILE_STR = "This is a tests."
+MOCK_ARGS_FILE_lIST = {'stage1': ['arg1', 'arg2', 'arg3'],
+                       'stage2': ['arg4', 'arg5', 'arg6']}
 
 MOCK_PARAM_DICT_PATH = 'mock_param.yaml'
 MOCK_CHI_PARAM_DICT_PATH = 'mock_param_chi_param.yaml'
@@ -49,13 +51,22 @@ def setup_and_teardown(clean_up):
         clean_mocks()  # Clean up after running tests
 
 
+# @pytest.fixture()
+# def mock_non_yaml_file():
+#     ny_file_path = Path.cwd() / 'mock_ny_file.txt'
+#     with ny_file_path.open('w') as nyf:
+#         nyf.write(MOCK_NON_YAML_FILE_STR)
+#     yield ny_file_path
+#     ny_file_path.unlink()
+
+
 @pytest.fixture()
-def mock_non_yaml_file():
-    ny_file_path = Path.cwd() / 'mock_ny_file.txt'
-    with ny_file_path.open('w') as nyf:
-        nyf.write(MOCK_NON_YAML_FILE_STR)
-    yield ny_file_path
-    ny_file_path.unlink()
+def mock_args_file(mock_root_dir):
+    args_file_path = mock_root_dir / 'args_file.yaml'
+    with args_file_path.open('w') as aff:
+        yaml.dump(MOCK_ARGS_FILE_lIST, aff)
+    yield args_file_path
+    args_file_path.unlink()
 
 
 @pytest.fixture()
@@ -92,5 +103,6 @@ def mock_root_dir():
 def mock_create_opts():
     def opts(x): return None
     opts.command = 'create'
-    opts.algorithm = 'scan'
+    opts.replace = 'False'
+    opts.non_yaml = []
     yield opts

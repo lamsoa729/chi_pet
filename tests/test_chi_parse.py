@@ -7,6 +7,7 @@ import sys
 
 from unittest import mock
 from chi_pet.chi_parse import parse_chi_options
+from mhelpers import *
 
 # @pytest.mark.parametrize("command,arg_dict", [
 #     ('create', 'value1'),
@@ -15,10 +16,11 @@ from chi_pet.chi_parse import parse_chi_options
 # ])
 
 
-def test_chi_create_argument_parsing():
+def test_chi_create_argument_parsing(mock_args_file):
+    mock_args_path = mock_args_file
     # Setup
     sys.argv = ['chi', 'create', 'param1.yaml',
-                'param2.yaml', '-a', 'args.yaml']
+                'param2.yaml', '-a', f'{mock_args_path}']
     # Test
     opts = parse_chi_options()
     # Assert
@@ -27,11 +29,13 @@ def test_chi_create_argument_parsing():
         assert Path(pf) in opts.param_files
 
 
-def test_chi_run_argument_parsing():
+def test_chi_run_argument_parsing(mock_args_file):
+    mock_args_path = mock_args_file
+
     # Setup
-    sys.argv = ['chi', 'run', '-a',  'args.yaml']
+    sys.argv = ['chi', 'run', '-a', f'{mock_args_path}']
     opts = parse_chi_options()
-    assert opts.args_file == Path('args.yaml')
+    assert opts.args_file == mock_args_path
 
     sys.argv = ['chi', 'run']
     with pytest.raises(SystemExit):
