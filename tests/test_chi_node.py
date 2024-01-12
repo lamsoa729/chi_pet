@@ -43,18 +43,21 @@ def test_chi_node_dir_creation(mock_chi_node):
     assert Path('tests/mock_node/data').exists()
 
 
-def test_chi_node_subnode_creation(mock_root_dir, mock_create_opts):
+def test_chi_node_subnode_creation(mock_root_dir, mock_args_file, mock_create_opts):
     """!Test to make sure subnodes are generated properly.
     """
     root_path = mock_root_dir
-    mock_create_opts.param_files = list(root_path.glob('*.yaml'))
+    mock_args_path = mock_args_file
 
     ny_file_path = root_path / 'mock_ny_file.txt'
     with ny_file_path.open('w') as nyf:
         nyf.write(MOCK_NON_YAML_FILE_STR)
-    mock_create_opts.non_yaml = [ny_file_path]
-    mock_args_path = mock_args_file
+
     mock_create_opts.args_files = [mock_args_path]
+
+    mock_create_opts.param_files = list(root_path.glob('*.yaml'))
+
+    mock_create_opts.non_yaml = [ny_file_path]
 
     cnode = ChiNode(root_path, opts=mock_create_opts)
     cnode.make_subnodes()
@@ -65,6 +68,7 @@ def test_chi_node_subnode_creation(mock_root_dir, mock_create_opts):
         assert (pa_dir_path / 'mock_param.yaml').exists()
         assert (yaml.safe_load(
             (pa_dir_path / 'mock_param_chi_param.yaml').open('r'))['var_param'] == pa)
+        assert (pa_dir_path / 'args.yaml').exists()
 
 
 def test_chi_node_multilevel_subnode_creation(mock_yaml_dict, mock_create_opts):
