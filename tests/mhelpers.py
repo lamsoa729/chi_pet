@@ -62,7 +62,7 @@ def setup_and_teardown(clean_up):
 
 @pytest.fixture()
 def mock_args_file(mock_root_dir, clean_up):
-    args_file_path = mock_root_dir / 'args.yaml'
+    args_file_path = mock_root_dir / 'mock_args.yaml'
     with args_file_path.open('w') as aff:
         yaml.dump(MOCK_ARGS_FILE_DICT, aff)
     yield args_file_path

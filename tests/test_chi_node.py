@@ -44,7 +44,7 @@ def test_chi_node_dir_creation(mock_chi_node):
 
 
 def test_chi_node_subnode_creation(mock_root_dir, mock_args_file, mock_create_opts):
-    """!Test to make sure subnodes are generated properly.
+    """!Test to make sure subnodes are generated properly for basic usage.
     """
     root_path = mock_root_dir
     mock_args_path = mock_args_file
@@ -68,7 +68,8 @@ def test_chi_node_subnode_creation(mock_root_dir, mock_args_file, mock_create_op
         assert (pa_dir_path / 'mock_param.yaml').exists()
         assert (yaml.safe_load(
             (pa_dir_path / 'mock_param_chi_param.yaml').open('r'))['var_param'] == pa)
-        assert (pa_dir_path / 'args.yaml').exists()
+        assert (pa_dir_path / 'mock_args.yaml').exists()
+        assert (pa_dir_path / 'mock_ny_file.txt').exists()
 
 
 def test_chi_node_multilevel_subnode_creation(mock_yaml_dict, mock_create_opts):
@@ -218,12 +219,3 @@ def test_chi_node_matched_creation_runtime_error(mock_yaml_dict, mock_create_opt
     cnode.make_node_dir(root_path)
     with pytest.raises(RuntimeError):
         cnode.make_subnodes()
-
-
-def test_chi_node_nonyaml_create(mock_root_dir, mock_create_opts):
-    """!Test to make sure subnodes are generated properly.
-    """
-    root_path = mock_root_dir
-    mock_create_opts.param_files = list(root_path.glob('*.yaml'))
-    # TODO NEXT TEST Make sure nonyaml files are created
-    pass
