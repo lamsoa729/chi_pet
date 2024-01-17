@@ -8,7 +8,7 @@ Description:
 """
 
 from pathlib import Path
-from mhelpers import MOCK_CHI_PARAM_STR, mock_yaml_dict
+from mhelpers import MOCK_CHI_PARAM_STR, mock_param_yaml_dict
 from chi_pet.chi_param import ChiParam, ObjRef
 import pytest
 
@@ -53,9 +53,9 @@ def test_obj_reference():
     assert test_dict['test'] == 1
 
 
-def test_realize_param(mock_yaml_dict):
+def test_realize_param(mock_param_yaml_dict):
     # Create an obj reference to chi param string
-    obj_ref = ObjRef(mock_yaml_dict['mock_param_chi_param.yaml'],
+    obj_ref = ObjRef(mock_param_yaml_dict['mock_param_chi_param.yaml'],
                      'var_param')
     # Create a chi param object from the string
     chi_param = eval(obj_ref.get_value())
@@ -65,5 +65,5 @@ def test_realize_param(mock_yaml_dict):
     for i, val in enumerate(chi_param._values):
         chi_param.set_value(i)
         assert chi_param._obj_r.get_value() == val
-        assert mock_yaml_dict['mock_param_chi_param.yaml']['var_param'] == val
-    assert mock_yaml_dict['mock_param_chi_param.yaml']['param_two'] == 'two'
+        assert mock_param_yaml_dict['mock_param_chi_param.yaml']['var_param'] == val
+    assert mock_param_yaml_dict['mock_param_chi_param.yaml']['param_two'] == 'two'

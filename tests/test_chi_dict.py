@@ -16,37 +16,37 @@ import yaml
 
 
 @pytest.fixture()
-def mock_chi_dict(mock_yaml_dict):
-    yaml_dict = mock_yaml_dict
+def mock_chi_dict(mock_param_yaml_dict):
+    yaml_dict = mock_param_yaml_dict
     chi_dict = ChiDict(param_dict=yaml_dict)
     return chi_dict
 
 
-def test_make_param_dict(mock_root_dir, mock_yaml_dict):
+def test_make_param_dict(mock_root_dir, mock_param_yaml_dict):
     chi_root_dir = mock_root_dir
     yaml_file_list = list(chi_root_dir.glob('*.yaml'))
     chi_dict = ChiDict(file_path_list=yaml_file_list)
-    assert chi_dict._param_dict == mock_yaml_dict
+    assert chi_dict._param_dict == mock_param_yaml_dict
 
 
-def test_search_dict_for_chi_params(mock_yaml_dict, mock_chi_param):
-    chi_dict = ChiDict(param_dict=mock_yaml_dict)
-    assert chi_dict._param_dict == mock_yaml_dict
+def test_search_dict_for_chi_params(mock_param_yaml_dict, mock_chi_param):
+    chi_dict = ChiDict(param_dict=mock_param_yaml_dict)
+    assert chi_dict._param_dict == mock_param_yaml_dict
     chi_param_list = chi_dict.search_dict_for_chi_params()
     assert len(chi_param_list) == 1
     assert str(chi_param_list[0]) == str(mock_chi_param)
 
 
-def test_search_dict_for_chi_params_when_none_exist(mock_yaml_dict, mock_chi_param):
+def test_search_dict_for_chi_params_when_none_exist(mock_param_yaml_dict, mock_chi_param):
     chi_dict = ChiDict(param_dict={"param": "not a ChiParam"})
     chi_param_list = chi_dict.search_dict_for_chi_params()
     assert len(chi_param_list) == 0
 
 
-def test_search_dict_for_chi_params_when_non_exist(mock_yaml_dict):
+def test_search_dict_for_chi_params_when_non_exist(mock_param_yaml_dict):
     # Remove the chi param string from the mock dictionary
-    mock_yaml_dict[MOCK_CHI_PARAM_DICT_PATH] = 1
-    chi_dict = ChiDict(param_dict=mock_yaml_dict)
+    mock_param_yaml_dict[MOCK_CHI_PARAM_DICT_PATH] = 1
+    chi_dict = ChiDict(param_dict=mock_param_yaml_dict)
     chi_param_list = chi_dict.search_dict_for_chi_params()
     assert len(chi_param_list) == 0
 

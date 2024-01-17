@@ -71,7 +71,7 @@ def mock_args_file(mock_root_dir, clean_up):
 
 
 @pytest.fixture()
-def mock_yaml_dict():
+def mock_param_yaml_dict():
     yaml_dict = {MOCK_PARAM_DICT_PATH: MOCK_PARAM_DICT,
                  MOCK_CHI_PARAM_DICT_PATH: MOCK_PARAM_CHI_DICT}
     return yaml_dict
@@ -97,13 +97,21 @@ def mock_root_dir():
         yaml.dump(MOCK_PARAM_CHI_DICT, ycpp)
 
     yield chi_root_path
-    # clean_mocks()
 
 
 @pytest.fixture()
 def mock_create_opts():
     def opts(x): return None
     opts.command = 'create'
+    opts.replace = 'False'
+    opts.non_yaml = []
+    yield opts
+
+
+@pytest.fixture()
+def mock_run_opts():
+    def opts(x): return None
+    opts.command = 'run'
     opts.replace = 'False'
     opts.non_yaml = []
     yield opts

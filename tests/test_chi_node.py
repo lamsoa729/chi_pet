@@ -72,10 +72,10 @@ def test_chi_node_subnode_creation(mock_root_dir, mock_args_file, mock_create_op
         assert (pa_dir_path / 'mock_ny_file.txt').exists()
 
 
-def test_chi_node_multilevel_subnode_creation(mock_yaml_dict, mock_create_opts):
+def test_chi_node_multilevel_subnode_creation(mock_param_yaml_dict, mock_create_opts):
     root_path = Path.cwd() / 'tests/mock_root'
     # Add another ChiParam at a lower level
-    yaml_dict = deepcopy(mock_yaml_dict)
+    yaml_dict = deepcopy(mock_param_yaml_dict)
     yaml_dict[MOCK_PARAM_DICT_PATH][
         'chi_param_2'] = "ChiParam(name='pB', format_str='pB{:.1f}', values=[.1,.2,.3], level=1)"
     chi_dict = ChiDict(param_dict=yaml_dict)
@@ -103,10 +103,10 @@ def test_chi_node_multilevel_subnode_creation(mock_yaml_dict, mock_create_opts):
                 (pb_dir_path / MOCK_PARAM_DICT_PATH).open('r'))['chi_param_2'] == pb)
 
 
-def test_chi_node_combinatorics_subnode_creation(mock_yaml_dict, mock_create_opts):
+def test_chi_node_combinatorics_subnode_creation(mock_param_yaml_dict, mock_create_opts):
     root_path = Path.cwd() / 'tests/mock_root'
     # Add another ChiParam at a lower level
-    yaml_dict = deepcopy(mock_yaml_dict)
+    yaml_dict = deepcopy(mock_param_yaml_dict)
     yaml_dict[MOCK_PARAM_DICT_PATH][
         'chi_param_2'] = "ChiParam(name='pB', format_str='pB{:.1f}', values=[.1,.2,.3])"
     chi_dict = ChiDict(param_dict=yaml_dict)
@@ -127,12 +127,12 @@ def test_chi_node_combinatorics_subnode_creation(mock_yaml_dict, mock_create_opt
                 (p_comb_dir / MOCK_PARAM_DICT_PATH).open('r'))['chi_param_2'] == pb)
 
 
-def test_chi_node_matched_subnode_creation(mock_yaml_dict, mock_create_opts):
+def test_chi_node_matched_subnode_creation(mock_param_yaml_dict, mock_create_opts):
     # Set path for creating node
     root_path = Path.cwd() / 'tests/mock_root'
 
     # Set up yaml dictionary
-    yaml_dict = deepcopy(mock_yaml_dict)
+    yaml_dict = deepcopy(mock_param_yaml_dict)
     # Change first chi-param to be a matched parameter
     yaml_dict[MOCK_CHI_PARAM_DICT_PATH]['var_param'] = (
         MOCK_CHI_PARAM_STR[:-1] + ", alg='match', param_grp='alpha')")
@@ -158,12 +158,12 @@ def test_chi_node_matched_subnode_creation(mock_yaml_dict, mock_create_opts):
             (p_comb_dir / MOCK_PARAM_DICT_PATH).open('r'))['chi_param_2'] == pb)
 
 
-def test_chi_node_matched_scanned_subnode_creation(mock_yaml_dict, mock_create_opts):
+def test_chi_node_matched_scanned_subnode_creation(mock_param_yaml_dict, mock_create_opts):
     # Set path for creating node
     root_path = Path.cwd() / 'tests/mock_root'
 
     # Set up yaml dictionary
-    yaml_dict = deepcopy(mock_yaml_dict)
+    yaml_dict = deepcopy(mock_param_yaml_dict)
     # Change first chi-param to be a matched parameter
     yaml_dict[MOCK_CHI_PARAM_DICT_PATH]['var_param'] = (
         MOCK_CHI_PARAM_STR[:-1] + ", alg='match', param_grp='alpha')")
@@ -199,12 +199,12 @@ def test_chi_node_matched_scanned_subnode_creation(mock_yaml_dict, mock_create_o
 @pytest.mark.parametrize("chi_param_2_str",
                          ["ChiParam(name='pB', format_str='pB{:.1f}', values=[.1,.2,.3,.4], alg='match', param_grp='alpha')",
                           "ChiParam(name='pB', format_str='pB{:.1f}', values=[.1,.2,.3], alg='match')"])
-def test_chi_node_matched_creation_runtime_error(mock_yaml_dict, mock_create_opts, chi_param_2_str):
+def test_chi_node_matched_creation_runtime_error(mock_param_yaml_dict, mock_create_opts, chi_param_2_str):
     # Set path for creating node
     root_path = Path.cwd() / 'tests/mock_root'
 
     # Set up yaml dictionary
-    yaml_dict = deepcopy(mock_yaml_dict)
+    yaml_dict = deepcopy(mock_param_yaml_dict)
     # Change first chi-param to be a matched parameter
     yaml_dict[MOCK_CHI_PARAM_DICT_PATH]['var_param'] = (
         MOCK_CHI_PARAM_STR[:-1] + ", alg='match', param_grp='alpha')")

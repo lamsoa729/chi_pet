@@ -33,6 +33,9 @@ class ChiRun(object):
                 elif sim_action.exists():
                     sim_action.unlink()
 
+    def get_actions(self):
+        return self._opts.args_dict.items()
+
     @classmethod
     def run_args(workdir, state, args):
         action = state + '-ing'
@@ -41,11 +44,11 @@ class ChiRun(object):
         sys.stdout.flush()
         if workdir.exists():
             os.chdir(workdir)
-            action_file.touch()
+            action_file.touch()  # Keeps track of current pipeline state
             status = run(args)
-            action_file.unlink()
             if status.returncode:
                 print(f"Run failed: State {state} did not succeed.")
+            action_file.unlink()  # Remove once completed successfully
             return status.returncode
         else:
             print(

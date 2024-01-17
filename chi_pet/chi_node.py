@@ -78,7 +78,7 @@ class ChiNode():
             return
 
         self._chi_dict.write_out_yaml_files(node_path)
-        self.make_nonyaml_files(node_path, self._opts.replace)
+        self.write_out_nonyaml_files(node_path, self._opts.replace)
         # self.make_analysis_dir(self._path)
         # self.make_misc_dir(self._path)
         # if len(self._chi_params):
@@ -87,7 +87,7 @@ class ChiNode():
 
         self._chi_dict.write_out_yaml_files(node_path)
 
-    def make_nonyaml_files(self, dir_path: Path, replace: bool = False) -> None:
+    def write_out_nonyaml_files(self, dir_path: Path, replace: bool = False) -> None:
         for nyf in self._opts.non_yaml:
             if nyf.exists():
                 new_nyf = dir_path / nyf.name
@@ -228,7 +228,4 @@ class ChiNode():
 ##########################################
 if __name__ == "__main__":
     # Testing code for things
-    cparams = [ChiParam("s" + str(i)) for i in range(10)]
-    print(cparams)
-    yml_dict = {}
-    cnode.make_node_dir()
+    pass
