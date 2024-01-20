@@ -7,13 +7,22 @@ from mhelpers import *
 import pytest
 
 
-# TODO NEXT TEST add tests for chi_run.py
-def test_chi_run_pipeline(mock_run_opts):
+def test_chi_run_states(mock_run_opts):
     """Test chi_run."""
-    mock_run_opts.args_dict = MOCK_ARGS_FILE_DICT
     # Make a ChiRun object
     crun = ChiRun(mock_run_opts)
 
-    assert True
+    assert crun.get_run_states() == mock_run_opts.states
+
+
+def test_chi_run_with_touch(mock_run_opts):
+    """Test chi_run."""
+    # Make a ChiRun object
+    crun = ChiRun(mock_run_opts)
+
+    assert crun.get_run_states() == mock_run_opts.states
+
     # Run the pipeline
     # Make sure action is carried out
+
+# TODO NEXT TEST add tests for chi_run.py

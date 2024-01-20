@@ -23,6 +23,8 @@ MOCK_NON_YAML_FILE_STR = "This is a tests."
 MOCK_ARGS_FILE_DICT = {'stage1': ['arg1', 'arg2', 'arg3'],
                        'stage2': ['arg4', 'arg5', 'arg6']}
 
+MOCK_SHELL_ARGS_FILE_DICT = {'touch': ['touch', 'mock_command.txt']}
+
 MOCK_PARAM_DICT_PATH = 'mock_param.yaml'
 MOCK_CHI_PARAM_DICT_PATH = 'mock_param_chi_param.yaml'
 
@@ -51,23 +53,18 @@ def setup_and_teardown(clean_up):
         clean_mocks()  # Clean up after running tests
 
 
-# @pytest.fixture()
-# def mock_non_yaml_file():
-#     ny_file_path = Path.cwd() / 'mock_ny_file.txt'
-#     with ny_file_path.open('w') as nyf:
-#         nyf.write(MOCK_NON_YAML_FILE_STR)
-#     yield ny_file_path
-#     ny_file_path.unlink()
+def mock_non_yaml_file(dir_path):
+    ny_file_path = dir_path / 'mock_ny_file.txt'
+    with ny_file_path.open('w') as nyf:
+        nyf.write(MOCK_NON_YAML_FILE_STR)
+    return ny_file_path
 
 
-@pytest.fixture()
-def mock_args_file(mock_root_dir, clean_up):
-    args_file_path = mock_root_dir / 'mock_args.yaml'
+def mock_args_file(dir_path):
+    args_file_path = dir_path / 'mock_args.yaml'
     with args_file_path.open('w') as aff:
         yaml.dump(MOCK_ARGS_FILE_DICT, aff)
-    yield args_file_path
-    if clean_up:
-        args_file_path.unlink()
+    return args_file_path
 
 
 @pytest.fixture()
@@ -75,6 +72,30 @@ def mock_param_yaml_dict():
     yaml_dict = {MOCK_PARAM_DICT_PATH: MOCK_PARAM_DICT,
                  MOCK_CHI_PARAM_DICT_PATH: MOCK_PARAM_CHI_DICT}
     return yaml_dict
+
+
+@pytest.fixture()
+def mock_leaf_dir():
+    """Create a directory to use a leaf chi directory for testing 
+
+    Returns
+    -------
+    Path
+        Path to root directory
+    """
+    chi_leaf_path = Path.cwd() / 'tests/mock_leaf'
+    chi_leaf_path.mkdir()
+    yaml_param_path = chi_leaf_path / MOCK_PARAM_DICT_PATH
+
+    with yaml_param_path.open('w') as ypp:
+        yaml.dump(MOCK_PARAM_DICT, ypp)
+
+    args_file_path = chi_leaf_path / 'mock_args.yaml'
+    with args_file_path.open('w') as aff:
+        yaml.dump(MOCK_ARGS_FILE_DICT, aff)
+    yield args_file_path
+
+    yield chi_leaf_path
 
 
 @pytest.fixture()
@@ -112,6 +133,9 @@ def mock_create_opts():
 def mock_run_opts():
     def opts(x): return None
     opts.command = 'run'
+    opts.use_sim_states = 'False'
     opts.replace = 'False'
     opts.non_yaml = []
+    opts.args_dict = MOCK_ARGS_FILE_DICT
+    opts.states = list(opts.args_dict.keys())
     yield opts

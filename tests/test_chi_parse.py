@@ -16,8 +16,9 @@ from mhelpers import *
 # ])
 
 
-def test_chi_create_argument_parsing(mock_args_file):
-    mock_args_path = mock_args_file
+def test_chi_create_argument_parsing(mock_root_dir):
+    root_path = mock_root_dir
+    mock_args_path = mock_args_file(root_path)
     # Setup
     sys.argv = ['chi', 'create', 'param1.yaml',
                 'param2.yaml', '-a', f'{mock_args_path}']
@@ -29,8 +30,9 @@ def test_chi_create_argument_parsing(mock_args_file):
         assert Path(pf) in opts.param_files
 
 
-def test_chi_run_argument_parsing(mock_args_file):
-    mock_args_path = mock_args_file
+def test_chi_run_argument_parsing(mock_root_dir):
+    root_path = mock_root_dir
+    mock_args_path = mock_args_file(root_path)
 
     # Setup
     sys.argv = ['chi', 'run', '-a', f'{mock_args_path}']
@@ -40,3 +42,7 @@ def test_chi_run_argument_parsing(mock_args_file):
     sys.argv = ['chi', 'run']
     with pytest.raises(SystemExit):
         opts = parse_chi_options()
+
+# TODO Add test for non-yaml files
+
+# TODO Add test for sim states

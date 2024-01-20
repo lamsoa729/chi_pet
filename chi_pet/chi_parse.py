@@ -10,6 +10,7 @@ Description:
 """
 
 from pathlib import Path
+import warnings
 from . import chi_lib as clib
 
 
@@ -50,12 +51,16 @@ def parse_chi_options():
     create_parser.add_argument('-r', '--replace', default=False, action='store_true',
                                help='Replace simulation file instead of throwing an error if file already exists.(Used with create parser only)')
 
-    create_parser.add_argument('-ny', '--non_yaml', nargs='+', type=Path, default=[],
+    create_parser.add_argument('-ny', '--non-yaml', nargs='+', type=Path, default=[],
                                help='Will add non-yaml files to seed directories when creating directory structure. (Used with create parser only)')
 
     # RUN options
     run_parser = subparsers.add_parser(
         'run', parents=[parent_parser], help='Run a simulation pipeline defined in args yaml file in a singular seed directory. Requires the --args_file option defined.')
+
+    run_parser.add_argument('-us', '--use-sim-states', action='store_true',
+                            default=False,
+                            help='Use sim.state files to determine which states to run.')
 
     # LAUNCH options
     launch_parser = subparsers.add_parser(
@@ -71,10 +76,6 @@ def parse_chi_options():
 
     opts = parser.parse_args()
 
-    if opts.command == 'run':
-        if opts.args_file is None:
-            parser.error("'run' requires the '--args_file' option.")
-
     if not opts.workdir:
         opts.workdir = Path.cwd()
     elif not opts.workdir.exists():
@@ -87,7 +88,21 @@ def parse_chi_options():
         with opts.args_file.open('r') as f:
             opts.args_dict = clib.load_yaml_in_order(f)
 
+    if opts.command == 'create':
         if not opts.states:
+            opts.states = list(opts.args_dict.keys())
+
+    elif opts.command == 'run':
+        if opts.args_file is None:
+            parser.error("'run' requires the '--args_file' option.")
+
+        if opts.use_sim_states and opts.states:
+            warnings.warn(
+                "Both use_sim_states and states are set. Will prioritize states given in commandline.")
+        elif opts.use_sim_states:  # Only use_sim_states is set
+            for sim_state in opts.workdir.glob('sim.*'):
+                opts.states.append(sim_state.name.split('.')[1])
+        else:  # Neither use_sim_states nor states are set
             opts.states = list(opts.args_dict.keys())
 
     return opts

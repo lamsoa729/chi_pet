@@ -43,15 +43,14 @@ def test_chi_node_dir_creation(mock_chi_node):
     assert Path('tests/mock_node/data').exists()
 
 
-def test_chi_node_subnode_creation(mock_root_dir, mock_args_file, mock_create_opts):
+def test_chi_node_subnode_creation(mock_root_dir, mock_create_opts):
     """!Test to make sure subnodes are generated properly for basic usage.
     """
     root_path = mock_root_dir
-    mock_args_path = mock_args_file
+    mock_args_path = mock_args_file(root_path)
 
     ny_file_path = root_path / 'mock_ny_file.txt'
-    with ny_file_path.open('w') as nyf:
-        nyf.write(MOCK_NON_YAML_FILE_STR)
+    mock_non_yaml_file(root_path)
 
     mock_create_opts.args_files = [mock_args_path]
 
