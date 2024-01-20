@@ -12,34 +12,9 @@ Description:
 '''
 
 
-class ChiRun(object):
-    def __init__(self, opts):
-        self._opts = opts
-        self._arg_dict = opts.args_dict
-        self._states = opts.states
-
-    def run(self):
-        """Run simulation pipeline defined in the the args.yaml file defined as self._opts.args_file.
-
-        """
-
-        # TODO Add option to see if sim_action file exists and only run those states.
-        for run_state, vals in self._args_dict.items():
-            args = [str(a) for a in vals]
-            sim_state = Path('sim.{}'.format(run_state))
-
-            # If sim action file exists then run the state
-            if run_state in self._states:
-                if self.run_args(self._workdir, run_state, args):
-                    (self._opts.workdir / '.error').touch()
-                elif sim_state.exists():
-                    sim_state.unlink()
-
-    def get_run_states(self):
-        return self._states
-
-    @classmethod
-    def run_args(workdir, state, args):
+def run_args(workdir, state, args):
+    current_dir = Path.cwd()
+    try:
         action = state + '-ing'
         action_file = Path('.' + action)
         print("Started {} sim using args {}".format(action, args))
@@ -56,6 +31,37 @@ class ChiRun(object):
             print(
                 f"Run failed: could not find work directory {workdir} to do action {state}.")
             return 1
+    except:
+        print(f"Run failed: State {state} did not succeed.")
+        return 1
+    finally:
+        os.chdir(current_dir)
+
+
+class ChiRun(object):
+    def __init__(self, opts):
+        self._opts = opts
+        self._args_dict = opts.args_dict
+        self._states = opts.states
+
+    def run(self):
+        """Run simulation pipeline defined in the the args.yaml file defined as self._opts.args_file.
+
+        """
+
+        for run_state, vals in self._args_dict.items():
+            args = [str(a) for a in vals]
+            sim_state = Path('sim.{}'.format(run_state))
+
+            # If sim action file exists then run the state
+            if run_state in self._states:
+                if run_args(self._opts.workdir, run_state, args):
+                    (self._opts.workdir / '.error').touch()
+                elif sim_state.exists():
+                    sim_state.unlink()
+
+    def get_run_states(self):
+        return self._states
 
 
 if __name__ == '__main__':

@@ -23,7 +23,8 @@ MOCK_NON_YAML_FILE_STR = "This is a tests."
 MOCK_ARGS_FILE_DICT = {'stage1': ['arg1', 'arg2', 'arg3'],
                        'stage2': ['arg4', 'arg5', 'arg6']}
 
-MOCK_SHELL_ARGS_FILE_DICT = {'touch': ['touch', 'mock_command.txt']}
+MOCK_SHELL_ARGS_FILE_DICT = {'touch1': ['touch', 'mock_output1.txt'],
+                             'touch2': ['touch', 'mock_output2.txt'], }
 
 MOCK_PARAM_DICT_PATH = 'mock_param.yaml'
 MOCK_CHI_PARAM_DICT_PATH = 'mock_param_chi_param.yaml'
@@ -33,7 +34,7 @@ def clean_mocks():
     """Clean up mock directories and files before testing to make sure we are
     working from a clean slate.
     """
-    for mpath in Path('.').glob('tests/mock*'):
+    for mpath in Path.cwd().glob('tests/mock*'):
         if mpath.is_file():
             mpath.unlink()
         elif mpath.is_dir():
@@ -90,11 +91,6 @@ def mock_leaf_dir():
     with yaml_param_path.open('w') as ypp:
         yaml.dump(MOCK_PARAM_DICT, ypp)
 
-    args_file_path = chi_leaf_path / 'mock_args.yaml'
-    with args_file_path.open('w') as aff:
-        yaml.dump(MOCK_ARGS_FILE_DICT, aff)
-    yield args_file_path
-
     yield chi_leaf_path
 
 
@@ -134,8 +130,6 @@ def mock_run_opts():
     def opts(x): return None
     opts.command = 'run'
     opts.use_sim_states = 'False'
-    opts.replace = 'False'
-    opts.non_yaml = []
     opts.args_dict = MOCK_ARGS_FILE_DICT
     opts.states = list(opts.args_dict.keys())
     yield opts
