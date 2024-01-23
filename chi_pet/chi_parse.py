@@ -76,6 +76,7 @@ def parse_chi_options():
 
     opts = parser.parse_args()
 
+    # General checking and options
     if not opts.workdir:
         opts.workdir = Path.cwd()
     elif not opts.workdir.exists():
@@ -87,11 +88,21 @@ def parse_chi_options():
 
         with opts.args_file.open('r') as f:
             opts.args_dict = clib.load_yaml_in_order(f)
+    else:
+        opts.args_dict = {}
 
+    # Create parsing
     if opts.command == 'create':
         if not opts.states:
             opts.states = list(opts.args_dict.keys())
 
+        if opts.non_yaml:
+            for ny in opts.non_yaml:
+                if not ny.exists():
+                    raise FileNotFoundError(
+                        f"Non-yaml file {ny} does not exist.")
+
+    # Run parsing
     elif opts.command == 'run':
         if opts.args_file is None:
             parser.error("'run' requires the '--args_file' option.")

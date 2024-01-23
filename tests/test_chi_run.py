@@ -33,7 +33,7 @@ def test_chi_run_touch(mock_leaf_dir, mock_run_opts):
     assert (mock_leaf_path / 'mock_output2.txt').exists()
 
 
-def test_chi_run_only_one_touch(mock_leaf_dir, mock_run_opts):
+def test_chi_run_only_one_touch_with_opts(mock_leaf_dir, mock_run_opts):
     """Test chi_run."""
     mock_leaf_path = mock_leaf_dir
     # Create and modify run optoins
@@ -49,5 +49,6 @@ def test_chi_run_only_one_touch(mock_leaf_dir, mock_run_opts):
     # Make sure action is carried out
     assert (mock_leaf_path / 'mock_output1.txt').exists()
     assert not (mock_leaf_path / 'mock_output2.txt').exists()
+
 
 # TODO NEXT TEST test run args to make sure it always returns you to the right directory
