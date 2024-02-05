@@ -51,4 +51,20 @@ def test_chi_run_only_one_touch_with_opts(mock_leaf_dir, mock_run_opts):
     assert not (mock_leaf_path / 'mock_output2.txt').exists()
 
 
-# TODO NEXT TEST test run args to make sure it always returns you to the right directory
+def test_chi_run_error(mock_leaf_dir, mock_run_opts):
+    """Test chi_run."""
+    home_dir = Path.cwd()
+    mock_leaf_path = mock_leaf_dir
+    # Create and modify run optoins
+    mock_run_opts.args_dict = {'touch1': ['not_a_command', 'mock_output1.txt']}
+    mock_run_opts.states = mock_run_opts.args_dict.keys()
+    mock_run_opts.workdir = mock_leaf_path
+
+    # Make a ChiRun object
+    crun = ChiRun(mock_run_opts)
+    # Run the pipeline with failed state
+    with pytest.raises(OSError):
+        crun.run()
+    assert (mock_leaf_path / '.error').exists()
+    assert Path.cwd() == home_dir
+

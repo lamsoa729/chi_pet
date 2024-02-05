@@ -218,3 +218,6 @@ def test_chi_node_matched_creation_runtime_error(mock_param_yaml_dict, mock_crea
     cnode.make_node_dir(root_path)
     with pytest.raises(RuntimeError):
         cnode.make_subnodes()
+
+
+FileNotFoundError

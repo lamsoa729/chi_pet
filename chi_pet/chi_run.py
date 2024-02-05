@@ -22,18 +22,20 @@ def run_args(workdir, state, args):
         if workdir.exists():
             os.chdir(workdir)
             action_file.touch()  # Keeps track of current pipeline state
-            status = run(args)
+            print("Running: ", args)
+            status = run(args) #TODO capture output when an error occurs
+            print("status: ", status)
             if status.returncode:
-                print(f"Run failed: State {state} did not succeed.")
+                raise OSError(f"Run failed: OSError occured at state {state}.")
             action_file.unlink()  # Remove once completed successfully
             return status.returncode
         else:
-            print(
-                f"Run failed: could not find work directory {workdir} to do action {state}.")
-            return 1
+            # error for not finding directory
+            raise FileNotFoundError(
+                f"Run failed: Work directory {workdir} not found to do action {state} .")
     except:
-        print(f"Run failed: State {state} did not succeed.")
-        return 1
+        (workdir / '.error').touch()
+        raise 
     finally:
         os.chdir(current_dir)
 
@@ -55,9 +57,8 @@ class ChiRun(object):
 
             # If sim action file exists then run the state
             if run_state in self._states:
-                if run_args(self._opts.workdir, run_state, args):
-                    (self._opts.workdir / '.error').touch()
-                elif sim_state.exists():
+                run_args(self._opts.workdir, run_state, args)
+                if sim_state.exists():
                     sim_state.unlink()
 
     def get_run_states(self):
