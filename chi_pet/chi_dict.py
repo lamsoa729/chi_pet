@@ -22,23 +22,46 @@ def eval_chi_param(chi_param_str):
 
 class ChiDict(object):
 
-    """Compiled dictionary of all the parameters to run a simulation."""
+    """Compiled dictionary of all the parameters to run a simulation.
 
+    """
     def __init__(self, param_dict: Optional[Dict] = None,
-                 file_path_list: Optional[List[Path]] = None):
+                 yaml_file_path_list: Optional[List[Path]] = None):
+        """Initialize a ChiDict with either a parameter dictionary or a list of yaml files that contain parameters pertinent to the simulations you wish to run.
+
+        Parameters
+        ----------
+        param_dict : Optional[Dict], optional
+            python dictionary where the first level keys are names of yaml files to be created. The subsequent levels can have arbitrary structure, by default None
+        file_path_list : Optional[List[Path]], optional
+            List of Path objects to yaml files that contain parameters for simulation, by default None
+        """
         self._param_dict = param_dict
         if self._param_dict is None:
-            assert file_path_list is not None, "Must provide a dictionary or list of file paths."
-            self._param_dict = self.make_param_dict(file_path_list)
+            assert yaml_file_path_list is not None, "Must provide a dictionary or list of file paths."
+            self._param_dict = self.make_param_dict(yaml_file_path_list)
 
-    def make_param_dict(self, file_path_list: List[Path]) -> Dict:
+    def make_param_dict(self, yaml_file_path_list: List[Path]) -> Dict:
+        """From a list of yaml files, create a single dictionary containing all simulation parameters.
+
+        Parameters
+        ----------
+        yaml_file_path_list : List[Path]
+            List of Path objects to yaml files that contain parameters for simulation, by default None
+
+        Returns
+        -------
+        Dict
+            Combined dictionary of all yaml files
+        """
         param_dict = {}
-        for file_path in file_path_list:
+        for file_path in yaml_file_path_list:
             with file_path.open('r') as f:
                 param_dict[file_path.name] = load_yaml_in_order(f)
         return param_dict
 
     def search_dict_for_chi_params(self):
+        
         chi_param_ref_list = list(find_chi_param_str(self._param_dict))
         chi_param_list = []
         for cp_ref in chi_param_ref_list:
@@ -60,5 +83,5 @@ class ChiDict(object):
 if __name__ == "__main__":
     cwd = Path(__file__).parent.parent / 'tests'
     yaml_list = list(cwd.glob('*.yaml'))
-    chi_dict = ChiDict(file_path_list=yaml_list)
+    chi_dict = ChiDict(yaml_file_path_list=yaml_list)
     print('chi_dict._param_dict = ', chi_dict._param_dict)

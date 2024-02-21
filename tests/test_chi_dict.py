@@ -25,7 +25,7 @@ def mock_chi_dict(mock_param_yaml_dict):
 def test_make_param_dict(mock_root_dir, mock_param_yaml_dict):
     chi_root_dir = mock_root_dir
     yaml_file_list = list(chi_root_dir.glob('*.yaml'))
-    chi_dict = ChiDict(file_path_list=yaml_file_list)
+    chi_dict = ChiDict(yaml_file_path_list=yaml_file_list)
     assert chi_dict._param_dict == mock_param_yaml_dict
 
 
@@ -54,7 +54,7 @@ def test_search_dict_for_chi_params_when_non_exist(mock_param_yaml_dict):
 def test_write_out_yaml_files(mock_root_dir):
     chi_root_dir = mock_root_dir
     orig_yaml_list = list(chi_root_dir.glob('*.yaml'))
-    chi_dict = ChiDict(file_path_list=orig_yaml_list)
+    chi_dict = ChiDict(yaml_file_path_list=orig_yaml_list)
     new_node = Path.cwd() / 'tests/mock_new_node'
     new_node.mkdir()
 

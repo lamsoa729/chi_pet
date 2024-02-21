@@ -60,7 +60,7 @@ class ChiNode():
                 raise RuntimeError(
                     "If a ChiDict is not supplied, a params_file_path list must be supplied instead.")
             self._chi_dict = ChiDict(
-                file_path_list=self._opts.param_files)
+                yaml_file_path_list=self._opts.param_files)
 
         self._chi_params = self._chi_dict.search_dict_for_chi_params()
         self._level = level if len(self._chi_params) == 0 else min(
