@@ -109,6 +109,8 @@ class ChiParam(object):
         self._obj_r = obj_r
 
     def get_number_of_values(self):
+        if self._values is None:
+            self.gen_param_values()
         return len(self._values)
 
     def gen_param_values(self):
@@ -130,6 +132,8 @@ class ChiParam(object):
         return self._obj_r.get_value()
 
     def get_dir_str(self):
+        if self._format_str is None:
+            self._format_str = self._name + '{}'
         return self._format_str.format(self.get_value())
 
     def __str__(self):

@@ -29,7 +29,7 @@ class Chi(object):
 
         if self.opts.command == 'create':
             chi_root_node = ChiNode(self.opts.workdir, opts=self.opts)
-            chi_root_node.make_subnodes()
+            chi_root_node.make_subnodes(replace=self.opts.replace)
 
         elif self.opts.command == 'run':
             c = ChiRun(self.opts)
